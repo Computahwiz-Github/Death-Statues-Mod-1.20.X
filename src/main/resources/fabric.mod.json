@@ -9,8 +9,9 @@
     "Jermstain"
   ],
   "contact": {
-    "homepage": "https://www.youtube.com/@Jermstain",
-    "sources": "Coming Soon"
+    "homepage": "https://github.com/Jermstain/Death-Statues-Mod-1.20.X",
+    "sources": "https://github.com/Jermstain/Death-Statues-Mod-1.20.X",
+    "issues": "https://github.com/Jermstain/Death-Statues-Mod-1.20.X/issues"
   },
 
   "license": "CC0-1.0",
