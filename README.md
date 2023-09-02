@@ -18,3 +18,5 @@ There are three goals for this project:
 
 - [ ] 3 - Make statue act as grave and contain all player's dropped items on death. 
 - 3.1 When the player destroys the statue, make it drop all of items except what you choose to leave on (specific armor/weapons)
+
+P.S. I added a shaped saddle recipe for fun (leather & iron)
