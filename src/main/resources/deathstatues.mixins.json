@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.isaiah.deathstatues.mixins",
+  "compatibilityLevel": "JAVA_16",
+  "mixins": [
+    "SpawnArmorStandMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

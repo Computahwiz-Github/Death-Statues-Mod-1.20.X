@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "deathstatuestest",
+  "version": "1.0",
+
+  "name": "Death Statues Test",
+  "description": "Spawns armor stand on player death with armor and items in each hand that were on the player. This also includes the player head if you don't have a helmet on! \nP.S. You can only destroy the armor stand with your name on it unless you're in creative mode.",
+  "authors": [
+    "Jermstain"
+  ],
+  "contact": {
+    "homepage": "https://www.youtube.com/@Jermstain",
+    "sources": "Coming Soon"
+  },
+
+  "license": "CC0-1.0",
+  "icon": "assets/deathstatues/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "net.isaiah.deathstatues.DeathStatuesClient"
+    ],
+    "main": [
+      "net.isaiah.deathstatues.DeathStatues"
+    ],
+    "fabric-datagen": [
+      "net.isaiah.deathstatues.DeathStatuesDataGenerator"
+    ]
+  },
+  "mixins": [
+    "deathstatues.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.14.20",
+    "fabric-api": "*",
+    "minecraft": "1.20.1",
+    "java": ">=17"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
