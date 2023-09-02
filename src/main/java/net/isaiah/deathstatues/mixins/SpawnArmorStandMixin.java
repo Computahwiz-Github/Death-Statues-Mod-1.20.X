@@ -35,11 +35,6 @@ public abstract class SpawnArmorStandMixin extends PlayerEntity{
         super(world, pos, yaw, gameProfile);
     }
 
-    //@Inject(at = @At("HEAD"), method = "loadWorld")
-    //private void init(CallbackInfo info) {
-        //Injects code at start of MinecraftServer.loadWorld()V
-    //}
-
     @Inject(at = @At("TAIL"), method = "onDeath")
     private void spawnArmorStand(DamageSource damageSource, CallbackInfo info){
         Logger LOGGER = LoggerFactory.getLogger("testmod");
