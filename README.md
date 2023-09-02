@@ -2,7 +2,7 @@
 WIP Death Statues Mod
 
 > [!WARNING]
-> W.I.P.! As of this verion (1.0), you must remove "DeathStatuesToast.java" to compile successfully. I have all the other basic functionality for the mod complete, but am tinkering with how to make a custom toast popup.
+> W.I.P.! As of this verion (1.0), "DeathStatuesToast.java" is superfluous and can be discarded. I have all the other basic functionality for the mod complete, but am tinkering with how to make a custom toast popup.
 
 This is my first Minecraft mod and it uses fabric. The idea of the mod is just to spawn a statue of a player when they die and have it as a collectible.
 
