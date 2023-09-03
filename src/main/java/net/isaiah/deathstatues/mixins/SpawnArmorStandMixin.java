@@ -1,6 +1,7 @@
 package net.isaiah.deathstatues.mixins;
 
 import com.mojang.authlib.GameProfile;
+import net.isaiah.deathstatues.DeathStatuesToast;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -78,6 +79,7 @@ public abstract class SpawnArmorStandMixin extends PlayerEntity{
 
         world.spawnEntity(armorStand);
         LOGGER.info("SPAWNED ARMOR STAND");
+        DeathStatuesToast.addSpawnedStatueToast(MinecraftClient.getInstance());
     }
 
     @Inject(at = @At("HEAD"), method = "attack")
@@ -87,6 +89,7 @@ public abstract class SpawnArmorStandMixin extends PlayerEntity{
             mc.player.sendMessage(Text.of("Your Death Statue has been destroyed"));
             target.kill();
             LOGGER.info("Attacking Armor Stand");
+            DeathStatuesToast.addDestroyedStatueToast(mc);
         }
     }
 

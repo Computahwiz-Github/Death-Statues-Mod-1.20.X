@@ -2,8 +2,6 @@ package net.isaiah.deathstatues;
 
 import com.google.common.collect.ImmutableList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Stream;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -18,6 +16,11 @@ import org.jetbrains.annotations.Nullable;
 
 @Environment(value=EnvType.CLIENT)
 public class DeathStatuesToast implements Toast {
+
+    public static void registerModToasts(){
+        DeathStatues.LOGGER.info("Registering mod items for " + DeathStatues.MOD_ID);
+    }
+
     private static final int MIN_WIDTH = 200;
     private static final int LINE_HEIGHT = 12;
     private static final int PADDING_Y = 10;
@@ -121,7 +124,7 @@ public class DeathStatuesToast implements Toast {
     }
 
     public static void show(ToastManager manager, Type type, Text title, @Nullable Text description) {
-        DeathStatuesToast deathStatuesToast = (DeathStatuesToast)manager.getToast(DeathStatuesToast.class, type);
+        DeathStatuesToast deathStatuesToast = manager.getToast(DeathStatuesToast.class, type);
         if (deathStatuesToast == null) {
             add(manager, type, title, description);
         } else {
@@ -130,28 +133,21 @@ public class DeathStatuesToast implements Toast {
 
     }
 
-    public static void addWorldAccessFailureToast(MinecraftClient client, String worldName) {
-        add(client.getToastManager(), DeathStatuesToast.Type.WORLD_ACCESS_FAILURE, Text.translatable("selectWorld.access_failure"), Text.literal(worldName));
+    public static void addDestroyedStatueToast(MinecraftClient client) {
+        add(client.getToastManager(), Type.PERIODIC_NOTIFICATION, Text.literal("Death Statues Mod"), Text.literal("Your Death Statue has been Destroyed!"));
     }
 
-    public static void addWorldDeleteFailureToast(MinecraftClient client, String worldName) {
-        add(client.getToastManager(), DeathStatuesToast.Type.WORLD_ACCESS_FAILURE, Text.translatable("selectWorld.delete_failure"), Text.literal(worldName));
+    public static void addSpawnedStatueToast(MinecraftClient client) {
+        add(client.getToastManager(), Type.PERIODIC_NOTIFICATION, Text.literal("Death Statues Mod"), Text.literal("Your Death Statue has been Created!"));
     }
 
-    public static void addPackCopyFailure(MinecraftClient client, String directory) {
-        add(client.getToastManager(), DeathStatuesToast.Type.PACK_COPY_FAILURE, Text.translatable("pack.copyFailure"), Text.literal(directory));
+    public static void addLoadedClientToast(MinecraftClient client) {
+        add(client.getToastManager(), Type.PERIODIC_NOTIFICATION, Text.translatable("deathstatues.toast.Title"), Text.literal("Welcome & Thanks for downloading!"));
     }
 
     @Environment(EnvType.CLIENT)
     public static enum Type {
-        TUTORIAL_HINT,
-        NARRATOR_TOGGLE,
-        WORLD_BACKUP,
-        PACK_LOAD_FAILURE,
-        WORLD_ACCESS_FAILURE,
-        PACK_COPY_FAILURE,
-        PERIODIC_NOTIFICATION,
-        UNSECURE_SERVER_WARNING(10000L);
+        PERIODIC_NOTIFICATION;
 
         final long displayDuration;
 
