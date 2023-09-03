@@ -104,7 +104,7 @@ public class DeathStatuesToast implements Toast {
     }
 
     public static void addDestroyedStatueToast(MinecraftClient client) {
-        add(client.getToastManager(), Type.PERIODIC_NOTIFICATION, Text.literal("Death Statues Mod").formatted(Formatting.DARK_PURPLE).formatted(Formatting.BOLD).formatted(Formatting.UNDERLINE), Text.literal("Your Death Statue has been Destroyed!").formatted(Formatting.GOLD));
+        add(client.getToastManager(), Type.PERIODIC_NOTIFICATION, Text.literal("Death Statues Mod").formatted(Formatting.BOLD), Text.literal("Your Death Statue has been Destroyed!").formatted(Formatting.DARK_PURPLE));
     }
 
     /* Where Text.literal() is used to be Text.translatable to use the translation keys from the lang file
@@ -114,11 +114,11 @@ public class DeathStatuesToast implements Toast {
     * */
 
     public static void addSpawnedStatueToast(MinecraftClient client) {
-        add(client.getToastManager(), Type.PERIODIC_NOTIFICATION, Text.literal("Death Statues Mod"), Text.literal("Your Death Statue has been Created!"));
+        add(client.getToastManager(), Type.PERIODIC_NOTIFICATION, Text.literal("Death Statues Mod").formatted(Formatting.BOLD), Text.literal("Your Death Statue has been Created!").formatted(Formatting.DARK_PURPLE));
     }
 
     public static void addLoadedClientToast(MinecraftClient client) {
-        add(client.getToastManager(), Type.PERIODIC_NOTIFICATION, Text.literal("Death Statues Mod"), Text.literal("Welcome & Thanks for downloading!"));
+        add(client.getToastManager(), Type.PERIODIC_NOTIFICATION, Text.literal("Death Statues Mod").formatted(Formatting.BOLD), Text.literal("Welcome & Thanks for downloading!").formatted(Formatting.DARK_PURPLE));
     }
 
     @Environment(EnvType.CLIENT)
