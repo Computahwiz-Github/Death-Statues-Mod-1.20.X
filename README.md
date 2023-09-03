@@ -18,6 +18,8 @@ There are three goals for this project:
   * 2.1 - Make custom background/icon/sounds for toasts
 
 - [ ] 3 - Make statue act as grave and contain all player's dropped items on death. 
-  - 3.1 When the player destroys the statue, make it drop all of items except what you choose to leave on (specific armor/weapons)
+  - 3.1 When the player destroys the statue, make it drop all the items except what you choose to leave on (specific armor/weapons)
+
+- [ ] 4 - Make translations in the language file actually work. Will take any pointers or tips please!
 
 P.S. I added a shaped saddle recipe for fun (leather & iron)
