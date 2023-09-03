@@ -16,12 +16,8 @@ import org.jetbrains.annotations.Nullable;
 
 @Environment(value=EnvType.CLIENT)
 public class DeathStatuesToast implements Toast {
-    private static final Text TITLE = Text.translatable("deathstatues.toast.custom_title");
-    private static final Text DESCRIPTION = Text.translatable("deathstatues.toast.custom_description");
-
-    private static final int MIN_WIDTH = 200;
-    private static final int LINE_HEIGHT = 12;
-    private static final int PADDING_Y = 10;
+    //private static final Text TITLE = Text.translatable("deathstatues.toast.custom_title");
+    //private static final Text DESCRIPTION = Text.translatable("deathstatues.toast.custom_description");
     private final Type type;
     private final Text title;
     private final List<OrderedText> lines;
@@ -64,15 +60,14 @@ public class DeathStatuesToast implements Toast {
             context.drawTexture(TEXTURE, 0, 0, 0, 64, i, this.getHeight());
         } else {
             j = this.getHeight();
-            int k = 28;
             int l = Math.min(4, j - 28);
-            this.drawPart(context, manager, i, 0, 0, 28);
+            this.drawPart(context, i, 0, 0, 28);
 
             for(int m = 28; m < j - l; m += 10) {
-                this.drawPart(context, manager, i, 16, m, Math.min(16, j - m - l));
+                this.drawPart(context, i, 16, m, Math.min(16, j - m - l));
             }
 
-            this.drawPart(context, manager, i, 32 - l, j - l, l);
+            this.drawPart(context, i, 32 - l, j - l, l);
         }
 
         if (this.lines == null) {
@@ -81,14 +76,14 @@ public class DeathStatuesToast implements Toast {
             context.drawText(manager.getClient().textRenderer, this.title, 18, 7, -256, false);
 
             for(j = 0; j < this.lines.size(); ++j) {
-                context.drawText(manager.getClient().textRenderer, (OrderedText)this.lines.get(j), 18, 18 + j * 12, -1, false);
+                context.drawText(manager.getClient().textRenderer, this.lines.get(j), 18, 18 + j * 12, -1, false);
             }
         }
 
         return (double)(startTime - this.startTime) < (double)this.type.displayDuration * manager.getNotificationDisplayTimeMultiplier() ? Visibility.SHOW : Visibility.HIDE;
     }
 
-    private void drawPart(DrawContext context, ToastManager manager, int width, int textureV, int y, int height) {
+    private void drawPart(DrawContext context, int width, int textureV, int y, int height) {
         int i = textureV == 0 ? 20 : 5;
         int j = Math.min(60, width - i);
         context.drawTexture(TEXTURE, 0, y, 0, 64 + textureV, i, height);
@@ -112,6 +107,12 @@ public class DeathStatuesToast implements Toast {
         add(client.getToastManager(), Type.PERIODIC_NOTIFICATION, Text.literal("Death Statues Mod").formatted(Formatting.DARK_PURPLE).formatted(Formatting.BOLD).formatted(Formatting.UNDERLINE), Text.literal("Your Death Statue has been Destroyed!").formatted(Formatting.GOLD));
     }
 
+    /* Where Text.literal() is used to be Text.translatable to use the translation keys from the lang file
+    *  However, it acts as a Literal and doesn't register the toast keys. Only translates to the literal key.
+    *  Take for example Text.Translatable("deathstatues.toast.custom_title") only outputs "deathstatues.toast.custom_title" not the translated key: "Death Statues Mod"
+    *  Any help here would be greatly appreciated.
+    * */
+
     public static void addSpawnedStatueToast(MinecraftClient client) {
         add(client.getToastManager(), Type.PERIODIC_NOTIFICATION, Text.literal("Death Statues Mod"), Text.literal("Your Death Statue has been Created!"));
     }
@@ -121,16 +122,16 @@ public class DeathStatuesToast implements Toast {
     }
 
     @Environment(EnvType.CLIENT)
-    public static enum Type {
+    public enum Type {
         PERIODIC_NOTIFICATION;
 
         final long displayDuration;
 
-        private Type(long displayDuration) {
+        Type(long displayDuration) {
             this.displayDuration = displayDuration;
         }
 
-        private Type() {
+        Type() {
             this(4000L);
         }
     }
