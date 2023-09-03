@@ -15,6 +15,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -78,9 +79,10 @@ public abstract class SpawnArmorStandMixin extends PlayerEntity{
         armorStand.setCustomName(this.getName());
 
         world.spawnEntity(armorStand);
+        assert MinecraftClient.getInstance().player != null;
+        MinecraftClient.getInstance().player.sendMessage(Text.translatable("deathstatues.toast.spawned").formatted(Formatting.GOLD));
         LOGGER.info("SPAWNED ARMOR STAND");
-
-        DeathStatuesToast.addSpawnedStatueToast(MinecraftClient.getInstance());
+        DeathStatuesToast.showSpawnedStatueToast("deathstatues.toast.title", "deathstatues.toast.spawned");
     }
 
     @Inject(at = @At("HEAD"), method = "attack")
@@ -88,9 +90,9 @@ public abstract class SpawnArmorStandMixin extends PlayerEntity{
         MinecraftClient mc = MinecraftClient.getInstance();
         if (target instanceof ArmorStandEntity && target.getName().equals(this.getName()) && mc.player!=null){
             target.kill();
-            mc.player.sendMessage(Text.of("Your Death Statue has been destroyed"));
+            mc.player.sendMessage(Text.translatable("deathstatues.toast.destroyed").formatted(Formatting.DARK_RED));
             LOGGER.info("Attacking Armor Stand");
-            DeathStatuesToast.addDestroyedStatueToast(mc);
+            DeathStatuesToast.showDestroyedStatueToast("deathstatues.toast.title","deathstatues.toast.destroyed");
         }
     }
 

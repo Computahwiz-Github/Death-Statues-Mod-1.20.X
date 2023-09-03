@@ -23,7 +23,9 @@ public class DeathStatues implements ModInitializer {
             worldLoaded = true;
         }
         if (worldLoaded && !welcomeToastDisplayed){
-            DeathStatuesToast.addLoadedClientToast(MinecraftClient.getInstance());
+            DeathStatuesToast.showLoadedClientToast("deathstatues.toast.title","deathstatues.toast.loaded");
+
+            //DeathStatuesToast.showCustomToast("My Custom Toast", new String[] {"This is a custom toast", "using Fabric for Minecraft 1.20!", "It has multiple lines of text."});
             LOGGER.info("World has loaded!");
             welcomeToastDisplayed = true;
         }
