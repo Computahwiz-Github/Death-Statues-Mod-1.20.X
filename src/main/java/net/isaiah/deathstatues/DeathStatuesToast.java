@@ -6,40 +6,31 @@ import java.util.List;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.toast.Toast;
 import net.minecraft.client.toast.ToastManager;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
 
 @Environment(value=EnvType.CLIENT)
 public class DeathStatuesToast implements Toast {
-
-    public static void registerModToasts(){
-        DeathStatues.LOGGER.info("Registering mod items for " + DeathStatues.MOD_ID);
-    }
+    private static final Text TITLE = Text.translatable("deathstatues.toast.custom_title");
+    private static final Text DESCRIPTION = Text.translatable("deathstatues.toast.custom_description");
 
     private static final int MIN_WIDTH = 200;
     private static final int LINE_HEIGHT = 12;
     private static final int PADDING_Y = 10;
     private final Type type;
-    private Text title;
-    private List<OrderedText> lines;
+    private final Text title;
+    private final List<OrderedText> lines;
     private long startTime;
     private boolean justUpdated;
     private final int width;
 
     public DeathStatuesToast(Type type, Text title, @Nullable Text description) {
         this(type, title, getTextAsList(description), Math.max(160, 30 + Math.max(MinecraftClient.getInstance().textRenderer.getWidth(title), description == null ? 0 : MinecraftClient.getInstance().textRenderer.getWidth(description))));
-    }
-
-    public static DeathStatuesToast create(MinecraftClient client, Type type, Text title, Text description) {
-        TextRenderer textRenderer = client.textRenderer;
-        List<OrderedText> list = textRenderer.wrapLines(description, 200);
-        int i = Math.max(200, list.stream().mapToInt(textRenderer::getWidth).max().orElse(200));
-        return new DeathStatuesToast(type, title, list, i + 30);
     }
 
     private DeathStatuesToast(Type type, Text title, List<OrderedText> lines, int width) {
@@ -109,12 +100,6 @@ public class DeathStatuesToast implements Toast {
         context.drawTexture(TEXTURE, width - j, y, 160 - j, 64 + textureV, j, height);
     }
 
-    public void setContent(Text title, @Nullable Text description) {
-        this.title = title;
-        this.lines = getTextAsList(description);
-        this.justUpdated = true;
-    }
-
     public Type getType() {
         return this.type;
     }
@@ -123,18 +108,8 @@ public class DeathStatuesToast implements Toast {
         manager.add(new DeathStatuesToast(type, title, description));
     }
 
-    public static void show(ToastManager manager, Type type, Text title, @Nullable Text description) {
-        DeathStatuesToast deathStatuesToast = manager.getToast(DeathStatuesToast.class, type);
-        if (deathStatuesToast == null) {
-            add(manager, type, title, description);
-        } else {
-            deathStatuesToast.setContent(title, description);
-        }
-
-    }
-
     public static void addDestroyedStatueToast(MinecraftClient client) {
-        add(client.getToastManager(), Type.PERIODIC_NOTIFICATION, Text.literal("Death Statues Mod"), Text.literal("Your Death Statue has been Destroyed!"));
+        add(client.getToastManager(), Type.PERIODIC_NOTIFICATION, Text.literal("Death Statues Mod").formatted(Formatting.DARK_PURPLE).formatted(Formatting.BOLD).formatted(Formatting.UNDERLINE), Text.literal("Your Death Statue has been Destroyed!").formatted(Formatting.GOLD));
     }
 
     public static void addSpawnedStatueToast(MinecraftClient client) {
@@ -142,7 +117,7 @@ public class DeathStatuesToast implements Toast {
     }
 
     public static void addLoadedClientToast(MinecraftClient client) {
-        add(client.getToastManager(), Type.PERIODIC_NOTIFICATION, Text.translatable("deathstatues.toast.Title"), Text.literal("Welcome & Thanks for downloading!"));
+        add(client.getToastManager(), Type.PERIODIC_NOTIFICATION, Text.literal("Death Statues Mod"), Text.literal("Welcome & Thanks for downloading!"));
     }
 
     @Environment(EnvType.CLIENT)
@@ -156,7 +131,7 @@ public class DeathStatuesToast implements Toast {
         }
 
         private Type() {
-            this(5000L);
+            this(4000L);
         }
     }
 }

@@ -38,7 +38,7 @@ public abstract class SpawnArmorStandMixin extends PlayerEntity{
 
     @Inject(at = @At("TAIL"), method = "onDeath")
     private void spawnArmorStand(DamageSource damageSource, CallbackInfo info){
-        Logger LOGGER = LoggerFactory.getLogger("testmod");
+        Logger LOGGER = LoggerFactory.getLogger("deathstatues");
         LOGGER.info("Died");
 
         Vec3d playerPosition = this.getPos();
@@ -79,6 +79,7 @@ public abstract class SpawnArmorStandMixin extends PlayerEntity{
 
         world.spawnEntity(armorStand);
         LOGGER.info("SPAWNED ARMOR STAND");
+
         DeathStatuesToast.addSpawnedStatueToast(MinecraftClient.getInstance());
     }
 
@@ -86,8 +87,8 @@ public abstract class SpawnArmorStandMixin extends PlayerEntity{
     private void stopItemDrops(Entity target, CallbackInfo ci){
         MinecraftClient mc = MinecraftClient.getInstance();
         if (target instanceof ArmorStandEntity && target.getName().equals(this.getName()) && mc.player!=null){
-            mc.player.sendMessage(Text.of("Your Death Statue has been destroyed"));
             target.kill();
+            mc.player.sendMessage(Text.of("Your Death Statue has been destroyed"));
             LOGGER.info("Attacking Armor Stand");
             DeathStatuesToast.addDestroyedStatueToast(mc);
         }
