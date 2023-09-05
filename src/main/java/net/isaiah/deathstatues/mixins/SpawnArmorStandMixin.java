@@ -36,7 +36,7 @@ public abstract class SpawnArmorStandMixin extends PlayerEntity {
         super(world, pos, yaw, gameProfile);
     }
 
-    @Inject(at = @At("TAIL"), method = "onDeath")
+    @Inject(at = @At("HEAD"), method = "onDeath")
     private void spawnArmorStand(DamageSource damageSource, CallbackInfo info){
         Logger LOGGER = LoggerFactory.getLogger("deathstatues");
         LOGGER.info("Died");
@@ -61,9 +61,14 @@ public abstract class SpawnArmorStandMixin extends PlayerEntity {
         }
 
         ArmorStandEntity armorStand = new ArmorStandEntity(EntityType.ARMOR_STAND, world);
+        world.spawnEntity(armorStand);
+
         armorStand.setShowArms(true);
         armorStand.setInvulnerable(true);
+        armorStand.setNoGravity(true);
         armorStand.setPosition(playerPosition);
+        armorStand.setCustomNameVisible(true);
+        armorStand.setCustomName(this.getName());
 
         armorStand.equipStack(EquipmentSlot.HEAD, HELMET);
         armorStand.equipStack(EquipmentSlot.CHEST, BREASTPLATE);
@@ -74,10 +79,6 @@ public abstract class SpawnArmorStandMixin extends PlayerEntity {
 
         //armorStand.equipStack(EquipmentSlot.HEAD, ItemStack.EMPTY);
 
-        armorStand.setCustomNameVisible(true);
-        armorStand.setCustomName(this.getName());
-
-        world.spawnEntity(armorStand);
         String statueLocation = armorStand.getBlockX() + ", " + armorStand.getBlockY() + ", " + armorStand.getBlockZ();
         LOGGER.info("SPAWNED ARMOR STAND: " + armorStand.getUuidAsString() + " at: " + statueLocation);
         DeathStatuesToast.add(MinecraftClient.getInstance().getToastManager(), DeathStatuesToast.Type.PERIODIC_NOTIFICATION, Text.translatable("deathstatues.toast.title"), Text.translatable("deathstatues.toast.spawned").append(statueLocation).formatted(Formatting.DARK_PURPLE).append("§A)"));
