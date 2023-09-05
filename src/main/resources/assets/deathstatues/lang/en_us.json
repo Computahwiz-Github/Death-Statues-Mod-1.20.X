@@ -1,6 +1,9 @@
 {
   "deathstatues.toast.title": "Death Statues Mod",
-  "deathstatues.toast.loaded": "Welcome & Thanks for downloading!",
-  "deathstatues.toast.spawned": "Your Death Statue has been Created!",
-  "deathstatues.toast.destroyed": "Your Death Statue has been Destroyed!"
+  "deathstatues.toast.spawned": "§6Your Death Statue has been Created!§A At: (",
+  "deathstatues.toast.destroyed": "Your Death Statue has been Destroyed!",
+  "category.deathstatues.toast": "Death Statues Mod",
+  "chat.deathstatues.toast.keybind": "§6%d §A-> §c§l(R)§l §AToast Spawned",
+  "chat.deathstatues.hover": "Click to tp",
+  "deathstatues.toast.welcome": "Welcome %d, Thanks for Downloading!"
 }

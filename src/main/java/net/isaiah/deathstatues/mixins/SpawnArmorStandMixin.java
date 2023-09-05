@@ -14,7 +14,7 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
+import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -29,8 +29,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayerEntity.class)
-
-public abstract class SpawnArmorStandMixin extends PlayerEntity{
+public abstract class SpawnArmorStandMixin extends PlayerEntity {
     @Shadow @Final private static Logger LOGGER;
 
     public SpawnArmorStandMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile) {
@@ -79,20 +78,22 @@ public abstract class SpawnArmorStandMixin extends PlayerEntity{
         armorStand.setCustomName(this.getName());
 
         world.spawnEntity(armorStand);
-        assert MinecraftClient.getInstance().player != null;
-        MinecraftClient.getInstance().player.sendMessage(Text.translatable("deathstatues.toast.spawned").formatted(Formatting.GOLD));
-        LOGGER.info("SPAWNED ARMOR STAND");
-        DeathStatuesToast.showSpawnedStatueToast("deathstatues.toast.title", "deathstatues.toast.spawned");
+        String statueLocation = armorStand.getBlockX() + ", " + armorStand.getBlockY() + ", " + armorStand.getBlockZ();
+        LOGGER.info("SPAWNED ARMOR STAND: " + armorStand.getUuidAsString() + " at: " + statueLocation);
+        DeathStatuesToast.add(MinecraftClient.getInstance().getToastManager(), DeathStatuesToast.Type.PERIODIC_NOTIFICATION, Text.translatable("deathstatues.toast.title"), Text.translatable("deathstatues.toast.spawned").append(statueLocation).formatted(Formatting.DARK_PURPLE).append("§A)"));
+        MutableText tooltipText = Text.translatable("deathstatues.toast.spawned");
+        MutableText message = Text.translatable(statueLocation).formatted(Formatting.GOLD).setStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.of("Click to tp"))).withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tp @s " + statueLocation.replace(",", ""))).withFormatting(Formatting.DARK_PURPLE));
+        tooltipText.append(message).append("§A)");
+        MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(tooltipText);
     }
 
     @Inject(at = @At("HEAD"), method = "attack")
     private void stopItemDrops(Entity target, CallbackInfo ci){
-        MinecraftClient mc = MinecraftClient.getInstance();
-        if (target instanceof ArmorStandEntity && target.getName().equals(this.getName()) && mc.player!=null){
+        if (target instanceof ArmorStandEntity && target.getName().equals(this.getName())){
             target.kill();
-            mc.player.sendMessage(Text.translatable("deathstatues.toast.destroyed").formatted(Formatting.DARK_RED));
-            LOGGER.info("Attacking Armor Stand");
-            DeathStatuesToast.showDestroyedStatueToast("deathstatues.toast.title","deathstatues.toast.destroyed");
+            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.translatable("deathstatues.toast.destroyed").formatted(Formatting.RED));
+            LOGGER.info("Attacking Armor Stand: " + target.getUuidAsString() + target.getBlockX() + ", " + target.getBlockY() + ", " + target.getBlockZ());
+            DeathStatuesToast.add(MinecraftClient.getInstance().getToastManager(), DeathStatuesToast.Type.PERIODIC_NOTIFICATION, Text.translatable("deathstatues.toast.title"), Text.translatable("deathstatues.toast.destroyed"));
         }
     }
 
