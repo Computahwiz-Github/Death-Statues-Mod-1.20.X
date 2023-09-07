@@ -1,8 +1,8 @@
 # Death-Statues-Mod-1.20.X
-Death Statues Mod -> Now Works on Servers! (Must have it installed on server as well to handle packets)
+Death Statues Mod -> Now Works on Servers!
 
 > [!WARNING]
-> W.I.P! As of this version (1.3)
+> W.I.P! As of this version (1.3) (Must have it installed on server as well for compatibility)
 
 This is my first Minecraft mod and it uses fabric. The idea of the mod is just to spawn a statue of a player when they die and have it as a collectible.
 
