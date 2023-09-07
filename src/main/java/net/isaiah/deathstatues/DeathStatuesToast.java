@@ -14,7 +14,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class DeathStatuesToast implements Toast{
+@Environment(EnvType.CLIENT)
+public class DeathStatuesToast implements Toast {
     private final Type type;
     private final Text title;
     private final List<OrderedText> descriptionLines;

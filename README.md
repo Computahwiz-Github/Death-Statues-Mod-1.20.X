@@ -1,8 +1,8 @@
 # Death-Statues-Mod-1.20.X
-Death Statues Mod
+Death Statues Mod -> Now Works on Servers! (Must have it installed on server as well to handle packets)
 
 > [!WARNING]
-> W.I.P! As of this version (1.2)
+> W.I.P! As of this version (1.3)
 
 This is my first Minecraft mod and it uses fabric. The idea of the mod is just to spawn a statue of a player when they die and have it as a collectible.
 
@@ -30,18 +30,19 @@ P.S. I added a shaped saddle recipe for fun (leather & iron).
 ## Welcome Toast Message
 When you load into a world, you'll get a little welcome toast message.
 
-You can also press [R] on your keyboard for now to replicate it (mainly for testing).
-
 ![Welcome Toast](images/welcome_toast.png)
 
 ### Death Statue Creation/Spawn Toast Message
 When you unalive, the statue will spawn with all the items on, and you'll get toast and chat messages.
 
-Both of these have the coordinates to where it spawned.
+    -> You can also press [R] on your keyboard for now to replicate this (mainly for testing) <-
 
-The chat also has a clickEvent that will suggest a teleport command in chat for you!
+Both of these messages will have the coordinates to where it spawned.
 
 ![Statue Spawned Toast](images/statue_spawned.png)
+
+    -> The chat also has a clickEvent that will suggest a teleport command in chat for you! <-
+
 ![Statue Spawned Chat](images/chat_clickEvent.png)
 
 ### Death Statue Destruction Toast Message
