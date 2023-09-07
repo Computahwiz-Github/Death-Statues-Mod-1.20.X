@@ -43,10 +43,14 @@ public class DeathStatues implements ModInitializer {
 
         //This Event triggers when an entity is attacked. I check if it's a player attacking an armor stand of the same name (So you don't destroy other people's statues)
         AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+            if (world.isClient()){
+                return ActionResult.PASS;
+            }
             if (entity instanceof ArmorStandEntity && entity.getName().equals(player.getName())) {
                 //LOGGER.info("Event: Attacking Armor Stand: [" + entity.getUuidAsString() + "], at: (" + entity.getBlockX() + ", " + entity.getBlockY() + ", " + entity.getBlockZ() + ")");
                 ServerPlayNetworking.send((ServerPlayerEntity) player, DeathStatuesMessages.DESTROY_STATUE_ID, PacketByteBufs.create());
                 entity.kill();
+                return ActionResult.PASS;
             }
 
             return ActionResult.PASS;
