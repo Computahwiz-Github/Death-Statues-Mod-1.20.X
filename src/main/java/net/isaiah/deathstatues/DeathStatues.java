@@ -80,13 +80,13 @@ public class DeathStatues implements ModInitializer {
 
         armorStand.setShowArms(true);
         armorStand.setInvulnerable(true);
-        armorStand.setNoGravity(true);
+        //armorStand.setNoGravity(true);
         armorStand.setPosition(playerPosition);
         armorStand.setCustomNameVisible(true);
         armorStand.setCustomName(serverPlayer.getName());
 
         world.spawnEntity(armorStand);
-        //armorStand.refreshPositionAndAngles(serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ(), serverPlayer.getYaw(), serverPlayer.getPitch());
+        armorStand.refreshPositionAndAngles(serverPlayer.getBlockPos(), serverPlayer.getYaw(), serverPlayer.getPitch());
 
         armorStand.equipStack(EquipmentSlot.HEAD, HELMET);
         armorStand.equipStack(EquipmentSlot.CHEST, BREASTPLATE);
