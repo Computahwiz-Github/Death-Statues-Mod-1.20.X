@@ -8,6 +8,7 @@ This is my first Minecraft mod and it uses fabric. The idea of the mod is just t
 
 At the moment, when the player dies, a player-like statue spawns. The statue wears whatever the player had on (armor & mainhand/offhand items). It even grabs the player skin!
 
+> [!IMPORTANT]
 > HELP! I managed to get the Custom Player/Statue model to render properly, but everything changed when I tried adding armor and held item rendering. Now I'm unable to register my entity renderer :(
 
 There are three main goals for this project:
@@ -52,4 +53,5 @@ When you destroy your statue, you'll get toast and chat messages.
 ![Statue Destroyed](images/statue_destroyed.png)
 
 ### W.I.P. Added Toast Message When You Whisper to a Player
+> [!IMPORTANT]
 > New screenshots coming soon
