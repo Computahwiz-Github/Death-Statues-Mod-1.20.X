@@ -6,12 +6,11 @@ Death Statues Mod -> Now Works on Servers!
 
 This is my first Minecraft mod and it uses fabric. The idea of the mod is just to spawn a statue of a player when they die and have it as a collectible.
 
-At the moment, when the player dies, an armor stand spawns. The armor stand wears whatever the player had on (armor & mainhand/offhand items). It even grabs the player skin for a player head if there is no helmet!
+At the moment, when the player dies, a player-like statue spawns. The statue wears whatever the player had on (armor & mainhand/offhand items). It even grabs the player skin!
+
+    -> HELP! I managed to get the Custom Player/Statue model to render properly, but everything changed when I tried adding armor and held item rendering. Now I'm unable to register my entity renderer <-
 
 There are three main goals for this project:
-
-    -> I managed to get the Custom Player/Statue model to render properly, but everything changed when I tried adding armor and held item rendering <-
-
 - [x] 1 - Make a "faux-player-model" instead of using an armor stand for the statue
   - [ ] 1.1 - Implement skin caching to avoid hitting api request limit
   - [ ] 1.2 -  Make the player model drop as an item with full NBT data that can be placed
