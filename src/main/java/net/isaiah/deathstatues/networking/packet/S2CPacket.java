@@ -5,6 +5,7 @@ import net.isaiah.deathstatues.DeathStatuesClient;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.text.Text;
 
 public class S2CPacket {
 
@@ -13,7 +14,11 @@ public class S2CPacket {
         DeathStatuesClient.displayStatueDestroyed();
     }
 
-    public static void clientPlayerDied(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender response_sender) {
+    public static void clientPlayerDied(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         DeathStatuesClient.displayStatueSpawned(client);
+    }
+
+    public static void clientWhisperCommand(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+        DeathStatuesClient.displayWhisperMessage(client, buf);
     }
 }

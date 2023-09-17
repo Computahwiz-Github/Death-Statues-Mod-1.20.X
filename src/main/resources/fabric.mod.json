@@ -30,6 +30,7 @@
     ]
   },
   "mixins": [
+    "deathstatues.mixins.json"
   ],
 
   "depends": {

@@ -10,6 +10,13 @@ import net.minecraft.server.network.ServerPlayerEntity;
 public class C2SPacket {
     //Everything here only happens on the server
     public static void serverSpawnStatue(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-        DeathStatues.spawnDeathStatue(player);
+        //DeathStatues.spawnDeathStatue(player); // Old armor stand method
+        DeathStatues.spawnPlayerDeathStatue(player);
+    }
+    public static void serverSpawnDeathStatue(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+        DeathStatues.spawnPlayerDeathStatue(player);
+    }
+    public static void serverReceivedStatueClient(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+        DeathStatues.receivedStatueClient(handler);
     }
 }

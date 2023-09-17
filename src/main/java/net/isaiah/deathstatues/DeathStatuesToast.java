@@ -98,7 +98,8 @@ public class DeathStatuesToast implements Toast {
 
     @Environment(value= EnvType.CLIENT)
     public enum Type {
-        PERIODIC_NOTIFICATION;
+        STATUE_NOTIFICATION,
+        WHISPER_NOTIFICATION;
 
         final long displayDuration;
 
