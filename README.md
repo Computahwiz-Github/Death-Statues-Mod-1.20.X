@@ -14,7 +14,7 @@ There are three main goals for this project:
 
 - [x] 1 - Make a "faux-player-model" instead of using an armor stand for the statue
   - [ ] 1.1 - Implement skin caching to avoid hitting api request limit
-  - [ ] 1.2 -  Make the player model drop as an item with full NBT data instead of just destroying an invulnerable armor stand (items otherwise drop, A.K.A. duplicate)
+  - [ ] 1.2 -  Make the player model drop as an item with full NBT data that can be placed
 
 - [x] 2 - Make custom toast popups to indicate when/where the player's death statue spawned and when the player destroys it
   - [x] 2.1 - Make background
@@ -51,3 +51,6 @@ Both of these messages will have the coordinates to where it spawned.
 When you destroy your statue, you'll get toast and chat messages.
 
 ![Statue Destroyed](images/statue_destroyed.png)
+
+### W.I.P. Added Toast Message When You Whisper to a Player
+screenshots coming soon
