@@ -28,9 +28,7 @@ import java.util.Objects;
 public class DeathStatueEntity extends LivingEntity {
     private final DeathStatueInventory inventory = new DeathStatueInventory(this);
     private final PlayerEntity currentPlayer;
-    /*private final DefaultedList<ItemStack> heldItems = DefaultedList.ofSize(2, ItemStack.EMPTY);
-    private final DefaultedList<ItemStack> armorItems = DefaultedList.ofSize(4, ItemStack.EMPTY);
-    public static final TrackedData<Byte> PLAYER_MODEL_PARTS = DataTracker.registerData(DeathStatueEntity.class, TrackedDataHandlerRegistry.BYTE);*/
+    //public static final TrackedData<Byte> PLAYER_MODEL_PARTS = DataTracker.registerData(DeathStatueEntity.class, TrackedDataHandlerRegistry.BYTE);
     protected Vec3d lastVelocity = Vec3d.ZERO;
     @Nullable
     private PlayerListEntry playerListEntry;
@@ -38,12 +36,14 @@ public class DeathStatueEntity extends LivingEntity {
 
     public DeathStatueEntity(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
-        this.currentPlayer = MinecraftClient.getInstance().player;
+        this.currentPlayer = MinecraftClient.getInstance().player; //Obviously runs in client environment, but this is just a placeholder until I make the C2S packet that sends the current player, unless there exists another way
     }
 
     public static DefaultAttributeContainer.Builder createStatueAttributes() {
         return LivingEntity.createLivingAttributes().add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 1.0).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.1f).add(EntityAttributes.GENERIC_ATTACK_SPEED).add(EntityAttributes.GENERIC_LUCK).add(EntityAttributes.GENERIC_MAX_HEALTH, 20);
     }
+
+    //Runs in client environment through ClientPlayNetworkingHandler because of the PlayerListEntry type
     @Nullable
     protected PlayerListEntry getPlayerListEntry() {
         if (this.playerListEntry == null) {
@@ -52,13 +52,14 @@ public class DeathStatueEntity extends LivingEntity {
         return this.playerListEntry;
     }
 
-    public PlayerManager getPlayerManager() {
+    /*public PlayerManager getPlayerManager() {
         if (this.playerManager == null) {
             this.playerManager = Objects.requireNonNull(this.currentPlayer.getServer()).getPlayerManager();
         }
         return playerManager;
-    }
+    }*/
 
+    // Eventually runs in client environment through ClientPlayNetworkingHandler because of the PlayerListEntry type
     public Identifier getSkinTexture() {
         PlayerListEntry playerListEntry = this.getPlayerListEntry();
         return playerListEntry == null ? DefaultSkinHelper.getTexture(this.currentPlayer.getUuid()) : playerListEntry.getSkinTexture();
