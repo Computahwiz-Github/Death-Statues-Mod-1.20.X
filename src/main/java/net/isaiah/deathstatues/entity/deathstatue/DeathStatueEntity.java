@@ -13,6 +13,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
 import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.PlayerManager;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
@@ -31,6 +34,7 @@ public class DeathStatueEntity extends LivingEntity {
     protected Vec3d lastVelocity = Vec3d.ZERO;
     @Nullable
     private PlayerListEntry playerListEntry;
+    private PlayerManager playerManager;
 
     public DeathStatueEntity(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
@@ -47,6 +51,14 @@ public class DeathStatueEntity extends LivingEntity {
         }
         return this.playerListEntry;
     }
+
+    public PlayerManager getPlayerManager() {
+        if (this.playerManager == null) {
+            this.playerManager = Objects.requireNonNull(this.currentPlayer.getServer()).getPlayerManager();
+        }
+        return playerManager;
+    }
+
     public Identifier getSkinTexture() {
         PlayerListEntry playerListEntry = this.getPlayerListEntry();
         return playerListEntry == null ? DefaultSkinHelper.getTexture(this.currentPlayer.getUuid()) : playerListEntry.getSkinTexture();
