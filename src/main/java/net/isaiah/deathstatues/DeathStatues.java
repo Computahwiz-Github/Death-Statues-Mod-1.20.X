@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+import net.isaiah.deathstatues.entity.ModEntities;
 import net.isaiah.deathstatues.entity.deathstatue.DeathStatueEntity;
 import net.isaiah.deathstatues.networking.DeathStatuesMessages;
 import net.minecraft.entity.EntityDimensions;
@@ -39,15 +40,15 @@ public class DeathStatues implements ModInitializer {
     public static final String MOD_ID = "death-statues";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static boolean hasStatuesClient = false;
-    private static final Identifier DEATH_STATUE_ENTITY_ID = new Identifier("deathstatues", "death_statue_entity");
-    public static final EntityType<DeathStatueEntity> DEATH_STATUE = Registry.register(Registries.ENTITY_TYPE, DEATH_STATUE_ENTITY_ID, FabricEntityTypeBuilder.create(SpawnGroup.MISC, DeathStatueEntity::new).dimensions(EntityDimensions.fixed(0.6F, 1.8F)).build());
+    //private static final Identifier DEATH_STATUE_ENTITY_ID = new Identifier("deathstatues", "death_statue_entity");
+    //public static final EntityType<DeathStatueEntity> DEATH_STATUE = Registry.register(Registries.ENTITY_TYPE, DEATH_STATUE_ENTITY_ID, FabricEntityTypeBuilder.create(SpawnGroup.MISC, DeathStatueEntity::new).dimensions(EntityDimensions.fixed(0.6F, 1.8F)).build());
 
     @Override
     public void onInitialize() {
         //Register Client-To-Server Packets
         DeathStatuesMessages.registerC2SPackets();
 
-        FabricDefaultAttributeRegistry.register(DEATH_STATUE, DeathStatueEntity.createStatueAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.DEATH_STATUE_ENTITY, DeathStatueEntity.createStatueAttributes());
 
         //This Event triggers when an entity dies and I check if it's a player then spawn the statue
         ServerLivingEntityEvents.ALLOW_DEATH.register((entity, damageSource, damageAmount) -> {
@@ -121,6 +122,7 @@ public class DeathStatues implements ModInitializer {
         LOGGER.info("SPAWNED ARMOR STAND: " + armorStand.getUuidAsString() + " at: " + statueLocation);
     }*/
 
+    //Here is the current method that spawns the statue. Will be renamed to old method name.
     public static void spawnPlayerDeathStatue(PlayerEntity serverPlayer) {
         Vec3d playerPosition = serverPlayer.getPos();
         World world = serverPlayer.getWorld();
@@ -134,7 +136,7 @@ public class DeathStatues implements ModInitializer {
         ItemStack MAINHAND = serverPlayer.getMainHandStack();
         ItemStack OFFHAND = serverPlayer.getOffHandStack();
 
-        DeathStatueEntity deathStatue = new DeathStatueEntity(DEATH_STATUE, world);
+        DeathStatueEntity deathStatue = new DeathStatueEntity(ModEntities.DEATH_STATUE_ENTITY, world);
 
         deathStatue.setPosition(playerPosition);
         deathStatue.setUuid(Uuids.getUuidFromProfile(gameProfile));

@@ -46,6 +46,12 @@ public class DeathStatuesClient implements ClientModInitializer {
 
         EntityModelLayerRegistry.registerModelLayer(MODEL_STATUE_LAYER, () -> DeathStatueEntityModel.getTexturedModelData(Dilation.NONE, false));
 
+        /*I used this lambda before and everything rendered just fine. It started giving me parameter type errors when I added in armor and held item rendering logic as DeathStatueEntity is a parameterized class.
+          It now calls for AbstractClientDeathStatueEntity to be passed. I'm not sure where I messed up as the only error that shows up is here.
+          I've paid attention to class hierarchy and parameter types, but yet no luck.
+          Then, I had to make an AbstractClientDeathStatueEntity class to be able to retrieve the calling/current player's skin and draw it on the statue entity, which extends DeathStatueEntity. So it's a bit of a mess.
+          I plan on making a ModRegistries class to get this garbage out of here, but until then, I'm stumped.
+        */
         /*EntityRendererRegistry.register(DeathStatues.DEATH_STATUE, (ctx) -> {
             return new DeathStatueEntityRenderer(ctx, new DeathStatueEntityModel<AbstractClientDeathStatueEntity>(ctx.getPart(MODEL_STATUE_LAYER), false), false);
         });*/
