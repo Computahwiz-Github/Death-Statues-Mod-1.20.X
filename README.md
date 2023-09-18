@@ -53,5 +53,5 @@ When you destroy your statue, you'll get toast and chat messages.
 ![Statue Destroyed](images/statue_destroyed.png)
 
 ### W.I.P. Added Toast Message When You Whisper to a Player
-> [!INFO]
+> [!NOTE]
 > New screenshots coming soon
