@@ -14,7 +14,8 @@ At the moment, when the player dies, a player-like statue spawns. The statue "wi
 There are three main goals for this project:
 - [x] 1 - Make a "faux-player-model" instead of using an armor stand for the statue
   - [ ] 1.1 - Implement skin caching to avoid hitting api request limit
-  - [ ] 1.2 -  Make the player model drop as an item with full NBT data that can be placed
+  - [ ] 1.2 - Make the player model drop as an item with full NBT data that can be placed
+  - [ ] 1.3 - Make the statue a BlockEntity instead of a faux-player-entity
 
 - [x] 2 - Make custom toast popups to indicate when/where the player's death statue spawned and when the player destroys it
   - [x] 2.1 - Make background
