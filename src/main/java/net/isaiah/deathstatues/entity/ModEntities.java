@@ -1,7 +1,6 @@
 package net.isaiah.deathstatues.entity;
 
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.isaiah.deathstatues.DeathStatues;
 import net.isaiah.deathstatues.entity.deathstatue.DeathStatueEntity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;

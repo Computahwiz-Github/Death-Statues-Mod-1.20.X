@@ -8,7 +8,6 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.isaiah.deathstatues.entity.ModEntities;
 import net.isaiah.deathstatues.entity.deathstatue.DeathStatueEntity;
 import net.isaiah.deathstatues.networking.DeathStatuesMessages;
 import net.minecraft.entity.EntityDimensions;
@@ -18,9 +17,6 @@ import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtHelper;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
@@ -40,15 +36,15 @@ public class DeathStatues implements ModInitializer {
     public static final String MOD_ID = "death-statues";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static boolean hasStatuesClient = false;
-    //private static final Identifier DEATH_STATUE_ENTITY_ID = new Identifier("deathstatues", "death_statue_entity");
-    //public static final EntityType<DeathStatueEntity> DEATH_STATUE = Registry.register(Registries.ENTITY_TYPE, DEATH_STATUE_ENTITY_ID, FabricEntityTypeBuilder.create(SpawnGroup.MISC, DeathStatueEntity::new).dimensions(EntityDimensions.fixed(0.6F, 1.8F)).build());
+    private static final Identifier DEATH_STATUE_ENTITY_ID = new Identifier("deathstatues", "death_statue_entity");
+    public static final EntityType<DeathStatueEntity> DEATH_STATUE = Registry.register(Registries.ENTITY_TYPE, DEATH_STATUE_ENTITY_ID, FabricEntityTypeBuilder.create(SpawnGroup.MISC, DeathStatueEntity::new).dimensions(EntityDimensions.fixed(0.6F, 1.8F)).build());
 
     @Override
     public void onInitialize() {
         //Register Client-To-Server Packets
         DeathStatuesMessages.registerC2SPackets();
 
-        FabricDefaultAttributeRegistry.register(ModEntities.DEATH_STATUE_ENTITY, DeathStatueEntity.createStatueAttributes());
+        FabricDefaultAttributeRegistry.register(DEATH_STATUE, DeathStatueEntity.createStatueAttributes());
 
         //This Event triggers when an entity dies and I check if it's a player then spawn the statue
         ServerLivingEntityEvents.ALLOW_DEATH.register((entity, damageSource, damageAmount) -> {
@@ -136,7 +132,7 @@ public class DeathStatues implements ModInitializer {
         ItemStack MAINHAND = serverPlayer.getMainHandStack();
         ItemStack OFFHAND = serverPlayer.getOffHandStack();
 
-        DeathStatueEntity deathStatue = new DeathStatueEntity(ModEntities.DEATH_STATUE_ENTITY, world);
+        DeathStatueEntity deathStatue = new DeathStatueEntity(DEATH_STATUE, world);
 
         deathStatue.setPosition(playerPosition);
         deathStatue.setUuid(Uuids.getUuidFromProfile(gameProfile));

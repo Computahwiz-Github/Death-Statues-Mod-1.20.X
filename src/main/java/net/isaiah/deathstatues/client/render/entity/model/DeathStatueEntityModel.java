@@ -2,7 +2,6 @@ package net.isaiah.deathstatues.client.render.entity.model;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import net.isaiah.deathstatues.client.network.AbstractClientDeathStatueEntity;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
@@ -16,7 +15,7 @@ import net.minecraft.util.math.random.Random;
 
 import java.util.List;
 
-public class DeathStatueEntityModel<A extends AbstractClientDeathStatueEntity> extends BipedEntityModel<A> {
+public class DeathStatueEntityModel<A extends LivingEntity> extends BipedEntityModel<A> {
 
     private static final String EAR = "ear";
     private static final String CLOAK = "cloak";
@@ -91,13 +90,13 @@ public class DeathStatueEntityModel<A extends AbstractClientDeathStatueEntity> e
 
     @Override
     public void setAngles(A livingEntity, float f, float g, float h, float i, float j) {
-        super.setAngles((A) livingEntity, f, g, h, i, j);
+        super.setAngles(livingEntity, f, g, h, i, j);
         this.leftPants.copyTransform(this.leftLeg);
         this.rightPants.copyTransform(this.rightLeg);
         this.leftSleeve.copyTransform(this.leftArm);
         this.rightSleeve.copyTransform(this.rightArm);
         this.jacket.copyTransform(this.body);
-        if (((LivingEntity)livingEntity).getEquippedStack(EquipmentSlot.CHEST).isEmpty()) {
+        if ((livingEntity).getEquippedStack(EquipmentSlot.CHEST).isEmpty()) {
             if (livingEntity.isInSneakingPose()) {
                 this.cloak.pivotZ = 1.4f;
                 this.cloak.pivotY = 1.85f;

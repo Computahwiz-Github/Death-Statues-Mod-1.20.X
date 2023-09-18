@@ -3,23 +3,19 @@ package net.isaiah.deathstatues.entity.deathstatue;
 import com.google.common.collect.Lists;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.client.render.entity.PlayerModelPart;
 import net.minecraft.client.util.DefaultSkinHelper;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,9 +25,10 @@ import java.util.Objects;
 public class DeathStatueEntity extends LivingEntity {
     private final DeathStatueInventory inventory = new DeathStatueInventory(this);
     private final PlayerEntity currentPlayer;
-    private final DefaultedList<ItemStack> heldItems = DefaultedList.ofSize(2, ItemStack.EMPTY);
+    /*private final DefaultedList<ItemStack> heldItems = DefaultedList.ofSize(2, ItemStack.EMPTY);
     private final DefaultedList<ItemStack> armorItems = DefaultedList.ofSize(4, ItemStack.EMPTY);
-    protected static final TrackedData<Byte> PLAYER_MODEL_PARTS = DataTracker.registerData(DeathStatueEntity.class, TrackedDataHandlerRegistry.BYTE);
+    public static final TrackedData<Byte> PLAYER_MODEL_PARTS = DataTracker.registerData(DeathStatueEntity.class, TrackedDataHandlerRegistry.BYTE);*/
+    protected Vec3d lastVelocity = Vec3d.ZERO;
     @Nullable
     private PlayerListEntry playerListEntry;
 
@@ -62,7 +59,7 @@ public class DeathStatueEntity extends LivingEntity {
 
     @Override
     public Iterable<ItemStack> getHandItems() {
-        return Lists.newArrayList(this.getMainHandStack(), this.getOffHandStack());
+        return Lists.newArrayList(this.inventory.getMainHandStack(), this.getOffHandStack());
     }
 
     @Override
@@ -99,9 +96,9 @@ public class DeathStatueEntity extends LivingEntity {
         return this.getWorld().getScoreboard();
     }
 
-    public boolean isPartVisible(PlayerModelPart modelPart) {
+    /*public boolean isPartVisible(PlayerModelPart modelPart) {
         return (this.getDataTracker().get(PLAYER_MODEL_PARTS) & modelPart.getBitFlag()) == modelPart.getBitFlag();
-    }
+    }*/
 
     @Override
     public void equipStack(EquipmentSlot slot, ItemStack stack) {
@@ -118,5 +115,9 @@ public class DeathStatueEntity extends LivingEntity {
     @Override
     public Arm getMainArm() {
         return Arm.RIGHT;
+    }
+
+    public Vec3d lerpVelocity(float tickDelta) {
+        return this.lastVelocity.lerp(this.getVelocity(), tickDelta);
     }
 }

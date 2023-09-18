@@ -10,13 +10,9 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.isaiah.deathstatues.client.network.AbstractClientDeathStatueEntity;
 import net.isaiah.deathstatues.client.render.entity.model.DeathStatueEntityModel;
 import net.isaiah.deathstatues.client.render.entity.DeathStatueEntityRenderer;
-import net.isaiah.deathstatues.entity.ModEntities;
-import net.isaiah.deathstatues.entity.deathstatue.DeathStatueEntity;
 import net.isaiah.deathstatues.networking.DeathStatuesMessages;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.Dilation;
@@ -46,17 +42,7 @@ public class DeathStatuesClient implements ClientModInitializer {
 
         EntityModelLayerRegistry.registerModelLayer(MODEL_STATUE_LAYER, () -> DeathStatueEntityModel.getTexturedModelData(Dilation.NONE, false));
 
-        /*I used this lambda before and everything rendered just fine. It started giving me parameter type errors when I added in armor and held item rendering logic as DeathStatueEntity is a parameterized class.
-          It now calls for AbstractClientDeathStatueEntity to be passed. I'm not sure where I messed up as the only error that shows up is here.
-          I've paid attention to class hierarchy and parameter types, but yet no luck.
-          Then, I had to make an AbstractClientDeathStatueEntity class to be able to retrieve the calling/current player's skin and draw it on the statue entity, which extends DeathStatueEntity. So it's a bit of a mess.
-          I plan on making a ModRegistries class to get this garbage out of here, but until then, I'm stumped.
-        */
-        /*EntityRendererRegistry.register(DeathStatues.DEATH_STATUE, (ctx) -> {
-            return new DeathStatueEntityRenderer(ctx, new DeathStatueEntityModel<AbstractClientDeathStatueEntity>(ctx.getPart(MODEL_STATUE_LAYER), false), false);
-        });*/
-
-        EntityRendererRegistry.register(ModEntities.DEATH_STATUE_ENTITY, DeathStatueEntityRenderer::new); //<- Problem lies here. I get an error: Incompatible parameter types in method reference expression
+        EntityRendererRegistry.register(DeathStatues.DEATH_STATUE, DeathStatueEntityRenderer::new);
 
         //This code executes when the player loads into a world.
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
