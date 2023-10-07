@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "deathstatues",
-  "version": "1.4",
+  "version": "1.5",
 
   "name": "Death Statues Test",
   "description": "Spawns armor stand on player death with armor and items in each hand that were on the player. This also includes the player head if you don't have a helmet on! \nP.S. You can only destroy the armor stand with your name on it unless you're in creative mode.",

@@ -8,17 +8,21 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
+import net.isaiah.deathstatues.block.ModBlocks;
+import net.isaiah.deathstatues.block.entity.ModBlockEntities;
 import net.isaiah.deathstatues.entity.deathstatue.DeathStatueEntity;
+import net.isaiah.deathstatues.item.ModItemGroups;
+import net.isaiah.deathstatues.item.ModItems;
 import net.isaiah.deathstatues.networking.DeathStatuesMessages;
-import net.minecraft.entity.EntityDimensions;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.SpawnGroup;
+import net.isaiah.deathstatues.screen.ModScreenHandlers;
+import net.minecraft.entity.*;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -33,16 +37,25 @@ import org.slf4j.LoggerFactory;
 import java.util.UUID;
 
 public class DeathStatues implements ModInitializer {
-    public static final String MOD_ID = "death-statues";
+    public static final String MOD_ID = "deathstatues";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static boolean hasStatuesClient = false;
     private static final Identifier DEATH_STATUE_ENTITY_ID = new Identifier("deathstatues", "death_statue_entity");
-    public static final EntityType<DeathStatueEntity> DEATH_STATUE = Registry.register(Registries.ENTITY_TYPE, DEATH_STATUE_ENTITY_ID, FabricEntityTypeBuilder.create(SpawnGroup.MISC, DeathStatueEntity::new).dimensions(EntityDimensions.fixed(0.6F, 1.8F)).build());
+    public static final EntityType<DeathStatueEntity> DEATH_STATUE = Registry.register(Registries.ENTITY_TYPE, DEATH_STATUE_ENTITY_ID,
+            FabricEntityTypeBuilder.create(SpawnGroup.MISC, DeathStatueEntity::new)
+                    .dimensions(EntityDimensions.fixed(0.6F, 1.8F)).build());
 
     @Override
     public void onInitialize() {
         //Register Client-To-Server Packets
         DeathStatuesMessages.registerC2SPackets();
+
+        ModItemGroups.registerItemGroups();
+        ModItems.registerModItems();
+        ModBlocks.registerModBlocks();
+        ModScreenHandlers.registerScreenHandlers();
+        ModBlockEntities.registerBlockEntities();
+        //Registry.register(Registries.SCREEN_HANDLER, id("box"), BOX_SCREEN_HANDLER);
 
         FabricDefaultAttributeRegistry.register(DEATH_STATUE, DeathStatueEntity.createStatueAttributes());
 

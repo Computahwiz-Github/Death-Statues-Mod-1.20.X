@@ -3,11 +3,21 @@
   "deathstatues.toast.spawned": "§6Your Death Statue has been Created!§A At: (",
   "deathstatues.toast.destroyed": "Your Death Statue has been Destroyed!",
   "deathstatues.toast.whisper": "§A[%s§A]§r whispered: %s",
+  "deathstatues.toast.welcome": "§AWelcome, %s, §AThanks for Downloading!",
+
   "key.deathstatues.toast": "Toast Popup Message",
   "category.deathstatues.toast": "Death Statues Mod",
+
   "chat.deathstatues.toast.keybind": "%s §A-> §c§l(R)§l §AToast & Statue Spawned",
   "chat.deathstatues.hover": "Click to tp",
-  "deathstatues.toast.welcome": "§AWelcome, %s, §AThanks for Downloading!",
   "chat.deathstatues.welcome": "§AWelcome, %s, §AThanks for Downloading!",
-  "entity.deathstatues.death_statue_entity": "Death Statue Entity"
+
+  "entity.deathstatues.death_statue_entity": "Death Statue Entity",
+
+  "block.deathstatues.death_statue_block": "Death Statue",
+  "block.deathstatues.death_statue_base": "Death Statue Base",
+
+  "item.deathstatues.death_statue": "Death Statue",
+
+  "itemgroup.statue": "Statue Group"
 }

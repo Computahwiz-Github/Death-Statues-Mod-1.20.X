@@ -11,6 +11,7 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
+import net.minecraft.client.render.entity.PlayerModelPart;
 import net.minecraft.client.render.entity.feature.*;
 import net.minecraft.client.render.entity.model.ArmorEntityModel;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
@@ -36,7 +37,6 @@ import java.util.Objects;
 
 public class DeathStatueEntityRenderer extends LivingEntityRenderer<DeathStatueEntity, DeathStatueEntityModel<DeathStatueEntity>> {
     public DeathStatueEntityRenderer(EntityRendererFactory.Context ctx) {
-        //super(ctx, new DeathStatueEntityModel<>(ctx.getPart(slim ? EntityModelLayers.PLAYER_SLIM : EntityModelLayers.PLAYER), slim), 0.5f);
         super(ctx, new DeathStatueEntityModel<>(ctx.getPart(DeathStatuesClient.MODEL_STATUE_LAYER), false), 0.5F);
         this.addFeature(new ArmorFeatureRenderer<>(this, new ArmorEntityModel<>(ctx.getPart(EntityModelLayers.PLAYER_INNER_ARMOR)), new ArmorEntityModel<>(ctx.getPart(EntityModelLayers.PLAYER_OUTER_ARMOR)), ctx.getModelManager()));
         this.addFeature(new DeathStatueHeldItemFeatureRenderer<>(this, ctx.getHeldItemRenderer()));
@@ -68,8 +68,8 @@ public class DeathStatueEntityRenderer extends LivingEntityRenderer<DeathStatueE
             deathStatueEntityModel.head.visible = true;
             deathStatueEntityModel.hat.visible = true;
         } else {
-            /*deathStatueEntityModel.setVisible(true);
-            deathStatueEntityModel.hat.visible = deathStatueEntity.isPartVisible(PlayerModelPart.HAT);
+            deathStatueEntityModel.setVisible(true);
+            /*deathStatueEntityModel.hat.visible = deathStatueEntity.isPartVisible(PlayerModelPart.HAT);
             deathStatueEntityModel.jacket.visible = deathStatueEntity.isPartVisible(PlayerModelPart.JACKET);
             deathStatueEntityModel.leftPants.visible = deathStatueEntity.isPartVisible(PlayerModelPart.LEFT_PANTS_LEG);
             deathStatueEntityModel.rightPants.visible = deathStatueEntity.isPartVisible(PlayerModelPart.RIGHT_PANTS_LEG);
@@ -151,15 +151,15 @@ public class DeathStatueEntityRenderer extends LivingEntityRenderer<DeathStatueE
         matrixStack.pop();
     }
 
-    public void renderRightArm(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, AbstractClientDeathStatueEntity player) {
+    public void renderRightArm(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, DeathStatueEntity player) {
         this.renderArm(matrices, vertexConsumers, light, player, this.model.rightArm, this.model.rightSleeve);
     }
 
-    public void renderLeftArm(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, AbstractClientDeathStatueEntity player) {
+    public void renderLeftArm(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, DeathStatueEntity player) {
         this.renderArm(matrices, vertexConsumers, light, player, this.model.leftArm, this.model.leftSleeve);
     }
 
-    private void renderArm(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, AbstractClientDeathStatueEntity player, ModelPart arm, ModelPart sleeve) {
+    private void renderArm(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, DeathStatueEntity player, ModelPart arm, ModelPart sleeve) {
         DeathStatueEntityModel<DeathStatueEntity> playerEntityModel = this.getModel();
         this.setModelPose(player);
         playerEntityModel.handSwingProgress = 0.0f;

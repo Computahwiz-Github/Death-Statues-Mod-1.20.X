@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "deathstatues:block/death_statue_base",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "deathstatues:block/death_statue_base"
+    },
+    "facing=south": {
+      "model": "deathstatues:block/death_statue_base",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "deathstatues:block/death_statue_base",
+      "y": 270
+    }
+  }
+}

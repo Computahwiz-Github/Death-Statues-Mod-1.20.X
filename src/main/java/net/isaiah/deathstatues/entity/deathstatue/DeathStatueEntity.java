@@ -1,21 +1,28 @@
 package net.isaiah.deathstatues.entity.deathstatue;
 
 import com.google.common.collect.Lists;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.isaiah.deathstatues.DeathStatues;
+import net.isaiah.deathstatues.networking.DeathStatuesMessages;
+import net.isaiah.deathstatues.networking.packet.C2SPacket;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.client.render.entity.PlayerModelPart;
 import net.minecraft.client.util.DefaultSkinHelper;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
 import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
@@ -23,46 +30,63 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.UUID;
 
 
 public class DeathStatueEntity extends LivingEntity {
     private final DeathStatueInventory inventory = new DeathStatueInventory(this);
-    private final PlayerEntity currentPlayer;
-    //public static final TrackedData<Byte> PLAYER_MODEL_PARTS = DataTracker.registerData(DeathStatueEntity.class, TrackedDataHandlerRegistry.BYTE);
+    private static PlayerEntity currentPlayer;
+    public static final TrackedData<Byte> PLAYER_MODEL_PARTS = DataTracker.registerData(DeathStatueEntity.class, TrackedDataHandlerRegistry.BYTE);
     protected Vec3d lastVelocity = Vec3d.ZERO;
     @Nullable
     private PlayerListEntry playerListEntry;
-    private PlayerManager playerManager;
+    private static Identifier skinTexture;
 
     public DeathStatueEntity(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
-        this.currentPlayer = MinecraftClient.getInstance().player; //Obviously runs in client environment, but this is just a placeholder until I make the C2S packet that sends the current player, unless there exists another way
+        //this.currentPlayer = MinecraftClient.getInstance().player;
+    }
+
+    public static void receivedCurrentPlayer(PlayerEntity player) {
+        DeathStatueEntity.currentPlayer = player;
+    }
+
+    @Override
+    public UUID getUuid() {
+        return super.getUuid();
+    }
+
+    @Override
+    protected void initDataTracker() {
+        super.initDataTracker();
+        this.dataTracker.startTracking(PLAYER_MODEL_PARTS, (byte)0);
     }
 
     public static DefaultAttributeContainer.Builder createStatueAttributes() {
-        return LivingEntity.createLivingAttributes().add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 1.0).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.1f).add(EntityAttributes.GENERIC_ATTACK_SPEED).add(EntityAttributes.GENERIC_LUCK).add(EntityAttributes.GENERIC_MAX_HEALTH, 20);
+        return LivingEntity.createLivingAttributes()
+                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 1.0)
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.1f)
+                .add(EntityAttributes.GENERIC_ATTACK_SPEED)
+                .add(EntityAttributes.GENERIC_LUCK)
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, 20);
     }
 
-    //Runs in client environment through ClientPlayNetworkingHandler because of the PlayerListEntry type
+    public static void updateSkinTexture(Identifier skinTexturePath) {
+        if (skinTexturePath != null) {
+            DeathStatueEntity.skinTexture = skinTexturePath;
+        }
+    }
+
     @Nullable
     protected PlayerListEntry getPlayerListEntry() {
         if (this.playerListEntry == null) {
-            this.playerListEntry = Objects.requireNonNull(MinecraftClient.getInstance().getNetworkHandler()).getPlayerListEntry(this.getUuid());
+            this.playerListEntry = Objects.requireNonNull(MinecraftClient.getInstance().getNetworkHandler()).getPlayerListEntry(DeathStatueEntity.UUID_KEY);
         }
         return this.playerListEntry;
     }
-
-    /*public PlayerManager getPlayerManager() {
-        if (this.playerManager == null) {
-            this.playerManager = Objects.requireNonNull(this.currentPlayer.getServer()).getPlayerManager();
-        }
-        return playerManager;
-    }*/
-
-    // Eventually runs in client environment through ClientPlayNetworkingHandler because of the PlayerListEntry type
     public Identifier getSkinTexture() {
         PlayerListEntry playerListEntry = this.getPlayerListEntry();
-        return playerListEntry == null ? DefaultSkinHelper.getTexture(this.currentPlayer.getUuid()) : playerListEntry.getSkinTexture();
+        return playerListEntry == null ? DefaultSkinHelper.getTexture(DeathStatueEntity.currentPlayer.getUuid()) : playerListEntry.getSkinTexture();
     }
 
     @Override
@@ -133,4 +157,8 @@ public class DeathStatueEntity extends LivingEntity {
     public Vec3d lerpVelocity(float tickDelta) {
         return this.lastVelocity.lerp(this.getVelocity(), tickDelta);
     }
+
+    /*public Identifier getSkinTexture() {
+        return this.skinTexture;
+    }*/
 }

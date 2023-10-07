@@ -14,6 +14,8 @@ import net.minecraft.client.texture.PlayerSkinTexture;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.util.DefaultSkinHelper;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
@@ -24,6 +26,7 @@ import net.minecraft.world.GameMode;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
+import java.util.Objects;
 
 @Environment(value= EnvType.CLIENT)
 public abstract class AbstractClientDeathStatueEntity extends DeathStatueEntity {
@@ -54,9 +57,14 @@ public abstract class AbstractClientDeathStatueEntity extends DeathStatueEntity 
     @Nullable
     protected PlayerListEntry getPlayerListEntry() {
         if (this.playerListEntry == null) {
-            this.playerListEntry = MinecraftClient.getInstance().getNetworkHandler().getPlayerListEntry(this.getUuid());
+            this.playerListEntry = Objects.requireNonNull(MinecraftClient.getInstance().getNetworkHandler()).getPlayerListEntry(this.getUuid());
         }
         return this.playerListEntry;
+    }
+
+    public Identifier getSkinTexture() {
+        PlayerListEntry playerListEntry = this.getPlayerListEntry();
+        return playerListEntry == null ? DefaultSkinHelper.getTexture(this.getUuid()) : playerListEntry.getSkinTexture();
     }
 
     @Override
@@ -72,11 +80,6 @@ public abstract class AbstractClientDeathStatueEntity extends DeathStatueEntity 
     public boolean hasSkinTexture() {
         PlayerListEntry playerListEntry = this.getPlayerListEntry();
         return playerListEntry != null && playerListEntry.hasSkinTexture();
-    }
-
-    public Identifier getSkinTexture() {
-        PlayerListEntry playerListEntry = this.getPlayerListEntry();
-        return playerListEntry == null ? DefaultSkinHelper.getTexture(this.getUuid()) : playerListEntry.getSkinTexture();
     }
 
     @Nullable
