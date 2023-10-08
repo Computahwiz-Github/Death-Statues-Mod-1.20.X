@@ -1,10 +1,13 @@
 package net.isaiah.deathstatues.block.statue;
 
+import net.isaiah.deathstatues.block.ModBlocks;
 import net.isaiah.deathstatues.block.entity.DeathStatueBlockEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.sound.SoundCategory;
@@ -16,9 +19,11 @@ import net.minecraft.util.*;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
 public class DeathStatueBaseBlock extends BlockWithEntity implements BlockEntityProvider {
@@ -39,6 +44,21 @@ public class DeathStatueBaseBlock extends BlockWithEntity implements BlockEntity
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
         return super.getPlacementState(ctx).with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+    }
+    @Override
+    public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
+        if (world.getBlockState(pos.up()).isAir()) {
+            world.setBlockState(pos.up(), ModBlocks.DEATH_STATUE_BLOCK.getDefaultState().with(FACING, state.get(FACING)));
+        }
+        super.onPlaced(world, pos, state, placer, itemStack);
+    }
+
+    @Override
+    public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+        if (world.getBlockState(pos.up()).isOf(ModBlocks.DEATH_STATUE_BLOCK)) {
+            world.setBlockState(pos.up(), Blocks.AIR.getDefaultState());
+        }
+        super.onBreak(world, pos, state, player);
     }
 
     @Override
