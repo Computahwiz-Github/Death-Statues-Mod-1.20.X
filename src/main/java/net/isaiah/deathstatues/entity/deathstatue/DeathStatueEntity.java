@@ -18,8 +18,9 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.text.Text;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
@@ -33,12 +34,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 import java.util.UUID;
 
-import static net.isaiah.deathstatues.block.statue.DeathStatueBlock.CHARGED;
-
 
 public class DeathStatueEntity extends LivingEntity {
     private final DeathStatueInventory inventory = new DeathStatueInventory(this);
-    private static PlayerEntity currentPlayer;
+    private static ServerPlayerEntity currentPlayer;
+    private static boolean receivedCurrentPlayer = false;
     public static final TrackedData<Byte> PLAYER_MODEL_PARTS = DataTracker.registerData(DeathStatueEntity.class, TrackedDataHandlerRegistry.BYTE);
     protected Vec3d lastVelocity = Vec3d.ZERO;
     @Nullable
@@ -50,8 +50,24 @@ public class DeathStatueEntity extends LivingEntity {
         //this.currentPlayer = MinecraftClient.getInstance().player;
     }
 
-    public static void receivedCurrentPlayer(PlayerEntity player) {
-        DeathStatueEntity.currentPlayer = player;
+    public static void receivedCurrentPlayer(ServerPlayerEntity player, PacketByteBuf buf) {
+        //currentPlayer = player;
+        if (player != null) {
+            receivedCurrentPlayer = true;
+            setCurrentPlayer(player);
+        }
+        //player.sendMessage(Text.of("Receiving player packet for: " + currentPlayer.getName().getString()));
+        //currentPlayer.setUuid(buf.readUuid());
+    }
+
+    public static void setCurrentPlayer(ServerPlayerEntity player) {
+        if (receivedCurrentPlayer) {
+            currentPlayer = player;
+        }
+    }
+
+    public static UUID getCurrentPlayerUUID() {
+        return currentPlayer.getUuid();
     }
 
     @Override
@@ -89,7 +105,12 @@ public class DeathStatueEntity extends LivingEntity {
     }
     public Identifier getSkinTexture() {
         PlayerListEntry playerListEntry = this.getPlayerListEntry();
-        return playerListEntry == null ? DefaultSkinHelper.getTexture(DeathStatueEntity.currentPlayer.getUuid()) : playerListEntry.getSkinTexture();
+        if (playerListEntry == null) {
+            assert MinecraftClient.getInstance().player != null;
+            return DefaultSkinHelper.getTexture(MinecraftClient.getInstance().player.getUuid());
+        } else {
+            return playerListEntry.getSkinTexture();
+        }
     }
 
     @Override
@@ -167,21 +188,9 @@ public class DeathStatueEntity extends LivingEntity {
 
     @Override
     public ActionResult interact(PlayerEntity player, Hand hand) {
-        player.sendMessage(Text.of("Player: " + player.getName().getString() + " interacted with statue"));
-        //return super.interact(player, hand);
-
-        //BlockPos bottomPos = pos.down();
         BlockPos bottomPos = this.getBlockPos();
         BlockState bottomBlockState = player.getWorld().getBlockState(bottomPos);
         Block bottomBlock = bottomBlockState.getBlock();
-        //BlockState state = player.getWorld().getBlockState(this.getBlockPos());
-
-        /*if (!player.getWorld().getBlockState(this.getBlockPos()).get(CHARGED)) {
-            player.getWorld().setBlockState(this.getBlockPos(), state.with(CHARGED, true));
-        }
-        else {
-            player.getWorld().setBlockState(this.getBlockPos(), state.with(CHARGED, false));
-        }*/
 
 
         if (bottomBlock instanceof DeathStatueBaseBlock) {

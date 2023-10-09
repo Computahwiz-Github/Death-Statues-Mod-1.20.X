@@ -67,8 +67,11 @@ public class DeathStatuesClient implements ClientModInitializer {
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
             ClientPlayNetworking.send(DeathStatuesMessages.HAS_STATUE_CLIENT_ID, PacketByteBufs.create());
             displayWelcomeMessage(client);
-            ClientPlayNetworking.send(DeathStatuesMessages.CURRENT_PLAYER_ID, PacketByteBufs.create());
+
             this.currentPlayer = client.player;
+            PacketByteBuf buf = new PacketByteBuf(PacketByteBufs.create());
+            buf.writeUuid(this.currentPlayer.getUuid());
+            ClientPlayNetworking.send(DeathStatuesMessages.CURRENT_PLAYER_ID, buf);
         });
 
         //This code executes when you press [R] on the keyboard.

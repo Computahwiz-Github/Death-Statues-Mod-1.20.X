@@ -23,7 +23,7 @@ public class C2SPacket {
         DeathStatues.receivedStatueClient(handler);
     }
     public static void serverReceivedPlayer(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-        DeathStatueEntity.receivedCurrentPlayer(player);
+        DeathStatueEntity.receivedCurrentPlayer(player, buf);
     }
     public static void serverReceivedTexture(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         DeathStatueEntity.updateSkinTexture(buf.readIdentifier());

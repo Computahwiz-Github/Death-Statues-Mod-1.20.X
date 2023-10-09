@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "deathstatues",
-  "version": "1.5.1",
+  "version": "1.5.2",
 
   "name": "Death Statues Mod",
   "description": "Spawns a player-like statue entity that wears the same armor and items from both hands. \nIt can be spawned by either placing down a statue base block, when you press [R] on your keyboard, or by dying.\nYou can also place down a more block-like Death Statue Block on top of the base block.\nBoth blocks and the entity will allow you to right click on them to access the statue's storage.\nThere isn't a way to access the armor slots yet because it essentially duplicates the items, so I need to fix that.",

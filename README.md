@@ -1,8 +1,8 @@
 # Death-Statues-Mod-1.20.X
-Death Statues Mod -> Almost Now Works on Servers (Well actually not with the statue entity yet)!
+Death Statues Mod -> Almost Now Works on Servers (The statue entity's skin is always taken from the current player)!
 
 > [!WARNING]
-> W.I.P! As of this version (1.5.1) (Must have it installed on server as well for compatibility)
+> W.I.P! As of this version (1.5.2) (Must have it installed on server as well for compatibility)
 
 > [!NOTE]
 > New screenshots coming soon
