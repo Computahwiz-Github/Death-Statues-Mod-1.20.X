@@ -1,8 +1,8 @@
 # Death-Statues-Mod-1.20.X
-Death Statues Mod -> Now Works on Servers!
+Death Statues Mod -> Almost Now Works on Servers (Well actually not with the statue entity yet)!
 
 > [!WARNING]
-> W.I.P! As of this version (1.5) (Must have it installed on server as well for compatibility)
+> W.I.P! As of this version (1.5.1) (Must have it installed on server as well for compatibility)
 
 > [!NOTE]
 > New screenshots coming soon
