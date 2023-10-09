@@ -1,8 +1,8 @@
 # Death-Statues-Mod-1.20.X
-Death Statues Mod -> Almost Now Works on Servers (The statue entity's skin is always taken from the current player)!
+Death Statues Mod -> Now Works on Servers!
 
 > [!WARNING]
-> W.I.P! As of this version (1.5.2) (Must have it installed on server as well for compatibility)
+> W.I.P! As of this version (1.5.3) (Must have it installed on server as well for compatibility)
 
 > [!NOTE]
 > New screenshots coming soon
@@ -15,8 +15,7 @@ There are three main goals for this project:
 - [x] 1 - Make a "faux-player-model" instead of using an armor stand for the statue
   - [ ] 1.1 - Implement skin caching to avoid hitting api request limit
   - [ ] 1.2 - Make the player model drop as an item with full NBT data that can be placed
-  - [ ] 1.3 - Figure out how to sync textures across server (Probably will be straight-forward with block entity)
-  - [ ] 1.4 - Send S2C packet to grab PlayerListEntry and skinTexture
+  - [x] 1.3 - Sync textures across server
 
 - [x] 2 - Make custom toast popups to indicate when/where the player's death statue spawned and when the player destroys it
   - [x] 2.1 - Make background

@@ -18,13 +18,8 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Arm;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
+import net.minecraft.util.*;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -33,41 +28,19 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class DeathStatueEntity extends LivingEntity {
     private final DeathStatueInventory inventory = new DeathStatueInventory(this);
-    private static ServerPlayerEntity currentPlayer;
-    private static boolean receivedCurrentPlayer = false;
     public static final TrackedData<Byte> PLAYER_MODEL_PARTS = DataTracker.registerData(DeathStatueEntity.class, TrackedDataHandlerRegistry.BYTE);
     protected Vec3d lastVelocity = Vec3d.ZERO;
     @Nullable
     private PlayerListEntry playerListEntry;
-    private static Identifier skinTexture;
 
     public DeathStatueEntity(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
-        //this.currentPlayer = MinecraftClient.getInstance().player;
-    }
-
-    public static void receivedCurrentPlayer(ServerPlayerEntity player, PacketByteBuf buf) {
-        //currentPlayer = player;
-        if (player != null) {
-            receivedCurrentPlayer = true;
-            setCurrentPlayer(player);
-        }
-        //player.sendMessage(Text.of("Receiving player packet for: " + currentPlayer.getName().getString()));
-        //currentPlayer.setUuid(buf.readUuid());
-    }
-
-    public static void setCurrentPlayer(ServerPlayerEntity player) {
-        if (receivedCurrentPlayer) {
-            currentPlayer = player;
-        }
-    }
-
-    public static UUID getCurrentPlayerUUID() {
-        return currentPlayer.getUuid();
     }
 
     @Override
@@ -90,24 +63,35 @@ public class DeathStatueEntity extends LivingEntity {
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 20);
     }
 
-    public static void updateSkinTexture(Identifier skinTexturePath) {
-        if (skinTexturePath != null) {
-            DeathStatueEntity.skinTexture = skinTexturePath;
-        }
-    }
-
     @Nullable
     protected PlayerListEntry getPlayerListEntry() {
         if (this.playerListEntry == null) {
-            this.playerListEntry = Objects.requireNonNull(MinecraftClient.getInstance().getNetworkHandler()).getPlayerListEntry(DeathStatueEntity.UUID_KEY);
+            this.playerListEntry = Objects.requireNonNull(MinecraftClient.getInstance().getNetworkHandler()).getPlayerListEntry(this.getUuid());
         }
         return this.playerListEntry;
     }
+
+    public UUID getPlayerUUIDFromEntityName(String entityName) {
+        Pattern pattern = Pattern.compile("\\[(.*?)]"); //Gets characters from between two square brackets, "[ ]"
+        Matcher matcher = pattern.matcher(entityName);
+        // Find the first matching pattern (if any)
+        if (matcher.find()) {
+            try {
+                return Uuids.getOfflinePlayerUuid(matcher.group(1));
+            } catch (IllegalArgumentException e) {
+                // UUID parsing failed
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
     public Identifier getSkinTexture() {
         PlayerListEntry playerListEntry = this.getPlayerListEntry();
         if (playerListEntry == null) {
             assert MinecraftClient.getInstance().player != null;
-            return DefaultSkinHelper.getTexture(MinecraftClient.getInstance().player.getUuid());
+            //return DefaultSkinHelper.getTexture(MinecraftClient.getInstance().player.getUuid()); //Old getTexture
+            return DefaultSkinHelper.getTexture(getPlayerUUIDFromEntityName(this.getName().getString()));
         } else {
             return playerListEntry.getSkinTexture();
         }

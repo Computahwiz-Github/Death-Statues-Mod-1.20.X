@@ -15,14 +15,11 @@ public class DeathStatuesMessages {
     public static final Identifier WHISPER_COMMAND_ID = new Identifier(DeathStatues.MOD_ID, "whisper_command");
     public static final Identifier HAS_STATUE_CLIENT_ID = new Identifier(DeathStatues.MOD_ID, "has_statue_client");
     public static final Identifier CURRENT_PLAYER_ID = new Identifier(DeathStatues.MOD_ID, "current_player");
-    public static final Identifier UPDATE_STATUE_TEXTURE = new Identifier(DeathStatues.MOD_ID, "statue_texture");
 
     public static void registerC2SPackets() {
         ServerPlayNetworking.registerGlobalReceiver(SPAWN_STATUE_ID, C2SPacket::serverSpawnStatue);
         ServerPlayNetworking.registerGlobalReceiver(HAS_STATUE_CLIENT_ID, C2SPacket::serverReceivedStatueClient);
         ServerPlayNetworking.registerGlobalReceiver(SPAWN_DEATH_STATUE_ID, C2SPacket::serverSpawnDeathStatue);
-        ServerPlayNetworking.registerGlobalReceiver(CURRENT_PLAYER_ID, C2SPacket::serverReceivedPlayer);
-        ServerPlayNetworking.registerGlobalReceiver(UPDATE_STATUE_TEXTURE, C2SPacket::serverReceivedTexture);
     }
 
     public static void registerS2CPackets() {

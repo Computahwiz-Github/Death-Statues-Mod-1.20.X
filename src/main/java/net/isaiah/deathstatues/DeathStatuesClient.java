@@ -22,7 +22,6 @@ import net.isaiah.deathstatues.util.ModModelPredicateProvider;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.model.Dilation;
-import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
@@ -32,7 +31,6 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,8 +41,6 @@ public class DeathStatuesClient implements ClientModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     private static KeyBinding keyBinding;
     public static final EntityModelLayer MODEL_STATUE_LAYER = new EntityModelLayer(new Identifier(MOD_ID, "statue"), "main");
-    @Nullable
-    private PlayerListEntry playerListEntry;
     private PlayerEntity currentPlayer;
 
     @Override
@@ -61,7 +57,6 @@ public class DeathStatuesClient implements ClientModInitializer {
         EntityModelLayerRegistry.registerModelLayer(MODEL_STATUE_LAYER, () -> DeathStatueEntityModel.getTexturedModelData(Dilation.NONE, false));
 
         EntityRendererRegistry.register(DeathStatues.DEATH_STATUE, DeathStatueEntityRenderer::new);
-        //BlockEntityRendererFactories.register(ModBlocks.DEATH_STATUE_BLOCK, DeathStatueEntityRenderer::new);
 
         //This code executes when the player loads into a world.
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
@@ -86,19 +81,6 @@ public class DeathStatuesClient implements ClientModInitializer {
             }
         });
     }
-
-    /*@Nullable
-    protected PlayerListEntry getPlayerListEntry() {
-        if (this.playerListEntry == null) {
-            DeathStatueEntity deathStatueEntity = new DeathStatueEntity(DeathStatues.DEATH_STATUE_BLOCK, MinecraftClient.getInstance().world);
-            this.playerListEntry = Objects.requireNonNull(MinecraftClient.getInstance().getNetworkHandler()).getPlayerListEntry(deathStatueEntity.getUuid());
-        }
-        return this.playerListEntry;
-    }
-    public Identifier getSkinTexture() {
-        PlayerListEntry playerListEntry = this.getPlayerListEntry();
-        return playerListEntry == null ? DefaultSkinHelper.getTexture(this.currentPlayer.getUuid()) : playerListEntry.getSkinTexture();
-    }*/
 
     public static void displayStatueSpawned(MinecraftClient client) {
         assert client.player != null;
