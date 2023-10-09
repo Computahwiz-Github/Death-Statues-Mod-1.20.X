@@ -42,14 +42,22 @@ Both of these messages have the coordinates to where it spawned.
 
 ![Statue Spawned Toast](images/statue_spawned.png)
 
+>-> The chat also has a clickEvent that will suggest a teleport command in chat for you! <-
+
+![Statue Spawned Chat](images/statue_spawned_chat_click_event.png)
+
 ### Now Works on Servers!
 You can share in the morbid fun of having death statues (blocks & entities) on servers
 
 ![Statue Works on Servers](images/works_on_servers.png)
 
->-> The chat also has a clickEvent that will suggest a teleport command in chat for you! <-
+### You Can Open the Base Block's Storage by Right-Clicking on the Death Statue Entity or the Block
 
-![Statue Spawned Chat](images/statue_spawned_chat_click_event.png)
+![Statue Entity Opens Storage](images/storage_works_on_entity.png)
+
+![Statue Block Opens Storage](images/storage_works_on_block.png)
+
+When you right-click to open the container from the Death Statue Block, it updates/changes the Statue Block's texture
 
 ### Death Statue Destruction Toast Message
 When you destroy your statue, you'll get toast and chat messages.
