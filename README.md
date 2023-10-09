@@ -63,4 +63,7 @@ You can only destroy the statue that has your name as part of its name, unless y
 
 ![Statue Can Destroy Creative](images/can_destroy_others_statues_creative.png)
 
-### W.I.P. Added Toast Message When You Whisper to a Player
+### Added Toast Message When You Whisper to a Player
+When you use /msg to whisper to another player, they will receive a toast popup of the message
+
+![Whisper Message Toast](images/whisper_toast.png)
