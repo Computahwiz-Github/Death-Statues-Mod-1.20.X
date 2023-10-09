@@ -51,7 +51,7 @@ public class DeathStatueBaseBlock extends BlockWithEntity implements BlockEntity
 
             //Spawns player model entity
             //assert placer != null;
-            //DeathStatues.spawnPlayerDeathStatue((PlayerEntity) placer, pos.up().toCenterPos());
+            //DeathStatues.spawnDeathStatueEntity((PlayerEntity) placer, pos.up().toCenterPos());
         }
         super.onPlaced(world, pos, state, placer, itemStack);
     }

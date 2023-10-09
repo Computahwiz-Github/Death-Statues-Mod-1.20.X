@@ -16,7 +16,6 @@ import net.isaiah.deathstatues.item.ModItems;
 import net.isaiah.deathstatues.networking.DeathStatuesMessages;
 import net.isaiah.deathstatues.screen.ModScreenHandlers;
 import net.minecraft.entity.*;
-import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
@@ -34,6 +33,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DeathStatues implements ModInitializer {
     public static final String MOD_ID = "deathstatues";
@@ -54,7 +55,6 @@ public class DeathStatues implements ModInitializer {
         ModBlocks.registerModBlocks();
         ModScreenHandlers.registerScreenHandlers();
         ModBlockEntities.registerBlockEntities();
-        //Registry.register(Registries.SCREEN_HANDLER, id("box"), BOX_SCREEN_HANDLER);
 
         FabricDefaultAttributeRegistry.register(DEATH_STATUE, DeathStatueEntity.createStatueAttributes());
 
@@ -63,8 +63,7 @@ public class DeathStatues implements ModInitializer {
             if (entity instanceof PlayerEntity player){
                 //LOGGER.info("Event: Player (" + player.getName().getString() + "): [" + player.getUuidAsString() + "] Died");
                 ServerPlayNetworking.send((ServerPlayerEntity) player, DeathStatuesMessages.PLAYER_DIED_ID, PacketByteBufs.create());
-                //spawnDeathStatue(player); // Old method that spawned armor stand
-                spawnPlayerDeathStatue(player, player.getPos());
+                spawnDeathStatueEntity(player, player.getPos());
             }
             return true;
         });
@@ -74,65 +73,48 @@ public class DeathStatues implements ModInitializer {
             if (world.isClient()){
                 return ActionResult.PASS;
             }
-            if (entity instanceof ArmorStandEntity && entity.getName().equals(player.getName())) {
-                //LOGGER.info("Event: Attacking Armor Stand: [" + entity.getUuidAsString() + "], at: (" + entity.getBlockX() + ", " + entity.getBlockY() + ", " + entity.getBlockZ() + ")");
+            //This is called when the Death Statue Entity has the same name as the attacking player
+            if (entity instanceof DeathStatueEntity && getPlayerNameFromStatueName(entity.getName().getString()).equals(player.getName())) {
+                //LOGGER.info("Event: Attacking Death Statue: [" + entity.getUuidAsString() + "], at: (" + entity.getBlockX() + ", " + entity.getBlockY() + ", " + entity.getBlockZ() + ")");
                 ServerPlayNetworking.send((ServerPlayerEntity) player, DeathStatuesMessages.DESTROY_STATUE_ID, PacketByteBufs.create());
                 entity.kill();
                 return ActionResult.PASS;
+            }
+            //This is called when the Death Statue Entity doesn't have the same name as the attacking player
+            else if (entity instanceof DeathStatueEntity && !getPlayerNameFromStatueName(entity.getName().getString()).equals(player.getName())) {
+                //If you're creative, you can destroy any statue
+                if (player.isCreative()) {
+                    entity.kill();
+                    return ActionResult.PASS;
+                }
+                else {
+                    player.sendMessage(Text.of("This statue isn't yours!"));
+                    return ActionResult.FAIL;
+                }
             }
 
             return ActionResult.PASS;
         });
     }
-    // I will be replacing this method as it is old and spawned an armor stand with gear on instead of my custom player/statue
-    /*public static void spawnDeathStatue(PlayerEntity serverPlayer) {
-        Vec3d playerPosition = serverPlayer.getPos();
-        World world = serverPlayer.getWorld();
-
-        ItemStack HELMET;
-        ItemStack BREASTPLATE = serverPlayer.getInventory().getArmorStack(2);
-        ItemStack LEGGINGS = serverPlayer.getInventory().getArmorStack(1);
-        ItemStack BOOTS = serverPlayer.getInventory().getArmorStack(0);
-        ItemStack MAINHAND = serverPlayer.getMainHandStack();
-        ItemStack OFFHAND = serverPlayer.getOffHandStack();
-
-        if (serverPlayer.getInventory().getArmorStack(3).isEmpty()) {
-            HELMET = new ItemStack(Items.PLAYER_HEAD);
-            GameProfile gameProfile = serverPlayer.getGameProfile();
-            HELMET.getOrCreateNbt().put("SkullOwner", NbtHelper.writeGameProfile(new NbtCompound(), gameProfile));
+    public Text getPlayerNameFromStatueName(String entityName) {
+        //Gets characters from between two square brackets, "[ ]"
+        Pattern pattern = Pattern.compile("\\[(.*?)]");
+        Matcher matcher = pattern.matcher(entityName);
+        // Find the first matching pattern (if any)
+        if (matcher.find()) {
+            try {
+                //return Uuids.getOfflinePlayerUuid(matcher.group(1));
+                return Text.of(matcher.group(1));
+            } catch (IllegalArgumentException e) {
+                // UUID parsing failed
+                e.printStackTrace();
+            }
         }
-        else {
-            HELMET = serverPlayer.getInventory().getArmorStack(3);
-        }
-
-        ArmorStandEntity armorStand = new ArmorStandEntity(EntityType.ARMOR_STAND, world);
-
-        armorStand.setShowArms(true);
-        armorStand.setInvulnerable(true);
-        //armorStand.setNoGravity(true);
-        armorStand.setPosition(playerPosition);
-        armorStand.setCustomNameVisible(true);
-        armorStand.setCustomName(serverPlayer.getName());
-
-        world.spawnEntity(armorStand);
-        armorStand.refreshPositionAndAngles(serverPlayer.getBlockPos(), serverPlayer.getYaw(), serverPlayer.getPitch());
-
-        armorStand.equipStack(EquipmentSlot.HEAD, HELMET);
-        armorStand.equipStack(EquipmentSlot.CHEST, BREASTPLATE);
-        armorStand.equipStack(EquipmentSlot.LEGS, LEGGINGS);
-        armorStand.equipStack(EquipmentSlot.FEET, BOOTS);
-        armorStand.equipStack(EquipmentSlot.MAINHAND, MAINHAND);
-        armorStand.equipStack(EquipmentSlot.OFFHAND, OFFHAND);
-
-        //armorStand.equipStack(EquipmentSlot.HEAD, ItemStack.EMPTY);
-
-        String statueLocation = armorStand.getBlockX() + ", " + armorStand.getBlockY() + ", " + armorStand.getBlockZ();
-        LOGGER.info("SPAWNED ARMOR STAND: " + armorStand.getUuidAsString() + " at: " + statueLocation);
-    }*/
-
-    //Here is the current method that spawns the statue. Will be renamed to old method name.
-    public static void spawnPlayerDeathStatue(PlayerEntity serverPlayer, Vec3d playerPosition) {
-        //Vec3d playerPosition = serverPlayer.getPos();
+        return null;
+    }
+    //This is the method that spawns the statue entity
+    public static void spawnDeathStatueEntity(PlayerEntity serverPlayer, Vec3d playerPosition) {
+        BlockPos playerBlockPos = BlockPos.ofFloored(playerPosition);
         World world = serverPlayer.getWorld();
         String playerName = serverPlayer.getName().getString();
         GameProfile gameProfile = new GameProfile(UUID.randomUUID(), "Death Statue of [" + playerName + "]");
@@ -152,7 +134,6 @@ public class DeathStatues implements ModInitializer {
         deathStatue.setHeadYaw(serverPlayer.getHeadYaw());
 
         world.spawnEntity(deathStatue);
-        BlockPos playerBlockPos = BlockPos.ofFloored(playerPosition);
         deathStatue.refreshPositionAndAngles(playerBlockPos, serverPlayer.getYaw(), serverPlayer.getPitch());
 
         deathStatue.equipStack(EquipmentSlot.HEAD, HELMET);
@@ -165,7 +146,7 @@ public class DeathStatues implements ModInitializer {
         String statueLocation = deathStatue.getBlockX() + ", " + deathStatue.getBlockY() + ", " + deathStatue.getBlockZ();
         LOGGER.info("SPAWNED DEATH STATUE: [" + deathStatue.getUuidAsString() + "] at: (" + statueLocation + ")");
     }
-
+    //This is where I will grab the player's skin texture for the statue block model
     public static void receivedStatueClient(ServerPlayNetworkHandler handler) {
         hasStatuesClient = true;
         //handler.getPlayer().sendMessage(Text.of("Has Statue Client: " + hasStatuesClient));

@@ -71,8 +71,9 @@ public class DeathStatueEntity extends LivingEntity {
         return this.playerListEntry;
     }
 
-    public UUID getPlayerUUIDFromEntityName(String entityName) {
-        Pattern pattern = Pattern.compile("\\[(.*?)]"); //Gets characters from between two square brackets, "[ ]"
+    public UUID getPlayerUUIDFromStatueName(String entityName) {
+        //Gets characters from between two square brackets, "[ ]"
+        Pattern pattern = Pattern.compile("\\[(.*?)]");
         Matcher matcher = pattern.matcher(entityName);
         // Find the first matching pattern (if any)
         if (matcher.find()) {
@@ -91,7 +92,7 @@ public class DeathStatueEntity extends LivingEntity {
         if (playerListEntry == null) {
             assert MinecraftClient.getInstance().player != null;
             //return DefaultSkinHelper.getTexture(MinecraftClient.getInstance().player.getUuid()); //Old getTexture
-            return DefaultSkinHelper.getTexture(getPlayerUUIDFromEntityName(this.getName().getString()));
+            return DefaultSkinHelper.getTexture(getPlayerUUIDFromStatueName(this.getName().getString()));
         } else {
             return playerListEntry.getSkinTexture();
         }

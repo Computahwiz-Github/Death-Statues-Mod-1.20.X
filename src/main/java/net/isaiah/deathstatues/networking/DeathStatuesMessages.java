@@ -8,7 +8,6 @@ import net.isaiah.deathstatues.networking.packet.S2CPacket;
 import net.minecraft.util.Identifier;
 
 public class DeathStatuesMessages {
-    public static final Identifier SPAWN_STATUE_ID = new Identifier(DeathStatues.MOD_ID, "spawn_statue");
     public static final Identifier SPAWN_DEATH_STATUE_ID = new Identifier(DeathStatues.MOD_ID, "spawn_death_statue");
     public static final Identifier DESTROY_STATUE_ID = new Identifier(DeathStatues.MOD_ID, "destroy_statue");
     public static final Identifier PLAYER_DIED_ID = new Identifier(DeathStatues.MOD_ID, "player_died");
@@ -17,7 +16,6 @@ public class DeathStatuesMessages {
     public static final Identifier CURRENT_PLAYER_ID = new Identifier(DeathStatues.MOD_ID, "current_player");
 
     public static void registerC2SPackets() {
-        ServerPlayNetworking.registerGlobalReceiver(SPAWN_STATUE_ID, C2SPacket::serverSpawnStatue);
         ServerPlayNetworking.registerGlobalReceiver(HAS_STATUE_CLIENT_ID, C2SPacket::serverReceivedStatueClient);
         ServerPlayNetworking.registerGlobalReceiver(SPAWN_DEATH_STATUE_ID, C2SPacket::serverSpawnDeathStatue);
     }

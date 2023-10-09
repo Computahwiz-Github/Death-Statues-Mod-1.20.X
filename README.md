@@ -2,10 +2,7 @@
 Death Statues Mod -> Now Works on Servers!
 
 > [!WARNING]
-> W.I.P! As of this version (1.5.4) (Must have it installed on server as well for compatibility)
-
-> [!NOTE]
-> New screenshots coming soon
+> W.I.P! As of this version (1.5.5) (Must have it installed on server as well for compatibility)
 
 This is my first Minecraft mod and it uses fabric. The idea of the mod is just to spawn a statue of a player when they die and have it as a collectible.
 
@@ -45,13 +42,25 @@ Both of these messages have the coordinates to where it spawned.
 
 ![Statue Spawned Toast](images/statue_spawned.png)
 
+### Now Works on Servers!
+You can share in the morbid fun of having death statues (blocks & entities) on servers
+
+![Statue Works on Servers](images/works_on_servers.png)
+
 >-> The chat also has a clickEvent that will suggest a teleport command in chat for you! <-
 
-![Statue Spawned Chat](images/chat_clickEvent.png)
+![Statue Spawned Chat](images/statue_spawned_chat_click_event.png)
 
 ### Death Statue Destruction Toast Message
 When you destroy your statue, you'll get toast and chat messages.
 
 ![Statue Destroyed](images/statue_destroyed.png)
+
+### You Can't Destroy Other's Statues, Unless You're In Creative Mode
+You can only destroy the statue that has your name as part of its name, unless you're in creative
+
+![Statue Can't Destroy](images/cant_destroy_others_statues.png)
+
+![Statue Can Destroy Creative](images/can_destroy_others_statues_creative.png)
 
 ### W.I.P. Added Toast Message When You Whisper to a Player
