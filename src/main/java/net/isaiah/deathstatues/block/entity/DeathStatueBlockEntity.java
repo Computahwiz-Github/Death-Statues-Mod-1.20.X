@@ -6,7 +6,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -20,8 +22,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 public class DeathStatueBlockEntity extends LootableContainerBlockEntity implements ExtendedScreenHandlerFactory, ImplementedInventory {
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(27, ItemStack.EMPTY);
-    private DefaultedList<ItemStack> items = DefaultedList.ofSize(size(), ItemStack.EMPTY);
+    private DefaultedList<ItemStack> inventory = DefaultedList.ofSize(27, ItemStack.EMPTY);
+    //private DefaultedList<ItemStack> items = DefaultedList.ofSize(size(), ItemStack.EMPTY);
 
     public DeathStatueBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.DEATH_STATUE_BASE, pos, state);
@@ -33,11 +35,11 @@ public class DeathStatueBlockEntity extends LootableContainerBlockEntity impleme
 
     @Override
     protected DefaultedList<ItemStack> getInvStackList() {
-        return items;
+        return this.inventory;
     }
     @Override
     protected void setInvStackList(DefaultedList<ItemStack> list) {
-        this.items = list;
+        this.inventory = list;
     }
 
     @Nullable
@@ -59,16 +61,15 @@ public class DeathStatueBlockEntity extends LootableContainerBlockEntity impleme
         return this.inventory;
     }
 
-    //Leave for when i need to write custom skin texture to upper half
-    /*@Override
+    @Override
     public void writeNbt(NbtCompound nbt) {
-        super.writeNbt(nbt);
         Inventories.writeNbt(nbt, inventory);
+        super.writeNbt(nbt);
     }
 
     @Override
     public void readNbt(NbtCompound nbt) {
-        Inventories.readNbt(nbt, inventory);
         super.readNbt(nbt);
-    }*/
+        Inventories.readNbt(nbt, inventory);
+    }
 }
