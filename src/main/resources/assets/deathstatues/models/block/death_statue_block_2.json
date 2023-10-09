@@ -1,7 +1,8 @@
 {
 	"texture_size": [64, 32],
 	"textures": {
-		"0": "deathstatues:block/statue_texture_2"
+		"0": "deathstatues:block/statue_texture_2",
+		"particle": "deathstatues:block/statue_texture_2"
 	},
 	"elements": [
 		{

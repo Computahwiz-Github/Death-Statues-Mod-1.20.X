@@ -1,33 +1,33 @@
 {
   "variants": {
-    "charged=false,facing=east": {
+    "charged=true,facing=east": {
       "model": "deathstatues:block/death_statue_block",
       "y": 90
     },
-    "charged=false,facing=north": {
+    "charged=true,facing=north": {
       "model": "deathstatues:block/death_statue_block"
     },
-    "charged=false,facing=south": {
+    "charged=true,facing=south": {
       "model": "deathstatues:block/death_statue_block",
       "y": 180
     },
-    "charged=false,facing=west": {
+    "charged=true,facing=west": {
       "model": "deathstatues:block/death_statue_block",
       "y": 270
     },
 
-    "charged=true,facing=east": {
+    "charged=false,facing=east": {
       "model": "deathstatues:block/death_statue_block_2",
       "y": 90
     },
-    "charged=true,facing=north": {
+    "charged=false,facing=north": {
       "model": "deathstatues:block/death_statue_block_2"
     },
-    "charged=true,facing=south": {
+    "charged=false,facing=south": {
       "model": "deathstatues:block/death_statue_block_2",
       "y": 180
     },
-    "charged=true,facing=west": {
+    "charged=false,facing=west": {
       "model": "deathstatues:block/death_statue_block_2",
       "y": 270
     }

@@ -1,12 +1,24 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_death_statue_block": {
+    "has_item_frame": {
       "conditions": {
         "items": [
           {
             "items": [
-              "deathstatues:death_statue_block"
+              "minecraft:iron_block"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_name_tag": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:name_tag"
             ]
           }
         ]
@@ -15,20 +27,21 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:death_statue"
+        "recipe": "deathstatues:death_statue_base_block"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_death_statue_block",
+      "has_name_tag",
+      "has_item_frame",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "minecraft:death_statue"
+      "deathstatues:death_statue_base_block"
     ]
   },
   "sends_telemetry_event": false

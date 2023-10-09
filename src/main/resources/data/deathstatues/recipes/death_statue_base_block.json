@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "F": {
+      "item": "minecraft:iron_block"
+    },
+    "N": {
+      "item": "minecraft:name_tag"
+    }
+  },
+  "pattern": [
+    "FFF",
+    "FNF",
+    "FFF"
+  ],
+  "result": {
+    "item": "deathstatues:death_statue_base"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,5 @@
+// 1.20.1	2023-10-09T15:26:51.8565491	Death Statues Mod/Model Definitions
+2ca1ccd4ffb70e199de3c80d8f5df178e0ce5863 assets\deathstatues\blockstates\death_statue_block.json
+cea40e1f1a2bead31b6dcf450d4cf6c7a1d2dc48 assets\deathstatues\models\item\death_statue_block.json
+8de9234dbfb51aaf08e1049d357765f130694521 assets\deathstatues\blockstates\death_statue_base.json
+75420d79b94e78b4d1ec58379eee1a0da505a155 assets\deathstatues\models\item\death_statue_base.json

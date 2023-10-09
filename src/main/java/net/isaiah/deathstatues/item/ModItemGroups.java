@@ -14,12 +14,11 @@ public class ModItemGroups {
     public static final ItemGroup STATUE_GROUP = Registry.register(Registries.ITEM_GROUP,
             new Identifier(DeathStatues.MOD_ID, "statue"),
             FabricItemGroup.builder().displayName(Text.translatable("itemgroup.statue"))
-                    .icon(() -> new ItemStack(ModItems.DEATH_STATUE)).entries(((displayContext, entries) -> {
+                    .icon(() -> new ItemStack(ModBlocks.DEATH_STATUE_BLOCK)).entries(((displayContext, entries) -> {
                         //entries.add(ModItems.DEATH_STATUE);
 
-                        entries.add(ModBlocks.DEATH_STATUE_BLOCK);
                         entries.add(ModBlocks.DEATH_STATUE_BASE_BLOCK);
-
+                        entries.add(ModBlocks.DEATH_STATUE_BLOCK);
 
                     })).build());
 

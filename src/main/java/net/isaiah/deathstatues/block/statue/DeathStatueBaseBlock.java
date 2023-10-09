@@ -1,12 +1,9 @@
 package net.isaiah.deathstatues.block.statue;
 
-import net.isaiah.deathstatues.DeathStatues;
 import net.isaiah.deathstatues.block.ModBlocks;
 import net.isaiah.deathstatues.block.entity.DeathStatueBlockEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
@@ -49,9 +46,12 @@ public class DeathStatueBaseBlock extends BlockWithEntity implements BlockEntity
     @Override
     public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
         if (world.getBlockState(pos.up()).isAir()) {
-            //world.setBlockState(pos.up(), ModBlocks.DEATH_STATUE_BLOCK.getDefaultState().with(FACING, state.get(FACING))); //Spawns player model block
-            assert placer != null;
-            DeathStatues.spawnPlayerDeathStatue((PlayerEntity) placer, pos.up().toCenterPos()); //Spawns player model entity
+            //Spawns player model block
+            world.setBlockState(pos.up(), ModBlocks.DEATH_STATUE_BLOCK.getDefaultState().with(FACING, state.get(FACING)));
+
+            //Spawns player model entity
+            //assert placer != null;
+            //DeathStatues.spawnPlayerDeathStatue((PlayerEntity) placer, pos.up().toCenterPos());
         }
         super.onPlaced(world, pos, state, placer, itemStack);
     }
@@ -60,6 +60,7 @@ public class DeathStatueBaseBlock extends BlockWithEntity implements BlockEntity
     public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
         if (world.getBlockState(pos.up()).isOf(ModBlocks.DEATH_STATUE_BLOCK)) {
             world.setBlockState(pos.up(), Blocks.AIR.getDefaultState());
+            world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_BREAK, SoundCategory.BLOCKS, 0.5f, world.random.nextFloat() * 0.1f + 0.9f);
         }
         super.onBreak(world, pos, state, player);
     }

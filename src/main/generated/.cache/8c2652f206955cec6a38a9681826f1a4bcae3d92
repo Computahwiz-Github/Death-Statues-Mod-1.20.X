@@ -1,0 +1,9 @@
+// 1.20.1	2023-10-09T15:26:51.854548	Death Statues Mod/Recipes
+faf248c693b9c6a6938f0627e7cbfb725580d748 data\deathstatues\recipes\death_statue_block.json
+01eba4592de6aac15e8cc5fa58c021a7a505336f data\deathstatues\recipes\death_statue_base.json
+d724a4fc8c53b5d68c54d18d75f98f1f5458d621 data\deathstatues\recipes\death_statue_base_block.json
+44188e175ef90e3ad3642d3c3bc1d17818fa2712 data\deathstatues\advancements\recipes\misc\death_statue_base.json
+5c53922fd498459b517844de39d7b1fedf148f32 data\deathstatues\recipes\iron_block.json
+ee70477eb86fc69ab02ca2ed891b530a916892cc data\deathstatues\advancements\recipes\misc\iron_block.json
+04612f116f3ad9f85f973f8a1b490887830e19a6 data\deathstatues\advancements\recipes\misc\death_statue_base_block.json
+af8b5bc5f8c9dfb42e7542b837d66f27ba9345fa data\deathstatues\advancements\recipes\misc\death_statue_block.json

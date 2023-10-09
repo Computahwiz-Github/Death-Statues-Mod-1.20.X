@@ -2,7 +2,8 @@
 	"parent": "minecraft:block",
 	"texture_size": [64, 64],
 	"textures": {
-		"0": "deathstatues:block/statue_texture"
+		"0": "deathstatues:block/statue_texture",
+		"particle": "deathstatues:block/statue_texture"
 	},
 	"elements": [
 		{

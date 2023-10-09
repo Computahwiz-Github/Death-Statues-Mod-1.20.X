@@ -168,6 +168,6 @@ public class DeathStatues implements ModInitializer {
 
     public static void receivedStatueClient(ServerPlayNetworkHandler handler) {
         hasStatuesClient = true;
-        handler.getPlayer().sendMessage(Text.of("Has Statue Client: " + hasStatuesClient));
+        //handler.getPlayer().sendMessage(Text.of("Has Statue Client: " + hasStatuesClient));
     }
 }

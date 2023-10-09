@@ -2,7 +2,7 @@
 Death Statues Mod -> Now Works on Servers!
 
 > [!WARNING]
-> W.I.P! As of this version (1.5.3) (Must have it installed on server as well for compatibility)
+> W.I.P! As of this version (1.5.4) (Must have it installed on server as well for compatibility)
 
 > [!NOTE]
 > New screenshots coming soon
@@ -29,7 +29,7 @@ There are three main goals for this project:
   - [ ] 3.1 When the player destroys the statue, make it drop all the items except what you choose to leave on (specific armor/weapons)
   - [x] 3.2 Make statue have storage capacity
 
-P.S. I added a shaped saddle recipe for fun (leather & iron).
+P.S. I added shaped recipes for the Death Statue Block, Base block, and a saddle recipe for fun (leather & iron).
 
 ## Welcome Toast Message
 When you load into a world, you'll get a little welcome toast message.

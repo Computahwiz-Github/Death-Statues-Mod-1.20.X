@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "deathstatues:death_statue_block"
+    "deathstatues:death_statue_block",
+    "deathstatues:death_statue_base"
   ]
 }

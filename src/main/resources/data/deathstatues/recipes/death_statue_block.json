@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "F": {
+      "item": "minecraft:item_frame"
+    },
+    "N": {
+      "item": "minecraft:name_tag"
+    }
+  },
+  "pattern": [
+    "FFF",
+    "FNF",
+    "FFF"
+  ],
+  "result": {
+    "item": "deathstatues:death_statue_block"
+  },
+  "show_notification": true
+}

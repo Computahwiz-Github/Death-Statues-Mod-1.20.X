@@ -11,21 +11,22 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
 public class ModItems {
-    public static final Item DEATH_STATUE = registerItem("death_statue", new Item(new Item.Settings().maxCount(1)));
-    public static final Item DEATH_STATUE_BASE_ITEM = registerItem("death_statue_base_item", new Item(new Item.Settings().maxCount(1)));
+    //public static final Item DEATH_STATUE = registerItem("death_statue", new Item(new Item.Settings().maxCount(1)));
+    //public static final Item DEATH_STATUE_BASE_ITEM = registerItem("death_statue_base_item", new Item(new Item.Settings().maxCount(1)));
 
     private static Item registerItem(String name, Item item) {
         return Registry.register(Registries.ITEM, new Identifier(DeathStatues.MOD_ID, name), item);
     }
-    private static void itemGroupIngredients(FabricItemGroupEntries entries) {
-        entries.add(DEATH_STATUE);
+    private static void itemGroupFunctional(FabricItemGroupEntries entries) {
+        //entries.add(DEATH_STATUE);
+        //entries.add(DEATH_STATUE_BASE_ITEM);
+
         entries.add(ModBlocks.DEATH_STATUE_BLOCK);
-        entries.add(DEATH_STATUE_BASE_ITEM);
         entries.add(ModBlocks.DEATH_STATUE_BASE_BLOCK);
     }
     public static void registerModItems() {
         DeathStatues.LOGGER.info("Registering Mod Items for: " + DeathStatues.MOD_ID);
 
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(ModItems::itemGroupIngredients);
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(ModItems::itemGroupFunctional);
     }
 }

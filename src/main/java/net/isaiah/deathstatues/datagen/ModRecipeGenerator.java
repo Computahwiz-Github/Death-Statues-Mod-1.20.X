@@ -2,8 +2,8 @@ package net.isaiah.deathstatues.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import net.isaiah.deathstatues.DeathStatues;
 import net.isaiah.deathstatues.block.ModBlocks;
-import net.isaiah.deathstatues.item.ModItems;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
 import net.minecraft.item.Items;
@@ -18,7 +18,7 @@ public class ModRecipeGenerator extends FabricRecipeProvider {
     }
     @Override
     public void generate(Consumer<RecipeJsonProvider> exporter) {
-        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.DEATH_STATUE)
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModBlocks.DEATH_STATUE_BLOCK)
                 .pattern("FFF")
                 .pattern("FNF")
                 .pattern("FFF")
@@ -26,8 +26,19 @@ public class ModRecipeGenerator extends FabricRecipeProvider {
                 .input('F', Items.ITEM_FRAME)
                 .criterion(hasItem(Items.NAME_TAG), conditionsFromItem(Items.NAME_TAG))
                 .criterion(hasItem(Items.ITEM_FRAME), conditionsFromItem(Items.ITEM_FRAME))
-                .offerTo(exporter, new Identifier(getRecipeName(ModItems.DEATH_STATUE) + "_"));
+                .offerTo(exporter, new Identifier(DeathStatues.MOD_ID, "death_statue_block"));
 
-        offerReversibleCompactingRecipes(exporter, RecipeCategory.MISC, ModItems.DEATH_STATUE, RecipeCategory.MISC, ModBlocks.DEATH_STATUE_BLOCK);
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModBlocks.DEATH_STATUE_BASE_BLOCK)
+                .pattern("FFF")
+                .pattern("FNF")
+                .pattern("FFF")
+                .input('N', Items.NAME_TAG)
+                .input('F', Items.IRON_BLOCK)
+                .criterion(hasItem(Items.NAME_TAG), conditionsFromItem(Items.NAME_TAG))
+                .criterion(hasItem(Items.ITEM_FRAME), conditionsFromItem(Items.IRON_BLOCK))
+                .offerTo(exporter, new Identifier(DeathStatues.MOD_ID, "death_statue_base_block"));
+
+        offerReversibleCompactingRecipes(exporter, RecipeCategory.MISC, Items.IRON_BLOCK, RecipeCategory.MISC, ModBlocks.DEATH_STATUE_BASE_BLOCK);
     }
 }
