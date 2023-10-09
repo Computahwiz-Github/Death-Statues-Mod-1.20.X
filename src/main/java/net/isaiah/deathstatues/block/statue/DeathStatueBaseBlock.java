@@ -1,5 +1,6 @@
 package net.isaiah.deathstatues.block.statue;
 
+import net.isaiah.deathstatues.DeathStatues;
 import net.isaiah.deathstatues.block.ModBlocks;
 import net.isaiah.deathstatues.block.entity.DeathStatueBlockEntity;
 import net.minecraft.block.*;
@@ -46,7 +47,9 @@ public class DeathStatueBaseBlock extends BlockWithEntity implements BlockEntity
     @Override
     public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
         if (world.getBlockState(pos.up()).isAir()) {
-            world.setBlockState(pos.up(), ModBlocks.DEATH_STATUE_BLOCK.getDefaultState().with(FACING, state.get(FACING)));
+            //world.setBlockState(pos.up(), ModBlocks.DEATH_STATUE_BLOCK.getDefaultState().with(FACING, state.get(FACING))); //Spawns player model block
+            assert placer != null;
+            DeathStatues.spawnPlayerDeathStatue((PlayerEntity) placer, pos.up().toCenterPos()); //Spawns player model entity
         }
         super.onPlaced(world, pos, state, placer, itemStack);
     }

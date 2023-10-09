@@ -85,7 +85,6 @@ public class DeathStatueBlock extends HorizontalFacingBlock {
                 return VoxelShapes.fullCube();
         }
     }
-
     @Override
     public BlockState rotate(BlockState state, BlockRotation rotation) {
         return state.with(FACING, rotation.rotate(state.get(FACING)));

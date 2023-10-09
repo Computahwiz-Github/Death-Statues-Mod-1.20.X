@@ -7,7 +7,6 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
 
 import java.util.UUID;
 
@@ -15,10 +14,10 @@ public class C2SPacket {
     //Everything here only happens on the server
     public static void serverSpawnStatue(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         //DeathStatues.spawnDeathStatue(player); // Old armor stand method
-        DeathStatues.spawnPlayerDeathStatue(player);
+        //DeathStatues.spawnPlayerDeathStatue(player);
     }
     public static void serverSpawnDeathStatue(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-        DeathStatues.spawnPlayerDeathStatue(player);
+        DeathStatues.spawnPlayerDeathStatue(player, player.getPos());
     }
     public static void serverReceivedStatueClient(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         DeathStatues.receivedStatueClient(handler);

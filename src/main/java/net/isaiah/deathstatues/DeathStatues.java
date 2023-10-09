@@ -8,7 +8,6 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.isaiah.deathstatues.block.ModBlocks;
 import net.isaiah.deathstatues.block.entity.ModBlockEntities;
 import net.isaiah.deathstatues.entity.deathstatue.DeathStatueEntity;
@@ -22,13 +21,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Uuids;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.slf4j.Logger;
@@ -65,7 +64,7 @@ public class DeathStatues implements ModInitializer {
                 //LOGGER.info("Event: Player (" + player.getName().getString() + "): [" + player.getUuidAsString() + "] Died");
                 ServerPlayNetworking.send((ServerPlayerEntity) player, DeathStatuesMessages.PLAYER_DIED_ID, PacketByteBufs.create());
                 //spawnDeathStatue(player); // Old method that spawned armor stand
-                spawnPlayerDeathStatue(player);
+                spawnPlayerDeathStatue(player, player.getPos());
             }
             return true;
         });
@@ -132,8 +131,8 @@ public class DeathStatues implements ModInitializer {
     }*/
 
     //Here is the current method that spawns the statue. Will be renamed to old method name.
-    public static void spawnPlayerDeathStatue(PlayerEntity serverPlayer) {
-        Vec3d playerPosition = serverPlayer.getPos();
+    public static void spawnPlayerDeathStatue(PlayerEntity serverPlayer, Vec3d playerPosition) {
+        //Vec3d playerPosition = serverPlayer.getPos();
         World world = serverPlayer.getWorld();
         String playerName = serverPlayer.getName().getString();
         GameProfile gameProfile = new GameProfile(UUID.randomUUID(), "Death Statue of [" + playerName + "]");
@@ -153,7 +152,8 @@ public class DeathStatues implements ModInitializer {
         deathStatue.setHeadYaw(serverPlayer.getHeadYaw());
 
         world.spawnEntity(deathStatue);
-        deathStatue.refreshPositionAndAngles(serverPlayer.getBlockPos(), serverPlayer.getYaw(), serverPlayer.getPitch());
+        BlockPos playerBlockPos = BlockPos.ofFloored(playerPosition);
+        deathStatue.refreshPositionAndAngles(playerBlockPos, serverPlayer.getYaw(), serverPlayer.getPitch());
 
         deathStatue.equipStack(EquipmentSlot.HEAD, HELMET);
         deathStatue.equipStack(EquipmentSlot.CHEST, BREASTPLATE);

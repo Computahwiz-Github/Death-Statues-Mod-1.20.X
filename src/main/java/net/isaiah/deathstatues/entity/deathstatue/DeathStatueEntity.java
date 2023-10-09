@@ -1,13 +1,11 @@
 package net.isaiah.deathstatues.entity.deathstatue;
 
 import com.google.common.collect.Lists;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.isaiah.deathstatues.DeathStatues;
-import net.isaiah.deathstatues.networking.DeathStatuesMessages;
-import net.isaiah.deathstatues.networking.packet.C2SPacket;
+import net.isaiah.deathstatues.block.statue.DeathStatueBaseBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.client.render.entity.PlayerModelPart;
 import net.minecraft.client.util.DefaultSkinHelper;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -21,16 +19,21 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
 import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.server.PlayerManager;
-import net.minecraft.server.network.ServerPlayNetworkHandler;
+import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Arm;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.UUID;
+
+import static net.isaiah.deathstatues.block.statue.DeathStatueBlock.CHARGED;
 
 
 public class DeathStatueEntity extends LivingEntity {
@@ -161,4 +164,29 @@ public class DeathStatueEntity extends LivingEntity {
     /*public Identifier getSkinTexture() {
         return this.skinTexture;
     }*/
+
+    @Override
+    public ActionResult interact(PlayerEntity player, Hand hand) {
+        player.sendMessage(Text.of("Player: " + player.getName().getString() + " interacted with statue"));
+        //return super.interact(player, hand);
+
+        //BlockPos bottomPos = pos.down();
+        BlockPos bottomPos = this.getBlockPos();
+        BlockState bottomBlockState = player.getWorld().getBlockState(bottomPos);
+        Block bottomBlock = bottomBlockState.getBlock();
+        //BlockState state = player.getWorld().getBlockState(this.getBlockPos());
+
+        /*if (!player.getWorld().getBlockState(this.getBlockPos()).get(CHARGED)) {
+            player.getWorld().setBlockState(this.getBlockPos(), state.with(CHARGED, true));
+        }
+        else {
+            player.getWorld().setBlockState(this.getBlockPos(), state.with(CHARGED, false));
+        }*/
+
+
+        if (bottomBlock instanceof DeathStatueBaseBlock) {
+            return bottomBlock.onUse(bottomBlockState, player.getWorld(), bottomPos, player, hand, new BlockHitResult(this.getPos(), this.getHorizontalFacing(), this.getBlockPos(), false));
+        }
+        return super.interact(player, hand);
+    }
 }
