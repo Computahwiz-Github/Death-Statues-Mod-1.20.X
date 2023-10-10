@@ -1,6 +1,11 @@
 package net.isaiah.deathstatues.entity.deathstatue;
 
 import com.google.common.collect.Lists;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.isaiah.deathstatues.DeathStatues;
 import net.isaiah.deathstatues.block.statue.DeathStatueBaseBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -26,6 +31,9 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -57,40 +65,84 @@ public class DeathStatueEntity extends LivingEntity {
     public static DefaultAttributeContainer.Builder createStatueAttributes() {
         return LivingEntity.createLivingAttributes()
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 1.0)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.1f)
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.0f)
                 .add(EntityAttributes.GENERIC_ATTACK_SPEED)
                 .add(EntityAttributes.GENERIC_LUCK)
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 20);
     }
 
+    @Environment(value= EnvType.CLIENT)
     @Nullable
     protected PlayerListEntry getPlayerListEntry() {
         if (this.playerListEntry == null) {
-            this.playerListEntry = Objects.requireNonNull(MinecraftClient.getInstance().getNetworkHandler()).getPlayerListEntry(this.getUuid());
+            //Hopefully this fixes skin texture assigning on online servers
+            if (this.getWorld().isClient()) {
+                this.playerListEntry = Objects.requireNonNull(MinecraftClient.getInstance().getNetworkHandler()).getPlayerListEntry(getPlayerUUIDFromStatueName(this.getName().getString()));
+            }
         }
         return this.playerListEntry;
     }
 
+    @Environment(value=EnvType.CLIENT)
     public UUID getPlayerUUIDFromStatueName(String entityName) {
         //Gets characters from between two square brackets, "[ ]"
         Pattern pattern = Pattern.compile("\\[(.*?)]");
         Matcher matcher = pattern.matcher(entityName);
+        String uuidString = "uuidString";
+
         // Find the first matching pattern (if any)
         if (matcher.find()) {
             try {
-                return Uuids.getOfflinePlayerUuid(matcher.group(1));
+                String playerName = matcher.group(1);
+
+                uuidString = Objects.requireNonNull(getPlayerUUID(playerName))
+                        .replaceAll(
+                                "(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})",
+                                "$1-$2-$3-$4-$5"
+                        );
+                return UUID.fromString(uuidString);
             } catch (IllegalArgumentException e) {
                 // UUID parsing failed
+                DeathStatues.LOGGER.info("UUID STRING: " + uuidString);
                 e.printStackTrace();
             }
         }
         return null;
     }
 
+    public static String getPlayerUUID(String playerName) {
+        try {
+            // Create the URL for the Mojang API request
+            URL url = new URL("https://api.mojang.com/users/profiles/minecraft/" + playerName);
+
+            // Open a connection to the URL
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            // Check if the request was successful
+            if (connection.getResponseCode() == 200) {
+                // Parse the response
+                InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+                JsonObject response = JsonParser.parseReader(reader).getAsJsonObject();
+
+                // Extract the UUID from the response and remove "" (quotation characters)
+                return response.get("id").toString().replaceAll("\"", "");
+            } else {
+                // Handle error response
+                System.err.println("Error: Unable to retrieve UUID. HTTP response code: " + connection.getResponseCode());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    @Environment(value=EnvType.CLIENT)
     public Identifier getSkinTexture() {
         PlayerListEntry playerListEntry = this.getPlayerListEntry();
         if (playerListEntry == null) {
-            assert MinecraftClient.getInstance().player != null;
+            //assert MinecraftClient.getInstance().player != null;
             //return DefaultSkinHelper.getTexture(MinecraftClient.getInstance().player.getUuid()); //Old getTexture
             return DefaultSkinHelper.getTexture(getPlayerUUIDFromStatueName(this.getName().getString()));
         } else {
@@ -142,10 +194,6 @@ public class DeathStatueEntity extends LivingEntity {
         return this.getWorld().getScoreboard();
     }
 
-    /*public boolean isPartVisible(PlayerModelPart modelPart) {
-        return (this.getDataTracker().get(PLAYER_MODEL_PARTS) & modelPart.getBitFlag()) == modelPart.getBitFlag();
-    }*/
-
     @Override
     public void equipStack(EquipmentSlot slot, ItemStack stack) {
         this.processEquippedStack(stack);
@@ -166,10 +214,6 @@ public class DeathStatueEntity extends LivingEntity {
     public Vec3d lerpVelocity(float tickDelta) {
         return this.lastVelocity.lerp(this.getVelocity(), tickDelta);
     }
-
-    /*public Identifier getSkinTexture() {
-        return this.skinTexture;
-    }*/
 
     @Override
     public ActionResult interact(PlayerEntity player, Hand hand) {

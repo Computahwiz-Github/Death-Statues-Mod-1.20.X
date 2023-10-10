@@ -1,7 +1,8 @@
 package net.isaiah.deathstatues.client.render.entity;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.isaiah.deathstatues.DeathStatuesClient;
-import net.isaiah.deathstatues.client.network.AbstractClientDeathStatueEntity;
 import net.isaiah.deathstatues.client.render.entity.model.DeathStatueEntityModel;
 import net.isaiah.deathstatues.client.render.entity.feature.DeathStatueHeldItemFeatureRenderer;
 import net.isaiah.deathstatues.entity.deathstatue.DeathStatueEntity;
@@ -11,7 +12,6 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
-import net.minecraft.client.render.entity.PlayerModelPart;
 import net.minecraft.client.render.entity.feature.*;
 import net.minecraft.client.render.entity.model.ArmorEntityModel;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
@@ -35,6 +35,7 @@ import net.minecraft.util.math.Vec3d;
 
 import java.util.Objects;
 
+@Environment(value= EnvType.CLIENT)
 public class DeathStatueEntityRenderer extends LivingEntityRenderer<DeathStatueEntity, DeathStatueEntityModel<DeathStatueEntity>> {
     public DeathStatueEntityRenderer(EntityRendererFactory.Context ctx) {
         super(ctx, new DeathStatueEntityModel<>(ctx.getPart(DeathStatuesClient.MODEL_STATUE_LAYER), false), 0.5F);
