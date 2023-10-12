@@ -18,8 +18,8 @@ import net.isaiah.deathstatues.client.render.entity.model.DeathStatueEntityModel
 import net.isaiah.deathstatues.client.render.entity.DeathStatueEntityRenderer;
 import net.isaiah.deathstatues.config.DeathStatueConfig;
 import net.isaiah.deathstatues.config.DeathStatueConfigManager;
-import net.isaiah.deathstatues.networking.DeathStatuesMessages;
-import net.isaiah.deathstatues.screen.DeathStatueScreen;
+import net.isaiah.deathstatues.networking.ModMessages;
+import net.isaiah.deathstatues.screen.DeathStatuesScreen;
 import net.isaiah.deathstatues.screen.ModScreenHandlers;
 import net.isaiah.deathstatues.util.ModModelPredicateProvider;
 import net.minecraft.client.MinecraftClient;
@@ -51,10 +51,10 @@ public class DeathStatuesClient implements ClientModInitializer {
         DeathStatueConfigManager.initializeConfig();
 
         //Register Server-To-Client Packets
-        DeathStatuesMessages.registerS2CPackets();
+        ModMessages.registerS2CPackets();
 
         ModModelPredicateProvider.registerModModels();
-        HandledScreens.register(ModScreenHandlers.DEATH_STATUE_SCREEN_HANDLER, DeathStatueScreen::new);
+        HandledScreens.register(ModScreenHandlers.DEATH_STATUE_SCREEN_HANDLER, DeathStatuesScreen::new);
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.DEATH_STATUE_BLOCK, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.DEATH_STATUE_BASE_BLOCK, RenderLayer.getCutout());
 
@@ -64,16 +64,16 @@ public class DeathStatuesClient implements ClientModInitializer {
 
         //This code executes when the player loads into a world.
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
-            ClientPlayNetworking.send(DeathStatuesMessages.HAS_STATUE_CLIENT_ID, PacketByteBufs.create());
+            ClientPlayNetworking.send(ModMessages.HAS_STATUE_CLIENT_ID, PacketByteBufs.create());
             displayWelcomeMessage(client);
 
             this.currentPlayer = client.player;
             PacketByteBuf buf = new PacketByteBuf(PacketByteBufs.create());
             buf.writeUuid(this.currentPlayer.getUuid());
-            ClientPlayNetworking.send(DeathStatuesMessages.CURRENT_PLAYER_ID, buf);
+            ClientPlayNetworking.send(ModMessages.CURRENT_PLAYER_ID, buf);
 
-            ClientPlayNetworking.send(DeathStatuesMessages.BASE_PLACES_ENTITY_CONFIG_ID, new PacketByteBuf(Unpooled.buffer().writeBoolean(DeathStatueConfig.BASE_PLACES_ENTITY.getValue())));
-            ClientPlayNetworking.send(DeathStatuesMessages.BASE_PLACES_BLOCK_CONFIG_ID, new PacketByteBuf(Unpooled.buffer().writeBoolean(DeathStatueConfig.BASE_PLACES_BLOCK.getValue())));
+            ClientPlayNetworking.send(ModMessages.BASE_PLACES_ENTITY_CONFIG_ID, new PacketByteBuf(Unpooled.buffer().writeBoolean(DeathStatueConfig.BASE_PLACES_ENTITY.getValue())));
+            ClientPlayNetworking.send(ModMessages.BASE_PLACES_BLOCK_CONFIG_ID, new PacketByteBuf(Unpooled.buffer().writeBoolean(DeathStatueConfig.BASE_PLACES_BLOCK.getValue())));
         });
 
         //This code executes when you press [R] on the keyboard.
@@ -82,8 +82,8 @@ public class DeathStatuesClient implements ClientModInitializer {
             while (keyBinding.wasPressed()) {
                 //LOGGER.info("Key [" + keyBinding.toString() + "] is pressed");
                 displayKeyBindMessage(client);
-                //ClientPlayNetworking.send(DeathStatuesMessages.UPDATE_STATUE_TEXTURE, new PacketByteBuf(Unpooled.buffer()).writeIdentifier(getSkinTexture()));
-                ClientPlayNetworking.send(DeathStatuesMessages.SPAWN_DEATH_STATUE_ID, PacketByteBufs.create());
+                //ClientPlayNetworking.send(ModMessages.UPDATE_STATUE_TEXTURE, new PacketByteBuf(Unpooled.buffer()).writeIdentifier(getSkinTexture()));
+                ClientPlayNetworking.send(ModMessages.SPAWN_DEATH_STATUE_ID, PacketByteBufs.create());
                 displayStatueSpawned(client);
             }
         });

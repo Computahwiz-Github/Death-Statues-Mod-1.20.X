@@ -13,7 +13,7 @@ import net.isaiah.deathstatues.block.entity.ModBlockEntities;
 import net.isaiah.deathstatues.entity.deathstatue.DeathStatueEntity;
 import net.isaiah.deathstatues.item.ModItemGroups;
 import net.isaiah.deathstatues.item.ModItems;
-import net.isaiah.deathstatues.networking.DeathStatuesMessages;
+import net.isaiah.deathstatues.networking.ModMessages;
 import net.isaiah.deathstatues.screen.ModScreenHandlers;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
@@ -48,7 +48,7 @@ public class DeathStatues implements ModInitializer {
     @Override
     public void onInitialize() {
         //Register Client-To-Server Packets
-        DeathStatuesMessages.registerC2SPackets();
+        ModMessages.registerC2SPackets();
 
         ModItemGroups.registerItemGroups();
         ModItems.registerModItems();
@@ -62,7 +62,7 @@ public class DeathStatues implements ModInitializer {
         ServerLivingEntityEvents.ALLOW_DEATH.register((entity, damageSource, damageAmount) -> {
             if (entity instanceof PlayerEntity player){
                 //LOGGER.info("Event: Player (" + player.getName().getString() + "): [" + player.getUuidAsString() + "] Died");
-                ServerPlayNetworking.send((ServerPlayerEntity) player, DeathStatuesMessages.PLAYER_DIED_ID, PacketByteBufs.create());
+                ServerPlayNetworking.send((ServerPlayerEntity) player, ModMessages.PLAYER_DIED_ID, PacketByteBufs.create());
                 spawnDeathStatueEntity(player, player.getPos());
             }
             return true;
@@ -76,7 +76,7 @@ public class DeathStatues implements ModInitializer {
             //This is called when the Death Statue Entity has the same name as the attacking player
             if (entity instanceof DeathStatueEntity && getPlayerNameFromStatueName(entity.getName().getString()).equals(player.getName())) {
                 //LOGGER.info("Event: Attacking Death Statue: [" + entity.getUuidAsString() + "], at: (" + entity.getBlockX() + ", " + entity.getBlockY() + ", " + entity.getBlockZ() + ")");
-                ServerPlayNetworking.send((ServerPlayerEntity) player, DeathStatuesMessages.DESTROY_STATUE_ID, PacketByteBufs.create());
+                ServerPlayNetworking.send((ServerPlayerEntity) player, ModMessages.DESTROY_STATUE_ID, PacketByteBufs.create());
                 entity.kill();
                 return ActionResult.PASS;
             }

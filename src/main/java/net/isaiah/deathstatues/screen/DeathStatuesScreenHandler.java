@@ -10,17 +10,17 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 
-public class DeathStatueScreenHandler extends ScreenHandler {
+public class DeathStatuesScreenHandler extends ScreenHandler {
     private final Inventory inventory;
     //private final PropertyDelegate propertyDelegate;
     public final DeathStatueBlockEntity blockEntity;
 
-    public DeathStatueScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
+    public DeathStatuesScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
         this(syncId, playerInventory, playerInventory.player.getWorld().getBlockEntity(buf.readBlockPos())/*,
                 new ArrayPropertyDelegate(2)*/);
     }
 
-    public DeathStatueScreenHandler(int syncId, PlayerInventory playerInventory, BlockEntity blockEntity/*, PropertyDelegate arrayPropertyDelegate*/) {
+    public DeathStatuesScreenHandler(int syncId, PlayerInventory playerInventory, BlockEntity blockEntity/*, PropertyDelegate arrayPropertyDelegate*/) {
         super(ModScreenHandlers.DEATH_STATUE_SCREEN_HANDLER, syncId);
         checkSize((Inventory) blockEntity, 27);
         this.inventory = (Inventory) blockEntity;

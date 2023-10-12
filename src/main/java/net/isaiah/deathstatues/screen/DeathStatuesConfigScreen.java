@@ -5,7 +5,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.isaiah.deathstatues.DeathStatues;
 import net.isaiah.deathstatues.config.DeathStatueConfig;
 import net.isaiah.deathstatues.config.DeathStatueConfigManager;
-import net.isaiah.deathstatues.networking.DeathStatuesMessages;
+import net.isaiah.deathstatues.networking.ModMessages;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -16,9 +16,9 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 
-public class DeathStatueConfigScreen extends GameOptionsScreen {
+public class DeathStatuesConfigScreen extends GameOptionsScreen {
     private final Screen parent;
-    public DeathStatueConfigScreen(Screen parent) {
+    public DeathStatuesConfigScreen(Screen parent) {
         super(parent, MinecraftClient.getInstance().options, Text.translatable("deathstatues.title"));
         this.parent = parent;
     }
@@ -128,8 +128,8 @@ public class DeathStatueConfigScreen extends GameOptionsScreen {
         DeathStatueConfigManager.save();
         assert client != null;
         if (client.world != null) {
-            ClientPlayNetworking.send(DeathStatuesMessages.BASE_PLACES_ENTITY_CONFIG_ID, new PacketByteBuf(Unpooled.buffer().writeBoolean(DeathStatueConfig.BASE_PLACES_ENTITY.getValue())));
-            ClientPlayNetworking.send(DeathStatuesMessages.BASE_PLACES_BLOCK_CONFIG_ID, new PacketByteBuf(Unpooled.buffer().writeBoolean(DeathStatueConfig.BASE_PLACES_BLOCK.getValue())));
+            ClientPlayNetworking.send(ModMessages.BASE_PLACES_ENTITY_CONFIG_ID, new PacketByteBuf(Unpooled.buffer().writeBoolean(DeathStatueConfig.BASE_PLACES_ENTITY.getValue())));
+            ClientPlayNetworking.send(ModMessages.BASE_PLACES_BLOCK_CONFIG_ID, new PacketByteBuf(Unpooled.buffer().writeBoolean(DeathStatueConfig.BASE_PLACES_BLOCK.getValue())));
         }
         client.setScreen(parent);
     }
@@ -139,8 +139,8 @@ public class DeathStatueConfigScreen extends GameOptionsScreen {
         DeathStatueConfigManager.save();
         assert client != null;
         if (client.world != null) {
-            ClientPlayNetworking.send(DeathStatuesMessages.BASE_PLACES_ENTITY_CONFIG_ID, new PacketByteBuf(Unpooled.buffer().writeBoolean(DeathStatueConfig.BASE_PLACES_ENTITY.getValue())));
-            ClientPlayNetworking.send(DeathStatuesMessages.BASE_PLACES_BLOCK_CONFIG_ID, new PacketByteBuf(Unpooled.buffer().writeBoolean(DeathStatueConfig.BASE_PLACES_BLOCK.getValue())));
+            ClientPlayNetworking.send(ModMessages.BASE_PLACES_ENTITY_CONFIG_ID, new PacketByteBuf(Unpooled.buffer().writeBoolean(DeathStatueConfig.BASE_PLACES_ENTITY.getValue())));
+            ClientPlayNetworking.send(ModMessages.BASE_PLACES_BLOCK_CONFIG_ID, new PacketByteBuf(Unpooled.buffer().writeBoolean(DeathStatueConfig.BASE_PLACES_BLOCK.getValue())));
         }
         System.out.println("Saving Config Options For: " + DeathStatues.MOD_ID);
     }

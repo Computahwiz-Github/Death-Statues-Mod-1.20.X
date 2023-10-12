@@ -1,7 +1,6 @@
 package net.isaiah.deathstatues.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.isaiah.deathstatues.DeathStatues;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.GameRenderer;
@@ -9,10 +8,10 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-public class DeathStatueScreen extends HandledScreen<DeathStatueScreenHandler> {
+public class DeathStatuesScreen extends HandledScreen<DeathStatuesScreenHandler> {
     private static final Identifier TEXTURE = new Identifier("minecraft", "textures/gui/container/shulker_box.png");
 
-    public DeathStatueScreen(DeathStatueScreenHandler handler, PlayerInventory playerInventory, Text title) {
+    public DeathStatuesScreen(DeathStatuesScreenHandler handler, PlayerInventory playerInventory, Text title) {
         super(handler, playerInventory, title);
     }
 
