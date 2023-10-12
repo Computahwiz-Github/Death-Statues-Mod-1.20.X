@@ -14,10 +14,14 @@ public class DeathStatuesMessages {
     public static final Identifier WHISPER_COMMAND_ID = new Identifier(DeathStatues.MOD_ID, "whisper_command");
     public static final Identifier HAS_STATUE_CLIENT_ID = new Identifier(DeathStatues.MOD_ID, "has_statue_client");
     public static final Identifier CURRENT_PLAYER_ID = new Identifier(DeathStatues.MOD_ID, "current_player");
+    public static final Identifier BASE_PLACES_ENTITY_CONFIG_ID = new Identifier(DeathStatues.MOD_ID, "base_places_entity_config");
+    public static final Identifier BASE_PLACES_BLOCK_CONFIG_ID = new Identifier(DeathStatues.MOD_ID, "base_places_block_config");
 
     public static void registerC2SPackets() {
         ServerPlayNetworking.registerGlobalReceiver(HAS_STATUE_CLIENT_ID, C2SPacket::serverReceivedStatueClient);
         ServerPlayNetworking.registerGlobalReceiver(SPAWN_DEATH_STATUE_ID, C2SPacket::serverSpawnDeathStatue);
+        ServerPlayNetworking.registerGlobalReceiver(BASE_PLACES_ENTITY_CONFIG_ID, C2SPacket::serverReceiveBasePlacesEntityConfig);
+        ServerPlayNetworking.registerGlobalReceiver(BASE_PLACES_BLOCK_CONFIG_ID, C2SPacket::serverReceiveBasePlacesBlockConfig);
     }
 
     public static void registerS2CPackets() {

@@ -19,5 +19,22 @@
 
   "item.deathstatues.death_statue": "Death Statue",
 
-  "itemgroup.statue": "Death Statue Blocks"
+  "itemgroup.statue": "Death Statue Blocks",
+
+  "deathstatues.title": "Death Statues Config Screen",
+  "option.modmenu.done.tooltip": "Leave & Save Config Options",
+  "option.modmenu.reset.button": "Reset",
+  "option.modmenu.reset.tooltip": "Reset Config Options",
+  "option.modmenu.base_places_entity": "Base Places Entity",
+  "option.modmenu.base_places_entity.true": "§AEnabled§r",
+  "option.modmenu.base_places_entity.false": "§cDisabled§r",
+  "option.modmenu.base_places_entity.tooltip": "§6DEFAULT§r: §cDisabled§r\nToggle Whether Death Statue Player Entity Model is Spawned on Top When Placing a Death Statue Base Block",
+  "option.modmenu.base_places_block": "Base Places Block",
+  "option.modmenu.base_places_block.true": "§AEnabled§r",
+  "option.modmenu.base_places_block.false": "§cDisabled§r",
+  "option.modmenu.base_places_block.tooltip": "§6DEFAULT§r: §AEnabled§r\nToggle Whether Death Statue Player Block Model is Placed on Top When Placing a Death Statue Base Block",
+  "option.modmenu.base_places_nothing": "Base Places Nothing",
+  "option.modmenu.base_places_nothing.true": "§ATrue§r",
+  "option.modmenu.base_places_nothing.false": "§cFalse§r",
+  "option.modmenu.base_places_nothing.tooltip": "§6DEFAULT§r: §cFalse§r §8(UNCLICKABLE)§r\nThis Shows Whether Placing Death Statue Base Block Will Place/Spawn a Player Model Above It"
 }

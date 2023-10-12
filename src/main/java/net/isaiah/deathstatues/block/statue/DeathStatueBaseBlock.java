@@ -1,13 +1,16 @@
 package net.isaiah.deathstatues.block.statue;
 
+import net.isaiah.deathstatues.DeathStatues;
 import net.isaiah.deathstatues.block.ModBlocks;
 import net.isaiah.deathstatues.block.entity.DeathStatueBlockEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.enums.DoubleBlockHalf;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.*;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.sound.SoundCategory;
@@ -26,7 +29,10 @@ import org.jetbrains.annotations.Nullable;
 
 public class DeathStatueBaseBlock extends BlockWithEntity implements BlockEntityProvider {
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
-    private static final VoxelShape SHAPE = Block.createCuboidShape(0, 0, 0, 16, 8, 16);
+    private static final VoxelShape SHAPE = Block.createCuboidShape(0, 0, 0, 16, 16, 16);
+    private static boolean BASE_PLACES_BLOCK = false;
+
+    private static boolean BASE_PLACES_ENTITY = false;
 
     public DeathStatueBaseBlock(Settings settings) {
         super(settings);
@@ -46,20 +52,52 @@ public class DeathStatueBaseBlock extends BlockWithEntity implements BlockEntity
     @Override
     public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
         if (world.getBlockState(pos.up()).isAir()) {
-            //Spawns player model block
-            world.setBlockState(pos.up(), ModBlocks.DEATH_STATUE_BLOCK.getDefaultState().with(FACING, state.get(FACING)));
-
-            //Spawns player model entity
-            //assert placer != null;
-            //DeathStatues.spawnDeathStatueEntity((PlayerEntity) placer, pos.up().toCenterPos());
+            //Spawns player model block if the config option for placing the block is true and placing the entity is false
+            if (BASE_PLACES_BLOCK && !BASE_PLACES_ENTITY) {
+                world.setBlockState(pos.up(), ModBlocks.DEATH_STATUE_BLOCK.getDefaultState().with(FACING, state.get(FACING)).with(DeathStatueBlock.HALF, DoubleBlockHalf.LOWER));
+                world.setBlockState(pos.up().add(0, 1, 0), ModBlocks.DEATH_STATUE_BLOCK.getDefaultState().with(FACING, state.get(FACING)).with(DeathStatueBlock.HALF, DoubleBlockHalf.UPPER));
+                world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_BREAK, SoundCategory.BLOCKS, 0.5f, world.random.nextFloat() * 0.1f + 0.9f);
+            }
+            //Spawns player model entity if the config option for placing the block is false and placing the entity is true
+            else if (BASE_PLACES_ENTITY && !BASE_PLACES_BLOCK) {
+                assert placer != null;
+                if (placer.isHolding(ModBlocks.DEATH_STATUE_BASE_BLOCK.asItem())) {
+                    switchToWeaponSlot((PlayerEntity) placer);
+                    DeathStatues.spawnDeathStatueEntity((PlayerEntity) placer, pos.up().toCenterPos());
+                }
+            }
         }
         super.onPlaced(world, pos, state, placer, itemStack);
     }
 
+    public static void determineBasePlacesEntityBasedOnConfig(PacketByteBuf buf) {
+        BASE_PLACES_ENTITY = buf.readBoolean();
+    }
+
+    public static void determineBasePlacesBlockBasedOnConfig(PacketByteBuf buf) {
+        BASE_PLACES_BLOCK = buf.readBoolean();
+    }
+
+    public void switchToWeaponSlot(PlayerEntity player) {
+        for (int i = 0; i < PlayerInventory.getHotbarSize(); i++) {
+            ItemStack stackInSlot = player.getInventory().getStack(i);
+            Item item = stackInSlot.getItem();
+            if (item instanceof SwordItem) {
+                player.getInventory().selectedSlot = i;
+                return;
+            }
+            else if (item instanceof AxeItem) {
+                player.getInventory().selectedSlot = i;
+                return;
+            }
+        }
+    }
+
     @Override
     public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-        if (world.getBlockState(pos.up()).isOf(ModBlocks.DEATH_STATUE_BLOCK)) {
-            world.setBlockState(pos.up(), Blocks.AIR.getDefaultState());
+        if (world.getBlockState(pos.up()).isOf(ModBlocks.DEATH_STATUE_BLOCK) && world.getBlockState(pos.up().add(0, 1, 0)).isOf(ModBlocks.DEATH_STATUE_BLOCK)) {
+            world.removeBlock(pos.up(), false);
+            world.removeBlock(pos.up().add(0, 1, 0), false);
             world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_BREAK, SoundCategory.BLOCKS, 0.5f, world.random.nextFloat() * 0.1f + 0.9f);
         }
         super.onBreak(world, pos, state, player);

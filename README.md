@@ -1,8 +1,11 @@
 # Death-Statues-Mod-1.20.X
-Death Statues Mod -> Now Works on Servers!
+Death Statues Mod -> Now with Config Options Compatible with ModMenu!
 
 > [!WARNING]
-> W.I.P! As of this version (1.5.6) (Must have it installed on server as well for compatibility)
+> W.I.P! As of this version (1.5.7) (Must have it installed on server as well for compatibility)
+
+> [!NOTE]
+> New Images Coming Soon
 
 This is my first Minecraft mod and it uses fabric. The idea of the mod is just to spawn a statue of a player when they die and have it as a collectible.
 
@@ -26,7 +29,7 @@ There are three main goals for this project:
   - [ ] 3.1 When the player destroys the statue, make it drop all the items except what you choose to leave on (specific armor/weapons)
   - [x] 3.2 Make statue have storage capacity
 
-P.S. I added shaped recipes for the Death Statue Block, Base block, and a saddle recipe for fun (leather & iron).
+P.S. I have added shaped recipes for the Death Statue Block, Base block, and a saddle recipe for fun (leather & iron).
 
 ## Welcome Toast Message
 When you load into a world, you'll get a little welcome toast message.

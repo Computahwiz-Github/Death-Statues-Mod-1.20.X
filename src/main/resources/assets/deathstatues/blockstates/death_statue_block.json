@@ -1,34 +1,66 @@
 {
   "variants": {
-    "charged=true,facing=east": {
-      "model": "deathstatues:block/death_statue_block",
+    "charged=false,half=lower,facing=east": {
+      "model": "deathstatues:block/death_statue_block_legacy_lower",
       "y": 90
     },
-    "charged=true,facing=north": {
-      "model": "deathstatues:block/death_statue_block"
+    "charged=false,half=lower,facing=north": {
+      "model": "deathstatues:block/death_statue_block_legacy_lower"
     },
-    "charged=true,facing=south": {
-      "model": "deathstatues:block/death_statue_block",
+    "charged=false,half=lower,facing=south": {
+      "model": "deathstatues:block/death_statue_block_legacy_lower",
       "y": 180
     },
-    "charged=true,facing=west": {
-      "model": "deathstatues:block/death_statue_block",
+    "charged=false,half=lower,facing=west": {
+      "model": "deathstatues:block/death_statue_block_legacy_lower",
       "y": 270
     },
 
-    "charged=false,facing=east": {
-      "model": "deathstatues:block/death_statue_block_2",
+    "charged=false,half=upper,facing=east": {
+      "model": "deathstatues:block/death_statue_block_legacy_upper",
       "y": 90
     },
-    "charged=false,facing=north": {
-      "model": "deathstatues:block/death_statue_block_2"
+    "charged=false,half=upper,facing=north": {
+      "model": "deathstatues:block/death_statue_block_legacy_upper"
     },
-    "charged=false,facing=south": {
-      "model": "deathstatues:block/death_statue_block_2",
+    "charged=false,half=upper,facing=south": {
+      "model": "deathstatues:block/death_statue_block_legacy_upper",
       "y": 180
     },
-    "charged=false,facing=west": {
-      "model": "deathstatues:block/death_statue_block_2",
+    "charged=false,half=upper,facing=west": {
+      "model": "deathstatues:block/death_statue_block_legacy_upper",
+      "y": 270
+    },
+
+    "charged=true,half=lower,facing=east": {
+      "model": "deathstatues:block/death_statue_block_lower",
+      "y": 90
+    },
+    "charged=true,half=lower,facing=north": {
+      "model": "deathstatues:block/death_statue_block_lower"
+    },
+    "charged=true,half=lower,facing=south": {
+      "model": "deathstatues:block/death_statue_block_lower",
+      "y": 180
+    },
+    "charged=true,half=lower,facing=west": {
+      "model": "deathstatues:block/death_statue_block_lower",
+      "y": 270
+    },
+
+    "charged=true,half=upper,facing=east": {
+      "model": "deathstatues:block/death_statue_block_upper",
+      "y": 90
+    },
+    "charged=true,half=upper,facing=north": {
+      "model": "deathstatues:block/death_statue_block_upper"
+    },
+    "charged=true,half=upper,facing=south": {
+      "model": "deathstatues:block/death_statue_block_upper",
+      "y": 180
+    },
+    "charged=true,half=upper,facing=west": {
+      "model": "deathstatues:block/death_statue_block_upper",
       "y": 270
     }
   }

@@ -95,12 +95,17 @@ public class DeathStatueEntity extends LivingEntity {
             try {
                 String playerName = matcher.group(1);
 
-                uuidString = Objects.requireNonNull(getPlayerUUID(playerName))
-                        .replaceAll(
-                                "(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})",
-                                "$1-$2-$3-$4-$5"
-                        );
-                return UUID.fromString(uuidString);
+                if (!playerName.startsWith("Player")) {
+                    uuidString = Objects.requireNonNull(getPlayerUUID(playerName))
+                            .replaceAll(
+                                    "(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})",
+                                    "$1-$2-$3-$4-$5"
+                            );
+                    return UUID.fromString(uuidString);
+                }
+                else {
+                    return Uuids.getOfflinePlayerUuid(playerName);
+                }
             } catch (IllegalArgumentException e) {
                 // UUID parsing failed
                 DeathStatues.LOGGER.info("UUID STRING: " + uuidString);
@@ -217,7 +222,7 @@ public class DeathStatueEntity extends LivingEntity {
 
     @Override
     public ActionResult interact(PlayerEntity player, Hand hand) {
-        BlockPos bottomPos = this.getBlockPos();
+        BlockPos bottomPos = this.getBlockPos().down();
         BlockState bottomBlockState = player.getWorld().getBlockState(bottomPos);
         Block bottomBlock = bottomBlockState.getBlock();
 

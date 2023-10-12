@@ -1,6 +1,7 @@
 package net.isaiah.deathstatues;
 
 
+import io.netty.buffer.Unpooled;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -15,6 +16,8 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.isaiah.deathstatues.block.ModBlocks;
 import net.isaiah.deathstatues.client.render.entity.model.DeathStatueEntityModel;
 import net.isaiah.deathstatues.client.render.entity.DeathStatueEntityRenderer;
+import net.isaiah.deathstatues.config.DeathStatueConfig;
+import net.isaiah.deathstatues.config.DeathStatueConfigManager;
 import net.isaiah.deathstatues.networking.DeathStatuesMessages;
 import net.isaiah.deathstatues.screen.DeathStatueScreen;
 import net.isaiah.deathstatues.screen.ModScreenHandlers;
@@ -45,6 +48,7 @@ public class DeathStatuesClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        DeathStatueConfigManager.initializeConfig();
 
         //Register Server-To-Client Packets
         DeathStatuesMessages.registerS2CPackets();
@@ -67,6 +71,9 @@ public class DeathStatuesClient implements ClientModInitializer {
             PacketByteBuf buf = new PacketByteBuf(PacketByteBufs.create());
             buf.writeUuid(this.currentPlayer.getUuid());
             ClientPlayNetworking.send(DeathStatuesMessages.CURRENT_PLAYER_ID, buf);
+
+            ClientPlayNetworking.send(DeathStatuesMessages.BASE_PLACES_ENTITY_CONFIG_ID, new PacketByteBuf(Unpooled.buffer().writeBoolean(DeathStatueConfig.BASE_PLACES_ENTITY.getValue())));
+            ClientPlayNetworking.send(DeathStatuesMessages.BASE_PLACES_BLOCK_CONFIG_ID, new PacketByteBuf(Unpooled.buffer().writeBoolean(DeathStatueConfig.BASE_PLACES_BLOCK.getValue())));
         });
 
         //This code executes when you press [R] on the keyboard.
