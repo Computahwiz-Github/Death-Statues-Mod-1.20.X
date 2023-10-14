@@ -90,12 +90,11 @@ public class DeathStatueEntity extends LivingEntity {
         Matcher matcher = pattern.matcher(entityName);
         String uuidString = "uuidString";
 
-        // Find the first matching pattern (if any)
         if (matcher.find()) {
             try {
                 String playerName = matcher.group(1);
 
-                if (!playerName.startsWith("Player")) {
+                if (!playerName.startsWith("Player") && getPlayerUUID(playerName) != null) {
                     uuidString = Objects.requireNonNull(getPlayerUUID(playerName))
                             .replaceAll(
                                     "(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})",

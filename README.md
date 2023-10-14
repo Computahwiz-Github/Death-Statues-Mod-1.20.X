@@ -2,7 +2,9 @@
 Death Statues Mod -> Now with Config Options Compatible with ModMenu!
 
 > [!WARNING]
-> W.I.P! As of this version (1.5.7) (Must have it installed on server as well for compatibility)
+> W.I.P! As of this version (1.5.8), the Statue Entity cannot load Skin textures for players not logged into same server
+> 
+> Working on the fix. Will push update soonish
 
 > [!NOTE]
 > New Images Coming Soon

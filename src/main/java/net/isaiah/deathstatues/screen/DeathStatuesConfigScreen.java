@@ -16,6 +16,9 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 
+import java.util.List;
+import java.util.Optional;
+
 public class DeathStatuesConfigScreen extends GameOptionsScreen {
     private final Screen parent;
     public DeathStatuesConfigScreen(Screen parent) {
@@ -26,23 +29,21 @@ public class DeathStatuesConfigScreen extends GameOptionsScreen {
     public ButtonWidget resetButton;
     public ButtonWidget testButton;
     private OptionListWidget list;
-    private int shownNothingButton = 0;
-    private int shownEntityButton = 0;
-    private int shownBlockButton = 0;
 
     @Override
     protected void init() {
-        this.list = new OptionListWidget(this.client, this.width, this.height, 32, this.height - 32, 25);
+        this.list = new OptionListWidget(this.client, this.width, this.height, 32, this.height - 32, 25); //l = this.height - 32
         this.list.addAll(DeathStatueConfig.asOptions());
 
         this.addSelectableChild(this.list);
-        testButton = ButtonWidget.builder(Text.translatable("option.modmenu.base_places_nothing").append(Text.of(": "))
-                        .append(!DeathStatueConfig.BASE_PLACES_ENTITY.getValue() && !DeathStatueConfig.BASE_PLACES_BLOCK.getValue() ?
-                                Text.translatable("option.modmenu.base_places_nothing.true") : Text.translatable("option.modmenu.base_places_nothing.false")), (button) -> {
-                    assert client != null;
-                    client.setScreen(this);
-                    System.out.println("Clicked testButton");
-                }).position(this.width / 2 - 80, 90)
+        Text testButtonText = Text.translatable("option.modmenu.base_places_nothing").append(Text.of(": "))
+                .append(!DeathStatueConfig.BASE_PLACES_ENTITY.getValue() && !DeathStatueConfig.BASE_PLACES_BLOCK.getValue() ?
+                        Text.translatable("option.modmenu.base_places_nothing.true") : Text.translatable("option.modmenu.base_places_nothing.false"));
+        testButton = ButtonWidget.builder(testButtonText, (button) -> {
+            assert client != null;
+            client.setScreen(this);
+            System.out.println("Clicked testButton");
+        }).position(this.width / 2 - 80, 90)
                 .size(165, 20)
                 .tooltip(Tooltip.of(Text.translatable("option.modmenu.base_places_nothing.tooltip")))
                 .build();
@@ -57,7 +58,6 @@ public class DeathStatuesConfigScreen extends GameOptionsScreen {
                 .build();
 
         resetButton = ButtonWidget.builder(Text.translatable("option.modmenu.reset.button"), (button) -> {
-            //DeathStatueConfig.BASE_PLACES_NOTHING.setValue(DeathStatueConfig.BASE_PLACES_NOTHING.getDefaultValue());
             DeathStatueConfig.BASE_PLACES_ENTITY.setValue(DeathStatueConfig.BASE_PLACES_ENTITY.getDefaultValue());
             DeathStatueConfig.BASE_PLACES_BLOCK.setValue(DeathStatueConfig.BASE_PLACES_BLOCK.getDefaultValue());
             DeathStatueConfigManager.save();
@@ -68,60 +68,76 @@ public class DeathStatuesConfigScreen extends GameOptionsScreen {
                 .tooltip(Tooltip.of(Text.translatable("option.modmenu.reset.tooltip")))
                 .build();
 
-        addDrawableChild(testButton);
+        //addDrawableChild(testButton);
         addDrawableChild(doneButton);
         addDrawableChild(resetButton);
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        updateButtons();
         this.renderBackgroundTexture(context);
         this.list.render(context, mouseX, mouseY, delta);
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 5, 0xffffff);
-        /*context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable("option.modmenu.base_places_nothing").append(Text.of(": "))
+        context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable("option.modmenu.base_places_nothing").append(Text.of(": "))
                         .append(!DeathStatueConfig.BASE_PLACES_ENTITY.getValue() && !DeathStatueConfig.BASE_PLACES_BLOCK.getValue() ?
-                                Text.translatable("option.modmenu.base_places_nothing.true") : Text.translatable("option.modmenu.base_places_nothing.false")),this.width / 2, 100, 0xffffff);*/
+                                Text.translatable("option.modmenu.base_places_nothing.true") : Text.translatable("option.modmenu.base_places_nothing.false")),this.width / 2, 80, 0xffffff);
+        context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable("option.modmenu.base_places_explanation.1"),this.width / 2, 100, 0xffffff);
+        context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable("option.modmenu.base_places_explanation.2"),this.width / 2, 115, 0xffffff);
+        context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable("option.modmenu.base_places_explanation.3"),this.width / 2, 130, 0xffffff);
+        context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable("option.modmenu.base_places_explanation.4"),this.width / 2, 145, 0xffffff);
+        placeTooltipOverCenteredText(context, mouseX, mouseY);
         super.render(context, mouseX, mouseY, delta);
     }
 
-    public void updateButtons() {
-
-        if (this.shownNothingButton == 0 && DeathStatueConfig.BASE_PLACES_ENTITY.getValue() == DeathStatueConfig.BASE_PLACES_BLOCK.getValue()) {
-            this.shownNothingButton++;
-            assert client != null;
-            client.setScreen(this);
-            this.shownEntityButton = 0;
-            this.shownBlockButton = 0;
+    public void placeTooltipOverCenteredText(DrawContext context, int mouseX, int mouseY) {
+        boolean mouseXOverBasePlaceIndicatorMaximized;
+        boolean mouseXOverBasePlaceIndicatorNotMaximized;
+        boolean mouseYOverBasePlaceIndicator = 78 <= mouseY && mouseY <= 90;
+        if (client.options.getGuiScale().getValue() == 3) {
+            mouseXOverBasePlaceIndicatorMaximized = 180 <= (mouseX / 2) && (mouseX / 2) <= 250 && (180 <= (this.width / 4));
+            mouseXOverBasePlaceIndicatorNotMaximized = 70 <= (mouseX / 2) && (mouseX / 2) <= 145 && (this.width / 4 <= 145);
+            testTooltipPlacement(context, mouseX, mouseY, mouseXOverBasePlaceIndicatorMaximized, mouseXOverBasePlaceIndicatorNotMaximized, mouseYOverBasePlaceIndicator);
         }
+        //Finish getting mouse values for different GUI scales
+        else if (client.options.getGuiScale().getValue() == 2) {
+        }
+    }
 
-        if (DeathStatueConfig.BASE_PLACES_BLOCK.getValue()) {
-            if (this.shownBlockButton == 0) {
-                this.shownBlockButton++;
+    public void testTooltipPlacement(DrawContext context, int mouseX, int mouseY, boolean mouseXOverBasePlaceIndicatorMaximized, boolean mouseXOverBasePlaceIndicatorNotMaximized, boolean mouseYOverBasePlaceIndicator) {
+        if ((mouseXOverBasePlaceIndicatorMaximized ^ mouseXOverBasePlaceIndicatorNotMaximized) && mouseYOverBasePlaceIndicator) {
+            context.drawTooltip(this.textRenderer, List.of(
+                    Text.translatable("option.modmenu.base_places_explanation.1"),
+                    Text.translatable("option.modmenu.base_places_explanation.2"),
+                    Text.translatable("option.modmenu.base_places_explanation.3"),
+                    Text.translatable("option.modmenu.base_places_explanation.4")),
+                    Optional.empty(), mouseX, mouseY);
+        }
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (this.list.getHoveredWidget(mouseX, mouseY).isPresent()) {
+            if (this.list.mouseClicked(mouseX, mouseY, button) && this.list.getHoveredWidget(mouseX, mouseY).get().getMessage().contains(Text.translatable("option.modmenu.base_places_entity"))) {
+                System.out.println("Base Places Entity Button Clicked");
+                if (DeathStatueConfig.BASE_PLACES_ENTITY.getValue() && DeathStatueConfig.BASE_PLACES_BLOCK.getValue()) {
+                    DeathStatueConfig.BASE_PLACES_BLOCK.toggleValue();
+                }
                 assert client != null;
                 client.setScreen(this);
-                this.shownNothingButton = 0;
-                this.shownEntityButton = 0;
+                return true;
             }
-            if (DeathStatueConfig.BASE_PLACES_ENTITY.getValue()) {
+            else if (this.list.mouseClicked(mouseX, mouseY, button) && this.list.getHoveredWidget(mouseX, mouseY).get().getMessage().contains(Text.translatable("option.modmenu.base_places_block"))) {
                 DeathStatueConfig.BASE_PLACES_BLOCK.toggleValue();
-                DeathStatueConfig.BASE_PLACES_ENTITY.toggleValue();
+                System.out.println("Base Places Block Button Clicked");
+                if (DeathStatueConfig.BASE_PLACES_BLOCK.getValue() && DeathStatueConfig.BASE_PLACES_ENTITY.getValue()) {
+                    DeathStatueConfig.BASE_PLACES_ENTITY.toggleValue();
+                }
                 assert client != null;
                 client.setScreen(this);
-                this.shownNothingButton = 0;
-                this.shownEntityButton = 0;
-                this.shownBlockButton = 0;
+                return true;
             }
         }
-        else if (DeathStatueConfig.BASE_PLACES_ENTITY.getValue()) {
-            if (this.shownEntityButton == 0) {
-                this.shownEntityButton++;
-                assert client != null;
-                client.setScreen(this);
-                this.shownBlockButton = 0;
-                this.shownNothingButton = 0;
-            }
-        }
+        return super.mouseClicked(mouseX, mouseY, button);
     }
     @Override
     public void close() {
@@ -132,6 +148,7 @@ public class DeathStatuesConfigScreen extends GameOptionsScreen {
             ClientPlayNetworking.send(ModMessages.BASE_PLACES_BLOCK_CONFIG_ID, new PacketByteBuf(Unpooled.buffer().writeBoolean(DeathStatueConfig.BASE_PLACES_BLOCK.getValue())));
         }
         client.setScreen(parent);
+        System.out.println("Saving Config Options For: " + DeathStatues.MOD_ID);
     }
 
     @Override
@@ -142,6 +159,5 @@ public class DeathStatuesConfigScreen extends GameOptionsScreen {
             ClientPlayNetworking.send(ModMessages.BASE_PLACES_ENTITY_CONFIG_ID, new PacketByteBuf(Unpooled.buffer().writeBoolean(DeathStatueConfig.BASE_PLACES_ENTITY.getValue())));
             ClientPlayNetworking.send(ModMessages.BASE_PLACES_BLOCK_CONFIG_ID, new PacketByteBuf(Unpooled.buffer().writeBoolean(DeathStatueConfig.BASE_PLACES_BLOCK.getValue())));
         }
-        System.out.println("Saving Config Options For: " + DeathStatues.MOD_ID);
     }
 }
