@@ -93,6 +93,7 @@ public class DeathStatuesConfigScreen extends GameOptionsScreen {
         boolean mouseXOverBasePlaceIndicatorMaximized;
         boolean mouseXOverBasePlaceIndicatorNotMaximized;
         boolean mouseYOverBasePlaceIndicator = 78 <= mouseY && mouseY <= 90;
+        assert client != null;
         if (client.options.getGuiScale().getValue() == 3) {
             mouseXOverBasePlaceIndicatorMaximized = 180 <= (mouseX / 2) && (mouseX / 2) <= 250 && (180 <= (this.width / 4));
             mouseXOverBasePlaceIndicatorNotMaximized = 70 <= (mouseX / 2) && (mouseX / 2) <= 145 && (this.width / 4 <= 145);

@@ -42,7 +42,7 @@ public class DeathStatues implements ModInitializer {
     public static boolean hasStatuesClient = false;
     private static final Identifier DEATH_STATUE_ENTITY_ID = new Identifier("deathstatues", "death_statue_entity");
     public static final EntityType<DeathStatueEntity> DEATH_STATUE = Registry.register(Registries.ENTITY_TYPE, DEATH_STATUE_ENTITY_ID,
-            FabricEntityTypeBuilder.create(SpawnGroup.MISC, DeathStatueEntity::new)
+            FabricEntityTypeBuilder.create(SpawnGroup.MISC, DeathStatueEntity::create)
                     .dimensions(EntityDimensions.fixed(0.6F, 1.8F)).build());
 
     @Override
@@ -60,17 +60,22 @@ public class DeathStatues implements ModInitializer {
 
         //This Event triggers when an entity dies and I check if it's a player then spawn the statue
         ServerLivingEntityEvents.ALLOW_DEATH.register((entity, damageSource, damageAmount) -> {
-            if (entity instanceof PlayerEntity player){
+            if (entity instanceof PlayerEntity player) {
                 //LOGGER.info("Event: Player (" + player.getName().getString() + "): [" + player.getUuidAsString() + "] Died");
                 ServerPlayNetworking.send((ServerPlayerEntity) player, ModMessages.PLAYER_DIED_ID, PacketByteBufs.create());
-                spawnDeathStatueEntity(player, player.getPos());
+                //spawnDeathStatueEntity(player, player.getPos());
+
+                World world = player.getWorld();
+                BlockPos playerBlockPos = player.getBlockPos();
+                world.setBlockState(playerBlockPos, ModBlocks.DEATH_STATUE_BASE_BLOCK.getDefaultState());
+                spawnDeathStatueEntity(player, player.getPos().add(0, 1, 0));
             }
             return true;
         });
 
         //This Event triggers when an entity is attacked. I check if it's a player attacking an armor stand of the same name (So you don't destroy other people's statues)
         AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-            if (world.isClient()){
+            if (world.isClient()) {
                 return ActionResult.PASS;
             }
             //This is called when the Death Statue Entity has the same name as the attacking player
@@ -142,6 +147,16 @@ public class DeathStatues implements ModInitializer {
         deathStatue.equipStack(EquipmentSlot.FEET, BOOTS);
         deathStatue.equipStack(EquipmentSlot.MAINHAND, MAINHAND);
         deathStatue.equipStack(EquipmentSlot.OFFHAND, OFFHAND);
+
+
+        if (!serverPlayer.isCreative()) {
+            serverPlayer.getInventory().removeOne(HELMET);
+            serverPlayer.getInventory().removeOne(BREASTPLATE);
+            serverPlayer.getInventory().removeOne(LEGGINGS);
+            serverPlayer.getInventory().removeOne(BOOTS);
+            serverPlayer.getInventory().removeOne(MAINHAND);
+            serverPlayer.getInventory().removeOne(OFFHAND);
+        }
 
         String statueLocation = deathStatue.getBlockX() + ", " + deathStatue.getBlockY() + ", " + deathStatue.getBlockZ();
         LOGGER.info("SPAWNED DEATH STATUE: [" + deathStatue.getUuidAsString() + "] at: (" + statueLocation + ")");

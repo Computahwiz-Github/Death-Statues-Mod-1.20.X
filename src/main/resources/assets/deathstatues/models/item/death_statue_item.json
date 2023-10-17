@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "deathstatues:block/death_statue_block_legacy",
   "textures": {
     "layer0": "deathstatues:item/death_statue_block"
   }

@@ -35,13 +35,10 @@ import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Environment(EnvType.CLIENT)
 public class DeathStatuesClient implements ClientModInitializer {
     public static final String MOD_ID = "deathstatues";
-    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     private static KeyBinding keyBinding;
     public static final EntityModelLayer MODEL_STATUE_LAYER = new EntityModelLayer(new Identifier(MOD_ID, "statue"), "main");
     private PlayerEntity currentPlayer;
@@ -101,7 +98,7 @@ public class DeathStatuesClient implements ClientModInitializer {
     }
 
     public static void displayStatueDestroyed() {
-        MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.translatable("deathstatues.toast.destroyed").formatted(Formatting.RED));
+        MinecraftClient.getInstance().inGameHud.setOverlayMessage(Text.translatable("deathstatues.toast.destroyed").formatted(Formatting.RED), false);
         DeathStatuesToast.add(MinecraftClient.getInstance().getToastManager(), DeathStatuesToast.Type.STATUE_NOTIFICATION, Text.translatable("deathstatues.toast.title"), Text.translatable("deathstatues.toast.destroyed"));
     }
 

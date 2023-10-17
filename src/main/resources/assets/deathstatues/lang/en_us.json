@@ -17,7 +17,9 @@
   "block.deathstatues.death_statue_block": "Death Statue",
   "block.deathstatues.death_statue_base": "Death Statue Base",
 
-  "item.deathstatues.death_statue": "Death Statue",
+  "item.deathstatues.death_statue_item": "Death Statue Entity",
+  "item.deathstatues.death_statue_item.tooltip.1": "§6You're strong for holding up a whole statue",
+  "item.deathstatues.death_statue_item.tooltip.2": "§6This one even has the inventory items in it!",
 
   "itemgroup.statue": "Death Statue Blocks",
 

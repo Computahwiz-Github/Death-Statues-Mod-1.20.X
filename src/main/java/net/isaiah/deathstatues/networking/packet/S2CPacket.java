@@ -5,7 +5,6 @@ import net.isaiah.deathstatues.DeathStatuesClient;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.text.Text;
 
 public class S2CPacket {
 

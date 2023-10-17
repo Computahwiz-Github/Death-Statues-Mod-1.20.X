@@ -1,7 +1,5 @@
 package net.isaiah.deathstatues.client.network;
 
-import com.google.common.hash.Hashing;
-import com.mojang.authlib.GameProfile;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.isaiah.deathstatues.DeathStatues;
@@ -14,10 +12,6 @@ import net.minecraft.client.texture.PlayerSkinTexture;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.util.DefaultSkinHelper;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.StringHelper;
 import net.minecraft.util.Uuids;
@@ -39,7 +33,7 @@ public abstract class AbstractClientDeathStatueEntity extends DeathStatueEntity 
     public float elytraRoll;
     public final ClientWorld clientWorld;
 
-    public AbstractClientDeathStatueEntity(ClientWorld world, GameProfile profile) {
+    public AbstractClientDeathStatueEntity(ClientWorld world) {
         super(DeathStatues.DEATH_STATUE, world);
         this.clientWorld = world;
     }
@@ -77,25 +71,10 @@ public abstract class AbstractClientDeathStatueEntity extends DeathStatueEntity 
         return this.lastVelocity.lerp(this.getVelocity(), tickDelta);
     }
 
-    public boolean hasSkinTexture() {
-        PlayerListEntry playerListEntry = this.getPlayerListEntry();
-        return playerListEntry != null && playerListEntry.hasSkinTexture();
-    }
-
     @Nullable
     public Identifier getCapeTexture() {
         PlayerListEntry playerListEntry = this.getPlayerListEntry();
         return playerListEntry == null ? null : playerListEntry.getCapeTexture();
-    }
-
-    public boolean canRenderElytraTexture() {
-        return this.getPlayerListEntry() != null;
-    }
-
-    @Nullable
-    public Identifier getElytraTexture() {
-        PlayerListEntry playerListEntry = this.getPlayerListEntry();
-        return playerListEntry == null ? null : playerListEntry.getElytraTexture();
     }
 
     public static void loadSkin(Identifier id, String playerName) {
@@ -105,10 +84,6 @@ public abstract class AbstractClientDeathStatueEntity extends DeathStatueEntity 
             abstractTexture = new PlayerSkinTexture(null, String.format(Locale.ROOT, SKIN_URL, StringHelper.stripTextFormat(playerName)), DefaultSkinHelper.getTexture(Uuids.getOfflinePlayerUuid(playerName)), true, null);
             textureManager.registerTexture(id, abstractTexture);
         }
-    }
-
-    public static Identifier getSkinId(String playerName) {
-        return new Identifier("skins/" + Hashing.sha1().hashUnencodedChars(StringHelper.stripTextFormat(playerName)));
     }
 
     public String getModel() {

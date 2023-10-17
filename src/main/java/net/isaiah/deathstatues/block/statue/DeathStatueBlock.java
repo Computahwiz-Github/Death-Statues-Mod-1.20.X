@@ -31,7 +31,7 @@ public class DeathStatueBlock extends HorizontalFacingBlock {
 
     public DeathStatueBlock(Settings settings) {
         super(settings);
-        this.setDefaultState(this.getDefaultState().with(FACING, Direction.SOUTH).with(HALF, DoubleBlockHalf.LOWER).with(CHARGED, false));
+        this.setDefaultState(this.getDefaultState().with(FACING, Direction.NORTH).with(HALF, DoubleBlockHalf.LOWER).with(CHARGED, false));
     }
 
     @Nullable

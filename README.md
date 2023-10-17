@@ -2,7 +2,7 @@
 Death Statues Mod -> Now with Config Options Compatible with ModMenu!
 
 > [!WARNING]
-> W.I.P! As of this version (1.5.8), the Statue Entity cannot load Skin textures for players not logged into same server
+> W.I.P! As of this version (1.5.9), hopefully skin caching works now... Not 100%!
 > 
 > Working on the fix. Will push update soonish
 
@@ -15,8 +15,8 @@ At the moment, when the player dies, a player-like statue spawns. The statue wea
 
 There are three main goals for this project:
 - [x] 1 - Make a "faux-player-model" instead of using an armor stand for the statue
-  - [ ] 1.1 - Implement skin caching to avoid hitting api request limit
-  - [ ] 1.2 - Make the player model drop as an item with full NBT data that can be placed
+  - [x] 1.1 - Implement skin caching to avoid hitting api request limit
+  - [x] 1.2 - Make the player model drop as an item with full NBT data that can be placed
   - [x] 1.3 - Sync textures across server
 
 - [x] 2 - Make custom toast popups to indicate when/where the player's death statue spawned and when the player destroys it
@@ -28,7 +28,7 @@ There are three main goals for this project:
   - [x] 2.6 - Adjust toast texture with size of description lines
 
 - [x] 3 - Make the statue a BlockEntity instead of a faux-player-entity 
-  - [ ] 3.1 When the player destroys the statue, make it drop all the items except what you choose to leave on (specific armor/weapons)
+  - [x] 3.1 When the player destroys the statue, make it drop all the items except what you choose (Not a choice ATM) to leave on (specific armor/weapons)
   - [x] 3.2 Make statue have storage capacity
 
 P.S. I have added shaped recipes for the Death Statue Block, Base block, and a saddle recipe for fun (leather & iron).

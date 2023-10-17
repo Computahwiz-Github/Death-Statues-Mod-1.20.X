@@ -36,7 +36,7 @@ public class DeathStatueBaseBlock extends BlockWithEntity implements BlockEntity
 
     public DeathStatueBaseBlock(Settings settings) {
         super(settings);
-        this.setDefaultState(this.getDefaultState().with(FACING, Direction.SOUTH));
+        this.setDefaultState(this.getDefaultState().with(FACING, Direction.NORTH));
     }
 
     @Override
@@ -62,8 +62,10 @@ public class DeathStatueBaseBlock extends BlockWithEntity implements BlockEntity
             else if (BASE_PLACES_ENTITY && !BASE_PLACES_BLOCK) {
                 assert placer != null;
                 if (placer.isHolding(ModBlocks.DEATH_STATUE_BASE_BLOCK.asItem())) {
+                    int currentSlot = ((PlayerEntity) placer).getInventory().selectedSlot;
                     switchToWeaponSlot((PlayerEntity) placer);
                     DeathStatues.spawnDeathStatueEntity((PlayerEntity) placer, pos.up().toCenterPos());
+                    ((PlayerEntity) placer).getInventory().selectedSlot = currentSlot;
                 }
             }
         }

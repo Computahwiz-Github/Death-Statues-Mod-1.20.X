@@ -41,10 +41,9 @@ public class DeathStatueEntityRenderer extends LivingEntityRenderer<DeathStatueE
         super(ctx, new DeathStatueEntityModel<>(ctx.getPart(DeathStatuesClient.MODEL_STATUE_LAYER), false), 0.5F);
         this.addFeature(new ArmorFeatureRenderer<>(this, new ArmorEntityModel<>(ctx.getPart(EntityModelLayers.PLAYER_INNER_ARMOR)), new ArmorEntityModel<>(ctx.getPart(EntityModelLayers.PLAYER_OUTER_ARMOR)), ctx.getModelManager()));
         this.addFeature(new DeathStatueHeldItemFeatureRenderer<>(this, ctx.getHeldItemRenderer()));
-        //this.addFeature(new StuckArrowsFeatureRenderer<AbstractClientDeathStatueEntity, DeathStatueEntityModel<AbstractClientDeathStatueEntity>>(ctx, this));
-        //this.addFeature(new CapeFeatureRenderer(this));
+        //this.addFeature(new StuckArrowsFeatureRenderer<AbstractClientDeathStatueEntity, DeathStatueEntityModel<DeathStatueEntity>>(ctx, this));
         this.addFeature(new HeadFeatureRenderer<>(this, ctx.getModelLoader(), ctx.getHeldItemRenderer()));
-        //this.addFeature(new ElytraFeatureRenderer<AbstractClientDeathStatueEntity, DeathStatueEntityModel<AbstractClientPlayerEntity>>(this, ctx.getModelLoader()));
+        this.addFeature(new ElytraFeatureRenderer<>(this, ctx.getModelLoader()));
         //this.addFeature(new StuckStingersFeatureRenderer<AbstractClientDeathStatueEntity, DeathStatueEntityModel<AbstractClientDeathStatueEntity>>(this));
     }
 

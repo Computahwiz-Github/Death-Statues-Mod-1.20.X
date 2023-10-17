@@ -5,12 +5,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.isaiah.deathstatues.DeathStatues;
 import net.isaiah.deathstatues.block.statue.DeathStatueBaseBlock;
+import net.isaiah.deathstatues.item.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.client.render.entity.PlayerModelPart;
 import net.minecraft.client.util.DefaultSkinHelper;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -24,6 +25,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
 import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.text.Style;
 import net.minecraft.util.*;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -46,9 +48,16 @@ public class DeathStatueEntity extends LivingEntity {
     protected Vec3d lastVelocity = Vec3d.ZERO;
     @Nullable
     private PlayerListEntry playerListEntry;
+    private Identifier skinTexture;
+    private boolean playerListEntrySet;
 
     public DeathStatueEntity(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
+        this.playerListEntrySet = false;
+    }
+
+    public static DeathStatueEntity create(EntityType<? extends LivingEntity> entityType, World world) {
+        return new DeathStatueEntity(entityType, world);
     }
 
     @Override
@@ -75,26 +84,34 @@ public class DeathStatueEntity extends LivingEntity {
     @Nullable
     protected PlayerListEntry getPlayerListEntry() {
         if (this.playerListEntry == null) {
-            //Hopefully this fixes skin texture assigning on online servers
             if (this.getWorld().isClient()) {
                 this.playerListEntry = Objects.requireNonNull(MinecraftClient.getInstance().getNetworkHandler()).getPlayerListEntry(getPlayerUUIDFromStatueName(this.getName().getString()));
             }
+        }
+        else {
+            System.out.println("Player List Entry: " + this.playerListEntry.getProfile().getName());
         }
         return this.playerListEntry;
     }
 
     @Environment(value=EnvType.CLIENT)
-    public UUID getPlayerUUIDFromStatueName(String entityName) {
+    public static UUID getPlayerUUIDFromStatueName(String entityName) {
         //Gets characters from between two square brackets, "[ ]"
         Pattern pattern = Pattern.compile("\\[(.*?)]");
         Matcher matcher = pattern.matcher(entityName);
         String uuidString = "uuidString";
+        String playerName = "playerName";
 
-        if (matcher.find()) {
+        if (matcher.find() || !entityName.contains("[")) {
             try {
-                String playerName = matcher.group(1);
+                if (!entityName.contains("[")) {
+                    playerName = entityName;
+                }
+                else if (matcher.group(1) != null) {
+                    playerName = matcher.group(1);
+                }
 
-                if (!playerName.startsWith("Player") && getPlayerUUID(playerName) != null) {
+                if (!playerName.toLowerCase().contains("player")) {
                     uuidString = Objects.requireNonNull(getPlayerUUID(playerName))
                             .replaceAll(
                                     "(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})",
@@ -107,7 +124,6 @@ public class DeathStatueEntity extends LivingEntity {
                 }
             } catch (IllegalArgumentException e) {
                 // UUID parsing failed
-                DeathStatues.LOGGER.info("UUID STRING: " + uuidString);
                 e.printStackTrace();
             }
         }
@@ -144,13 +160,21 @@ public class DeathStatueEntity extends LivingEntity {
 
     @Environment(value=EnvType.CLIENT)
     public Identifier getSkinTexture() {
-        PlayerListEntry playerListEntry = this.getPlayerListEntry();
-        if (playerListEntry == null) {
-            //assert MinecraftClient.getInstance().player != null;
-            //return DefaultSkinHelper.getTexture(MinecraftClient.getInstance().player.getUuid()); //Old getTexture
-            return DefaultSkinHelper.getTexture(getPlayerUUIDFromStatueName(this.getName().getString()));
+        if (!this.playerListEntrySet) {
+            this.playerListEntry = this.getPlayerListEntry();
+            if (this.playerListEntry != null) {
+                this.skinTexture = new Identifier(this.playerListEntry.getSkinTexture().toTranslationKey().replace("minecraft.", ""));
+            }
+            this.playerListEntrySet = true;
+        }
+        if (this.playerListEntry == null) {
+            return DefaultSkinHelper.getTexture(Objects.requireNonNull(getPlayerUUIDFromStatueName(this.getName().getString())));
         } else {
-            return playerListEntry.getSkinTexture();
+            //System.out.println("Player List Entry Path: " + this.playerListEntry.getSkinTexture().toTranslationKey().replace("minecraft.", ""));
+            //Identifier skinIdentifier = new Identifier(this.playerListEntry.getSkinTexture().toTranslationKey().replace("minecraft.", ""));
+            //System.out.println("Skin Identifier: " + skinIdentifier.toTranslationKey());
+            return this.skinTexture;
+            //return this.playerListEntry.getSkinTexture();
         }
     }
 
@@ -225,10 +249,50 @@ public class DeathStatueEntity extends LivingEntity {
         BlockState bottomBlockState = player.getWorld().getBlockState(bottomPos);
         Block bottomBlock = bottomBlockState.getBlock();
 
-
-        if (bottomBlock instanceof DeathStatueBaseBlock) {
+        if (player.isSneaking() && hand.equals(Hand.MAIN_HAND)) {
+            /*if (!hasCustomStatueItem(player)) {
+                ItemStack deathStatueStack = ModItems.DEATH_STATUE_ITEM.getDefaultStack();
+                NbtCompound nbtData = new NbtCompound();
+                nbtData.put("Inventory", this.inventory.writeNbt(new NbtList()));
+                System.out.println("NBT DATA: " + nbtData);
+                deathStatueStack.setNbt(nbtData);
+                deathStatueStack.setCustomName(this.getCustomName());
+                player.getInventory().insertStack(deathStatueStack);
+                this.remove(RemovalReason.KILLED);
+                //player.getInventory().insertStack(ModItems.DEATH_STATUE_ITEM.getDefaultStack().setCustomName(this.getCustomName()));
+            }*/
+            ItemStack deathStatueStack = ModItems.DEATH_STATUE_ITEM.getDefaultStack();
+            NbtCompound nbtData = new NbtCompound();
+            nbtData.put("Inventory", this.inventory.writeNbt(new NbtList()));
+            deathStatueStack.setNbt(nbtData);
+            deathStatueStack.setCustomName(Objects.requireNonNull(this.getCustomName()).copyContentOnly().setStyle(Style.EMPTY.withColor(Formatting.DARK_PURPLE)));
+            player.getInventory().insertStack(deathStatueStack);
+            this.remove(RemovalReason.KILLED);
+        }
+        else if (bottomBlock instanceof DeathStatueBaseBlock) {
             return bottomBlock.onUse(bottomBlockState, player.getWorld(), bottomPos, player, hand, new BlockHitResult(this.getPos(), this.getHorizontalFacing(), this.getBlockPos(), false));
         }
         return super.interact(player, hand);
+    }
+
+    public boolean hasCustomStatueItem(PlayerEntity player) {
+        for (int i = 0; i < player.getInventory().size(); i++) {
+            ItemStack stack = player.getInventory().getStack(i);
+            NbtCompound displayTag = stack.getOrCreateSubNbt("display");
+
+            if (displayTag.contains("Name", 8)) {
+                String displayName = displayTag.getString("Name");
+                //System.out.println("Display Name: "+ displayName);
+                if (displayName != null && displayName.contains(this.getDisplayName().getString())) {
+                    System.out.println("Player has custom statue item already");
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isPartVisible(PlayerModelPart modelPart) {
+        return (this.getDataTracker().get(PLAYER_MODEL_PARTS) & modelPart.getBitFlag()) == modelPart.getBitFlag();
     }
 }
