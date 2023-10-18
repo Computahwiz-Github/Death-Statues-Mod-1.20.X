@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.isaiah.deathstatues.DeathStatues;
 import net.isaiah.deathstatues.config.DeathStatueConfig;
 import net.isaiah.deathstatues.config.DeathStatueConfigManager;
+import net.isaiah.deathstatues.item.ModItems;
 import net.isaiah.deathstatues.networking.ModMessages;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -86,6 +87,7 @@ public class DeathStatuesConfigScreen extends GameOptionsScreen {
         context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable("option.modmenu.base_places_explanation.3"),this.width / 2, 130, 0xffffff);
         context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable("option.modmenu.base_places_explanation.4"),this.width / 2, 145, 0xffffff);
         placeTooltipOverCenteredText(context, mouseX, mouseY);
+        context.drawItem(ModItems.DEATH_STATUE_ITEM.getDefaultStack(), this.width / 2, 160);
         super.render(context, mouseX, mouseY, delta);
     }
 

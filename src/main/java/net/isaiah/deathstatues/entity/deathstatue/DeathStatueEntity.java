@@ -7,6 +7,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.isaiah.deathstatues.block.statue.DeathStatueBaseBlock;
 import net.isaiah.deathstatues.item.ModItems;
+import net.isaiah.deathstatues.screen.DeathStatuesScreen;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
@@ -57,10 +58,6 @@ public class DeathStatueEntity extends LivingEntity {
     public DeathStatueEntity(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
         this.playerListEntrySet = false;
-    }
-
-    public static DeathStatueEntity create(EntityType<? extends LivingEntity> entityType, World world) {
-        return new DeathStatueEntity(entityType, world);
     }
 
     @Override
@@ -282,6 +279,7 @@ public class DeathStatueEntity extends LivingEntity {
 
         if (!player.isSneaking() && hand.equals(Hand.MAIN_HAND)) {
             if (bottomBlock instanceof DeathStatueBaseBlock) {
+                DeathStatuesScreen.setDeathStatueEntityID(this.getId());
                 return bottomBlock.onUse(bottomBlockState, player.getWorld(), bottomPos, player, hand, new BlockHitResult(this.getPos(), this.getHorizontalFacing(), this.getBlockPos(), false));
             }
         }

@@ -42,7 +42,7 @@ public class DeathStatues implements ModInitializer {
     public static boolean hasStatuesClient = false;
     private static final Identifier DEATH_STATUE_ENTITY_ID = new Identifier("deathstatues", "death_statue_entity");
     public static final EntityType<DeathStatueEntity> DEATH_STATUE = Registry.register(Registries.ENTITY_TYPE, DEATH_STATUE_ENTITY_ID,
-            FabricEntityTypeBuilder.create(SpawnGroup.MISC, DeathStatueEntity::create)
+            FabricEntityTypeBuilder.create(SpawnGroup.MISC, DeathStatueEntity::new)
                     .dimensions(EntityDimensions.fixed(0.6F, 1.8F)).build());
 
     @Override

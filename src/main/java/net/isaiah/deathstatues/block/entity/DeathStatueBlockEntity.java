@@ -19,11 +19,11 @@ import org.jetbrains.annotations.Nullable;
 
 public class DeathStatueBlockEntity extends LootableContainerBlockEntity implements ExtendedScreenHandlerFactory, ImplementedInventory {
     private DefaultedList<ItemStack> inventory = DefaultedList.ofSize(27, ItemStack.EMPTY);
-    //private DefaultedList<ItemStack> items = DefaultedList.ofSize(size(), ItemStack.EMPTY);
 
     public DeathStatueBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.DEATH_STATUE_BASE, pos, state);
     }
+
     @Override
     protected Text getContainerName() {
         return Text.translatable(getCachedState().getBlock().getTranslationKey());

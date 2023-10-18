@@ -12,26 +12,21 @@ import net.minecraft.screen.slot.Slot;
 
 public class DeathStatuesScreenHandler extends ScreenHandler {
     private final Inventory inventory;
-    //private final PropertyDelegate propertyDelegate;
     public final DeathStatueBlockEntity blockEntity;
 
     public DeathStatuesScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
-        this(syncId, playerInventory, playerInventory.player.getWorld().getBlockEntity(buf.readBlockPos())/*,
-                new ArrayPropertyDelegate(2)*/);
+        this(syncId, playerInventory, playerInventory.player.getWorld().getBlockEntity(buf.readBlockPos()));
     }
 
-    public DeathStatuesScreenHandler(int syncId, PlayerInventory playerInventory, BlockEntity blockEntity/*, PropertyDelegate arrayPropertyDelegate*/) {
+    public DeathStatuesScreenHandler(int syncId, PlayerInventory playerInventory, BlockEntity blockEntity) {
         super(ModScreenHandlers.DEATH_STATUE_SCREEN_HANDLER, syncId);
         checkSize((Inventory) blockEntity, 27);
         this.inventory = (Inventory) blockEntity;
-        //this.propertyDelegate = arrayPropertyDelegate;
         this.blockEntity = (DeathStatueBlockEntity) blockEntity;
 
         addStatueInventory(inventory);
         addPlayerInventory(playerInventory);
         addPlayerHotbar(playerInventory);
-
-        //addProperties(arrayPropertyDelegate);
     }
 
     @Override

@@ -2,7 +2,7 @@
 Death Statues Mod -> Now with Config Options Compatible with ModMenu!
 
 > [!WARNING]
-> W.I.P! As of this version (1.6.1), there is still not a custom block entity renderer for the statue block!
+> W.I.P! As of this version (1.6.2), there is still not a custom block entity renderer for the statue block!
 
 > [!NOTE]
 > New Images Coming Soon
@@ -37,7 +37,7 @@ There are three main goals for this project:
 - [x] 3 - Make the statue a BlockEntity instead of a faux-player-entity 
   - [x] 3.1 When the player destroys the statue, make it drop all the items except what you choose to leave on (specific armor/weapons)
   - [x] 3.2 Make statue have storage capacity
-  - [ ] 3.3 Make block entity have poses, inventory, armor & item renderers
+  - [ ] 3.3 Make statue block entity have poses, inventory, armor & item renderers
 
 P.S. I have added shaped recipes for the Death Statue Block, Base block, and a saddle recipe for fun (leather & iron).
 
