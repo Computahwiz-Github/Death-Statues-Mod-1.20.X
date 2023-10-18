@@ -371,31 +371,28 @@ public class DeathStatueEntity extends LivingEntity {
         int i;
         if (source.getAttacker() != null) {
             source.getAttacker().playSound(SoundEvents.ENTITY_ITEM_BREAK, 1.0f, this.getWorld().random.nextFloat() * 0.1f + 0.9f);
-        }
-        for (i = 0; i < this.inventory.main.size(); ++i) {
-            itemStack = this.inventory.main.get(i);
-            if (itemStack.isEmpty()) continue;
-            this.dropStack(itemStack);
-            this.inventory.main.set(i, ItemStack.EMPTY);
-        }
-        for (i = 0; i < this.inventory.offHand.size(); ++i) {
-            itemStack = this.inventory.offHand.get(i);
-            if (itemStack.isEmpty()) continue;
-            this.dropStack(itemStack);
-            this.inventory.offHand.set(i, ItemStack.EMPTY);
-        }
-        for (i = 0; i < this.inventory.armor.size(); ++i) {
-            itemStack = this.inventory.armor.get(i);
-            if (itemStack.isEmpty()) continue;
-            this.dropStack(itemStack);
-            this.inventory.armor.set(i, ItemStack.EMPTY);
+            if (!source.isSourceCreativePlayer()) {
+                Block.dropStack(this.getWorld(), this.getBlockPos(), ModItems.DEATH_STATUE_ITEM.getDefaultStack());
+                for (i = 0; i < this.inventory.main.size(); ++i) {
+                    itemStack = this.inventory.main.get(i);
+                    if (itemStack.isEmpty()) continue;
+                    this.dropStack(itemStack);
+                    this.inventory.main.set(i, ItemStack.EMPTY);
+                }
+                for (i = 0; i < this.inventory.offHand.size(); ++i) {
+                    itemStack = this.inventory.offHand.get(i);
+                    if (itemStack.isEmpty()) continue;
+                    this.dropStack(itemStack);
+                    this.inventory.offHand.set(i, ItemStack.EMPTY);
+                }
+                for (i = 0; i < this.inventory.armor.size(); ++i) {
+                    itemStack = this.inventory.armor.get(i);
+                    if (itemStack.isEmpty()) continue;
+                    this.dropStack(itemStack);
+                    this.inventory.armor.set(i, ItemStack.EMPTY);
+                }
+            }
         }
         return super.damage(source, amount);
-    }
-
-    @Override
-    public void kill() {
-        Block.dropStack(this.getWorld(), this.getBlockPos(), ModItems.DEATH_STATUE_ITEM.getDefaultStack());
-        super.kill();
     }
 }

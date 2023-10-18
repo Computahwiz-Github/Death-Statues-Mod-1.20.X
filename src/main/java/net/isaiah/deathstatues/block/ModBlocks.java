@@ -14,8 +14,9 @@ import net.minecraft.registry.Registry;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 
+
 public class ModBlocks {
-    public static final Block DEATH_STATUE_BLOCK = registerBlock("death_statue_block", new DeathStatueBlock(FabricBlockSettings.create().strength(4.0f, 0.6f).sounds(BlockSoundGroup.AMETHYST_BLOCK)));
+    public static final Block DEATH_STATUE_BLOCK = registerBlock("death_statue_block", new DeathStatueBlock(FabricBlockSettings.create().strength(4.0f, 0.6f).sounds(BlockSoundGroup.AMETHYST_BLOCK).luminance(10)));
     public static final Block DEATH_STATUE_BASE_BLOCK = registerBlock("death_statue_base", new DeathStatueBaseBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK).sounds(BlockSoundGroup.COPPER).nonOpaque()));
 
     private static Block registerBlock(String name, Block block) {

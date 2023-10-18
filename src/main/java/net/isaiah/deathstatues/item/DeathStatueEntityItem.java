@@ -19,8 +19,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class DeathStatueBlockItem extends Item {
-    public DeathStatueBlockItem(Item.Settings settings) {
+public class DeathStatueEntityItem extends Item {
+    public DeathStatueEntityItem(Item.Settings settings) {
         super(settings);
     }
 

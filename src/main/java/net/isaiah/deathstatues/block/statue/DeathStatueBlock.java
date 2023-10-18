@@ -119,7 +119,7 @@ public class DeathStatueBlock extends HorizontalFacingBlock {
 
     @Override
     public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
-            world.setBlockState(pos.up(), ModBlocks.DEATH_STATUE_BLOCK.getDefaultState().with(FACING, world.getBlockState(pos).get(FACING)).with(HALF, DoubleBlockHalf.UPPER));
+        world.setBlockState(pos.up(), ModBlocks.DEATH_STATUE_BLOCK.getDefaultState().with(FACING, world.getBlockState(pos).get(FACING)).with(HALF, DoubleBlockHalf.UPPER));
         super.onPlaced(world, pos, state, placer, itemStack);
     }
 

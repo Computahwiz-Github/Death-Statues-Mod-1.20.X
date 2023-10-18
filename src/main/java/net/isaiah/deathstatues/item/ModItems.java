@@ -10,7 +10,7 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
 public class ModItems {
-    public static final Item DEATH_STATUE_ITEM = registerItem("death_statue_item", new DeathStatueBlockItem(new Item.Settings().food(FoodComponents.COOKED_BEEF).maxCount(1)));
+    public static final Item DEATH_STATUE_ITEM = registerItem("death_statue_item", new DeathStatueEntityItem(new Item.Settings().food(FoodComponents.COOKED_BEEF).maxCount(1)));
     //public static final Item DEATH_STATUE_BASE_ITEM = registerItem("death_statue_base_item", new Item(new Item.Settings().maxCount(1)));
 
     private static Item registerItem(String name, Item item) {

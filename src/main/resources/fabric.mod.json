@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "deathstatues",
-  "version": "1.6",
+  "version": "1.6.1",
 
   "name": "Death Statues Mod",
   "description": "Look at Config Options Before Continuing!\nWhen you die, or have the config option enabled for spawning it above when a statue base block is placed, a player-like statue entity of you is spawned that has the same skin, wears the same armor as you, and has items from both of your hands.\nIt can be spawned by either placing down a statue base block (Default: DISABLED), pressing [R] on your keyboard, or by dying.\nYou can also place down a more block-like Death Statue Block on top of the base block, or have the base block place it above itself for you (Default: DISABLED).\nBoth blocks and the entity will allow you to right click on them to access the statue base block's storage.\nYou can Shift + Right-Click on the entity to change the armor and hand items like an armor stand. \nYou can Shift + R-Click + L-CTRL on the entity to get it in item form with the armor and hand items.\nP.S. I also still haven't made a custom block entity renderer, so there are no armor, item, pose, or matching skin texture displays yet for the statue block.",
