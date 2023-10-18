@@ -39,7 +39,7 @@ import org.lwjgl.glfw.GLFW;
 @Environment(EnvType.CLIENT)
 public class DeathStatuesClient implements ClientModInitializer {
     public static final String MOD_ID = "deathstatues";
-    private static KeyBinding keyBinding;
+    private static KeyBinding spawnKeyBinding;
     public static final EntityModelLayer MODEL_STATUE_LAYER = new EntityModelLayer(new Identifier(MOD_ID, "statue"), "main");
     private PlayerEntity currentPlayer;
 
@@ -74,10 +74,9 @@ public class DeathStatuesClient implements ClientModInitializer {
         });
 
         //This code executes when you press [R] on the keyboard.
-        keyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.deathstatues.toast", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_R, "category.deathstatues.toast"));
+        spawnKeyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.deathstatues.toast", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_R, "category.deathstatues.toast"));
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            while (keyBinding.wasPressed()) {
-                //LOGGER.info("Key [" + keyBinding.toString() + "] is pressed");
+            while (spawnKeyBinding.wasPressed()) {
                 displayKeyBindMessage(client);
                 //ClientPlayNetworking.send(ModMessages.UPDATE_STATUE_TEXTURE, new PacketByteBuf(Unpooled.buffer()).writeIdentifier(getSkinTexture()));
                 ClientPlayNetworking.send(ModMessages.SPAWN_DEATH_STATUE_ID, PacketByteBufs.create());

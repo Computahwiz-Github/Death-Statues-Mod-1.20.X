@@ -10,22 +10,25 @@ import net.isaiah.deathstatues.item.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.client.render.entity.PlayerModelPart;
 import net.minecraft.client.util.DefaultSkinHelper;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
 import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.text.Style;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -99,7 +102,7 @@ public class DeathStatueEntity extends LivingEntity {
         //Gets characters from between two square brackets, "[ ]"
         Pattern pattern = Pattern.compile("\\[(.*?)]");
         Matcher matcher = pattern.matcher(entityName);
-        String uuidString = "uuidString";
+        String uuidString;
         String playerName = "playerName";
 
         if (matcher.find() || !entityName.contains("[")) {
@@ -243,56 +246,156 @@ public class DeathStatueEntity extends LivingEntity {
         return this.lastVelocity.lerp(this.getVelocity(), tickDelta);
     }
 
+    public void giveCustomStatueItem(PlayerEntity player) {
+        ItemStack deathStatueStack = ModItems.DEATH_STATUE_ITEM.getDefaultStack();
+        NbtCompound nbtData = new NbtCompound();
+        nbtData.put("Inventory", this.inventory.writeNbt(new NbtList()));
+        //System.out.println("NBT DATA: " + nbtData);
+        deathStatueStack.setNbt(nbtData);
+        String customName = Objects.requireNonNull(this.getCustomName()).getString();
+
+        Pattern pattern = Pattern.compile("\\[(.*?)]");
+        Matcher matcher = pattern.matcher(customName);
+        if (matcher.find()) {
+            try {
+                if (matcher.group(1) != null) {
+                    customName = matcher.group(1);
+                    deathStatueStack.setCustomName(Text.of("Death Statue of ").copyContentOnly().formatted(Formatting.AQUA)
+                            .append(Text.of("[").copyContentOnly().formatted(Formatting.GREEN))
+                            .append(Text.of(customName).copyContentOnly().formatted(Formatting.GOLD))
+                            .append(Text.of("]").copyContentOnly().formatted(Formatting.GREEN)));
+                }
+            } catch (IllegalArgumentException e) {
+                // UUID parsing failed
+                e.printStackTrace();
+            }
+        }
+        this.remove(RemovalReason.KILLED);
+        player.getInventory().insertStack(deathStatueStack);
+    }
+
     @Override
-    public ActionResult interact(PlayerEntity player, Hand hand) {
+    public ActionResult interactAt(PlayerEntity player, Vec3d hitPos, Hand hand) {
         BlockPos bottomPos = this.getBlockPos().down();
         BlockState bottomBlockState = player.getWorld().getBlockState(bottomPos);
         Block bottomBlock = bottomBlockState.getBlock();
 
-        if (player.isSneaking() && hand.equals(Hand.MAIN_HAND)) {
-            /*if (!hasCustomStatueItem(player)) {
-                ItemStack deathStatueStack = ModItems.DEATH_STATUE_ITEM.getDefaultStack();
-                NbtCompound nbtData = new NbtCompound();
-                nbtData.put("Inventory", this.inventory.writeNbt(new NbtList()));
-                System.out.println("NBT DATA: " + nbtData);
-                deathStatueStack.setNbt(nbtData);
-                deathStatueStack.setCustomName(this.getCustomName());
-                player.getInventory().insertStack(deathStatueStack);
-                this.remove(RemovalReason.KILLED);
-                //player.getInventory().insertStack(ModItems.DEATH_STATUE_ITEM.getDefaultStack().setCustomName(this.getCustomName()));
-            }*/
-            ItemStack deathStatueStack = ModItems.DEATH_STATUE_ITEM.getDefaultStack();
-            NbtCompound nbtData = new NbtCompound();
-            nbtData.put("Inventory", this.inventory.writeNbt(new NbtList()));
-            deathStatueStack.setNbt(nbtData);
-            deathStatueStack.setCustomName(Objects.requireNonNull(this.getCustomName()).copyContentOnly().setStyle(Style.EMPTY.withColor(Formatting.DARK_PURPLE)));
-            player.getInventory().insertStack(deathStatueStack);
-            this.remove(RemovalReason.KILLED);
-        }
-        else if (bottomBlock instanceof DeathStatueBaseBlock) {
-            return bottomBlock.onUse(bottomBlockState, player.getWorld(), bottomPos, player, hand, new BlockHitResult(this.getPos(), this.getHorizontalFacing(), this.getBlockPos(), false));
-        }
-        return super.interact(player, hand);
-    }
-
-    public boolean hasCustomStatueItem(PlayerEntity player) {
-        for (int i = 0; i < player.getInventory().size(); i++) {
-            ItemStack stack = player.getInventory().getStack(i);
-            NbtCompound displayTag = stack.getOrCreateSubNbt("display");
-
-            if (displayTag.contains("Name", 8)) {
-                String displayName = displayTag.getString("Name");
-                //System.out.println("Display Name: "+ displayName);
-                if (displayName != null && displayName.contains(this.getDisplayName().getString())) {
-                    System.out.println("Player has custom statue item already");
-                    return true;
-                }
+        if (!player.isSneaking() && hand.equals(Hand.MAIN_HAND)) {
+            if (bottomBlock instanceof DeathStatueBaseBlock) {
+                return bottomBlock.onUse(bottomBlockState, player.getWorld(), bottomPos, player, hand, new BlockHitResult(this.getPos(), this.getHorizontalFacing(), this.getBlockPos(), false));
             }
         }
-        return false;
+
+        ItemStack itemStack = player.getStackInHand(hand);
+        if (player.isSpectator()) {
+            return ActionResult.SUCCESS;
+        }
+        if (player.getWorld().isClient) {
+            return ActionResult.CONSUME;
+        }
+
+        EquipmentSlot equipmentSlot = MobEntity.getPreferredEquipmentSlot(itemStack);
+        if (itemStack.isEmpty()) {
+            if (player.isSneaking() && hand.equals(Hand.MAIN_HAND) && Screen.hasControlDown()) {
+                giveCustomStatueItem(player);
+                return ActionResult.SUCCESS;
+            }
+            EquipmentSlot equipmentSlot2 = this.getSlotFromPosition(hitPos);
+            if (this.hasStackEquipped(equipmentSlot2) && this.equip(player, equipmentSlot2, itemStack, hand)) {
+                return ActionResult.SUCCESS;
+            }
+        }
+        else {
+            if (this.equip(player, equipmentSlot, itemStack, hand)) {
+                return ActionResult.SUCCESS;
+            }
+        }
+        return ActionResult.PASS;
     }
 
-    public boolean isPartVisible(PlayerModelPart modelPart) {
-        return (this.getDataTracker().get(PLAYER_MODEL_PARTS) & modelPart.getBitFlag()) == modelPart.getBitFlag();
+    private EquipmentSlot getSlotFromPosition(Vec3d hitPos) {
+        EquipmentSlot equipmentSlot = EquipmentSlot.MAINHAND;
+        double d = hitPos.y;
+        EquipmentSlot equipmentSlot2 = EquipmentSlot.FEET;
+        if (d >= 0.1) {
+            double d2 = 0.45;
+            if (d < 0.1 + d2 && this.hasStackEquipped(equipmentSlot2)) {
+                return EquipmentSlot.FEET;
+            }
+        }
+        double d3 = 0.0;
+        if (d >= 0.9 + d3) {
+            double d4 = 0.7;
+            if (d < 0.9 + d4 && this.hasStackEquipped(EquipmentSlot.CHEST)) {
+                return EquipmentSlot.CHEST;
+            }
+        }
+        if (d >= 0.4) {
+            double d5 = 0.8;
+            if (d < 0.4 + d5 && this.hasStackEquipped(EquipmentSlot.LEGS)) {
+                return EquipmentSlot.LEGS;
+            }
+        }
+        if (d >= 1.6 && this.hasStackEquipped(EquipmentSlot.HEAD)) {
+            return EquipmentSlot.HEAD;
+        }
+        if (this.hasStackEquipped(EquipmentSlot.MAINHAND)) return equipmentSlot;
+        if (!this.hasStackEquipped(EquipmentSlot.OFFHAND)) return equipmentSlot;
+        return EquipmentSlot.OFFHAND;
+    }
+
+    private boolean equip(PlayerEntity player, EquipmentSlot slot, ItemStack stack, Hand hand) {
+        ItemStack itemStack = this.getEquippedStack(slot);
+        if (player.getAbilities().creativeMode && itemStack.isEmpty() && !stack.isEmpty()) {
+            this.equipStack(slot, stack.copyWithCount(1));
+            return true;
+        }
+        if (!stack.isEmpty() && stack.getCount() > 1) {
+            if (!itemStack.isEmpty()) {
+                return false;
+            }
+            this.equipStack(slot, stack.split(1));
+            return true;
+        }
+        this.equipStack(slot, stack);
+        player.setStackInHand(hand, itemStack);
+        if (!itemStack.isEmpty()) {
+            this.getWorld().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_ITEM_PICKUP, this.getSoundCategory(), 1.0f, this.getWorld().random.nextFloat() * 0.1f + 0.9f);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean damage(DamageSource source, float amount) {
+        ItemStack itemStack;
+        int i;
+        if (source.getAttacker() != null) {
+            source.getAttacker().playSound(SoundEvents.ENTITY_ITEM_BREAK, 1.0f, this.getWorld().random.nextFloat() * 0.1f + 0.9f);
+        }
+        for (i = 0; i < this.inventory.main.size(); ++i) {
+            itemStack = this.inventory.main.get(i);
+            if (itemStack.isEmpty()) continue;
+            this.dropStack(itemStack);
+            this.inventory.main.set(i, ItemStack.EMPTY);
+        }
+        for (i = 0; i < this.inventory.offHand.size(); ++i) {
+            itemStack = this.inventory.offHand.get(i);
+            if (itemStack.isEmpty()) continue;
+            this.dropStack(itemStack);
+            this.inventory.offHand.set(i, ItemStack.EMPTY);
+        }
+        for (i = 0; i < this.inventory.armor.size(); ++i) {
+            itemStack = this.inventory.armor.get(i);
+            if (itemStack.isEmpty()) continue;
+            this.dropStack(itemStack);
+            this.inventory.armor.set(i, ItemStack.EMPTY);
+        }
+        return super.damage(source, amount);
+    }
+
+    @Override
+    public void kill() {
+        Block.dropStack(this.getWorld(), this.getBlockPos(), ModItems.DEATH_STATUE_ITEM.getDefaultStack());
+        super.kill();
     }
 }

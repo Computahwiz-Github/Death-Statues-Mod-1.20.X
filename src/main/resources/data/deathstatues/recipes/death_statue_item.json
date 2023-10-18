@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "deathstatues:death_statue_block"
+    },
+    {
+      "item": "minecraft:armor_stand"
+    }
+  ],
+  "result": {
+    "item": "deathstatues:death_statue_item"
+  }
+}

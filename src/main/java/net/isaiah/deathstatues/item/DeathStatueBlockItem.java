@@ -3,6 +3,7 @@ package net.isaiah.deathstatues.item;
 import com.mojang.authlib.GameProfile;
 import net.isaiah.deathstatues.DeathStatues;
 import net.isaiah.deathstatues.entity.deathstatue.DeathStatueEntity;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
@@ -74,6 +75,13 @@ public class DeathStatueBlockItem extends Item {
                         Text.translatable("item.deathstatues.death_statue_item.tooltip.2")));
             }
         }
-        super.appendTooltip(stack, world, tooltip, context);
+        if (!Screen.hasShiftDown()) {
+            tooltip.add(Text.translatable("item.deathstatues.death_statue_item.tooltip.hint"));
+        }
+        else {
+            tooltip.addAll(List.of(
+                    Text.translatable("item.deathstatues.death_statue_item.tooltip.shift.1"),
+                    Text.translatable("item.deathstatues.death_statue_item.tooltip.shift.2")));
+        }
     }
 }

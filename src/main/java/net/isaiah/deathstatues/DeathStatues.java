@@ -79,10 +79,10 @@ public class DeathStatues implements ModInitializer {
                 return ActionResult.PASS;
             }
             //This is called when the Death Statue Entity has the same name as the attacking player
-            if (entity instanceof DeathStatueEntity && getPlayerNameFromStatueName(entity.getName().getString()).equals(player.getName())) {
+            if (entity instanceof DeathStatueEntity deathStatueEntity && getPlayerNameFromStatueName(entity.getName().getString()).equals(player.getName())) {
                 //LOGGER.info("Event: Attacking Death Statue: [" + entity.getUuidAsString() + "], at: (" + entity.getBlockX() + ", " + entity.getBlockY() + ", " + entity.getBlockZ() + ")");
                 ServerPlayNetworking.send((ServerPlayerEntity) player, ModMessages.DESTROY_STATUE_ID, PacketByteBufs.create());
-                entity.kill();
+                deathStatueEntity.kill();
                 return ActionResult.PASS;
             }
             //This is called when the Death Statue Entity doesn't have the same name as the attacking player

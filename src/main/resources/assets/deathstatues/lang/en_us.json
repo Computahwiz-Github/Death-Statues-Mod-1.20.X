@@ -14,12 +14,15 @@
 
   "entity.deathstatues.death_statue_entity": "Death Statue Entity",
 
-  "block.deathstatues.death_statue_block": "Death Statue",
+  "block.deathstatues.death_statue_block": "Death Statue Block",
   "block.deathstatues.death_statue_base": "Death Statue Base",
 
   "item.deathstatues.death_statue_item": "Death Statue Entity",
-  "item.deathstatues.death_statue_item.tooltip.1": "§6You're strong for holding up a whole statue",
-  "item.deathstatues.death_statue_item.tooltip.2": "§6This one even has the inventory items in it!",
+  "item.deathstatues.death_statue_item.tooltip.1": "§AYou must be strong to hold up a statue",
+  "item.deathstatues.death_statue_item.tooltip.2": "§AThis one even has inventory items in it!",
+  "item.deathstatues.death_statue_item.tooltip.shift.1": "§5Hold Shift + R-Click + L-CTRL",
+  "item.deathstatues.death_statue_item.tooltip.shift.2": "§5On Statue Entity To Get In Item Form!",
+  "item.deathstatues.death_statue_item.tooltip.hint": "§7Hold Shift to view extra functionality",
 
   "itemgroup.statue": "Death Statue Blocks",
 
@@ -34,7 +37,7 @@
   "option.modmenu.base_places_block": "Base Places Block",
   "option.modmenu.base_places_block.true": "§AEnabled§r",
   "option.modmenu.base_places_block.false": "§cDisabled§r",
-  "option.modmenu.base_places_block.tooltip": "§6DEFAULT§r: §AEnabled§r\nToggle Whether Death Statue Player Block Model is Placed on Top When Placing a Death Statue Base Block",
+  "option.modmenu.base_places_block.tooltip": "§6DEFAULT§r: §ADisabled§r\nToggle Whether Death Statue Player Block Model is Placed on Top When Placing a Death Statue Base Block",
   "option.modmenu.base_places_nothing": "[Base Places Nothing]",
   "option.modmenu.base_places_nothing.true": "§ATrue§r",
   "option.modmenu.base_places_nothing.false": "§cFalse§r",

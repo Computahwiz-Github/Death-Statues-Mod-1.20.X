@@ -56,7 +56,7 @@ public class DeathStatueBaseBlock extends BlockWithEntity implements BlockEntity
             if (BASE_PLACES_BLOCK && !BASE_PLACES_ENTITY) {
                 world.setBlockState(pos.up(), ModBlocks.DEATH_STATUE_BLOCK.getDefaultState().with(FACING, state.get(FACING)).with(DeathStatueBlock.HALF, DoubleBlockHalf.LOWER));
                 world.setBlockState(pos.up().add(0, 1, 0), ModBlocks.DEATH_STATUE_BLOCK.getDefaultState().with(FACING, state.get(FACING)).with(DeathStatueBlock.HALF, DoubleBlockHalf.UPPER));
-                world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_BREAK, SoundCategory.BLOCKS, 0.5f, world.random.nextFloat() * 0.1f + 0.9f);
+                world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_BREAK, SoundCategory.BLOCKS, 1.0f, world.random.nextFloat() * 0.1f + 0.9f);
             }
             //Spawns player model entity if the config option for placing the block is false and placing the entity is true
             else if (BASE_PLACES_ENTITY && !BASE_PLACES_BLOCK) {
@@ -100,7 +100,7 @@ public class DeathStatueBaseBlock extends BlockWithEntity implements BlockEntity
         if (world.getBlockState(pos.up()).isOf(ModBlocks.DEATH_STATUE_BLOCK) && world.getBlockState(pos.up().add(0, 1, 0)).isOf(ModBlocks.DEATH_STATUE_BLOCK)) {
             world.removeBlock(pos.up(), false);
             world.removeBlock(pos.up().add(0, 1, 0), false);
-            world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_BREAK, SoundCategory.BLOCKS, 0.5f, world.random.nextFloat() * 0.1f + 0.9f);
+            world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_BREAK, SoundCategory.BLOCKS, 1.0f, world.random.nextFloat() * 0.1f + 0.9f);
         }
         super.onBreak(world, pos, state, player);
     }
@@ -148,7 +148,7 @@ public class DeathStatueBaseBlock extends BlockWithEntity implements BlockEntity
             NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
 
             if (screenHandlerFactory != null) {
-                world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_ENDER_CHEST_OPEN, SoundCategory.BLOCKS, 0.5f, world.random.nextFloat() * 0.1f + 0.9f);
+                world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_ENDER_CHEST_OPEN, SoundCategory.BLOCKS, 1.0f, world.random.nextFloat() * 0.1f + 0.9f);
                 player.openHandledScreen(screenHandlerFactory);
             }
         }

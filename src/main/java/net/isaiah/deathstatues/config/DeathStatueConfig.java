@@ -10,8 +10,7 @@ import java.util.ArrayList;
 
 public class DeathStatueConfig {
     public static final CustomBooleanConfigOption BASE_PLACES_ENTITY = new CustomBooleanConfigOption("base_places_entity", false);
-    public static final CustomBooleanConfigOption BASE_PLACES_BLOCK = new CustomBooleanConfigOption("base_places_block", true);
-    //public static final CustomBooleanConfigOption BASE_PLACES_NOTHING = new CustomBooleanConfigOption("base_places_nothing", false);
+    public static final CustomBooleanConfigOption BASE_PLACES_BLOCK = new CustomBooleanConfigOption("base_places_block", false);
 
     public static SimpleOption<?>[] asOptions() {
         ArrayList<SimpleOption<?>> options = new ArrayList<>();

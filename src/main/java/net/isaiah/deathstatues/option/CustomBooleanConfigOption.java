@@ -12,7 +12,6 @@ public class CustomBooleanConfigOption extends BooleanConfigOption {
     private final Text disabledText;
     private final Text BASE_PLACES_ENTITY_TOOLTIP = Text.translatable("option.modmenu.base_places_entity.tooltip");
     private final Text BASE_PLACES_BLOCK_TOOLTIP = Text.translatable("option.modmenu.base_places_block.tooltip");
-    //private final Text BASE_PLACES_NOTHING_TOOLTIP = Text.translatable("option.modmenu.base_places_nothing.tooltip");
     public CustomBooleanConfigOption(String key, boolean defaultValue, String enabledKey, String disabledKey) {
         super(key, defaultValue, enabledKey, disabledKey);
         this.translationKey = TranslationUtil.translationKeyOf("option", key);
@@ -38,11 +37,6 @@ public class CustomBooleanConfigOption extends BooleanConfigOption {
                     (text, value) -> value ? enabledText : disabledText, SimpleOption.BOOLEAN, getValue(),
                     newValue -> ConfigOptionStorage.setBoolean(super.getKey(), newValue));
         }
-        /*else if (option.toString().equals("Base Places Nothing")) {
-            return new SimpleOption<>(translationKey, SimpleOption.constantTooltip(BASE_PLACES_NOTHING_TOOLTIP),
-                    (text, value) -> value ? enabledText : disabledText, SimpleOption.BOOLEAN, getValue(),
-                    newValue -> ConfigOptionStorage.setBoolean(super.getKey(), newValue));
-        }*/
         return SimpleOption.ofBoolean(translationKey, getValue(), (value) -> ConfigOptionStorage.setBoolean(super.getKey(), value));
     }
 }

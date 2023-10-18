@@ -13,24 +13,12 @@
       },
       "trigger": "minecraft:inventory_changed"
     },
-    "has_item_frame": {
+    "has_death_statue_block": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:item_frame"
-            ]
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "has_name_tag": {
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "minecraft:name_tag"
+              "deathstatues:death_statue_block"
             ]
           }
         ]
@@ -39,22 +27,21 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "deathstatues:death_statue_block"
+        "recipe": "deathstatues:death_statue_item"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_name_tag",
-      "has_item_frame",
+      "has_death_statue_block",
       "has_armor_stand",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "deathstatues:death_statue_block"
+      "deathstatues:death_statue_item"
     ]
   },
   "sends_telemetry_event": false

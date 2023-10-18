@@ -2,6 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
+    "A": {
+      "item": "minecraft:armor_stand"
+    },
     "F": {
       "item": "minecraft:item_frame"
     },
@@ -12,7 +15,7 @@
   "pattern": [
     "FFF",
     "FNF",
-    "FFF"
+    "FAF"
   ],
   "result": {
     "item": "deathstatues:death_statue_block"
