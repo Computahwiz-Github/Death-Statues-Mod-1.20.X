@@ -43,7 +43,7 @@
   "option.modmenu.base_places_nothing.false": "§cFalse§r",
   "option.modmenu.base_places_nothing.tooltip": "§6DEFAULT§r: §ATrue§r §8(UNCLICKABLE)§r\nThis Shows Whether Placing Death Statue Base Block Will Place/Spawn a Player Model Above It",
   "option.modmenu.base_places_explanation.1": "§7The above options are for when you place down a §A[§6Death Statue Base Block§A]",
-  "option.modmenu.base_places_explanation.2": "§7(Default: The base places a block version of a player model above it)",
+  "option.modmenu.base_places_explanation.2": "§7(Default: The base places nothing above it)",
   "option.modmenu.base_places_explanation.3": "§7If you don't want the base block to place anything above it,",
   "option.modmenu.base_places_explanation.4": "§7Then just leave both options disabled"
 }
