@@ -2,21 +2,28 @@
 Death Statues Mod -> Now with Config Options Compatible with ModMenu!
 
 > [!WARNING]
-> W.I.P! As of this version (1.5.9), hopefully skin caching works now... Not 100%!
-> 
-> Working on the fix. Will push update soonish
+> W.I.P! As of this version (1.6), there is still not a custom block entity renderer for the statue block!
 
 > [!NOTE]
 > New Images Coming Soon
 
 This is my first Minecraft mod and it uses fabric. The idea of the mod is just to spawn a statue of a player when they die and have it as a collectible.
 
-At the moment, when the player dies, a player-like statue spawns. The statue wears whatever the player had on (armor & mainhand/offhand items). It even grabs the player skin!
+At the moment, when the player dies, a player-like statue spawns.
 
+The statue wears whatever the player had on (armor & mainhand/offhand items). It even grabs the player skin!
+
+You can right-click on it to access a statue base block's storage if it is above one.
+
+You can shift + right-click to swap armor and hand items like on an armor stand!
+
+You can shift + L-ctrl + right-click to pick it up in item form. You can use the item to place it back down, inventory and all!
+
+\
 There are three main goals for this project:
 - [x] 1 - Make a "faux-player-model" instead of using an armor stand for the statue
   - [x] 1.1 - Implement skin caching to avoid hitting api request limit
-  - [x] 1.2 - Make the player model drop as an item with full NBT data that can be placed
+  - [x] 1.2 - Make the statue entity pick-up-able as an item with full NBT data that can be placed
   - [x] 1.3 - Sync textures across server
 
 - [x] 2 - Make custom toast popups to indicate when/where the player's death statue spawned and when the player destroys it
@@ -28,8 +35,9 @@ There are three main goals for this project:
   - [x] 2.6 - Adjust toast texture with size of description lines
 
 - [x] 3 - Make the statue a BlockEntity instead of a faux-player-entity 
-  - [x] 3.1 When the player destroys the statue, make it drop all the items except what you choose (Not a choice ATM) to leave on (specific armor/weapons)
+  - [x] 3.1 When the player destroys the statue, make it drop all the items except what you choose to leave on (specific armor/weapons)
   - [x] 3.2 Make statue have storage capacity
+  - [ ] 3.3 Make block entity have poses, inventory, armor & item renderers
 
 P.S. I have added shaped recipes for the Death Statue Block, Base block, and a saddle recipe for fun (leather & iron).
 
