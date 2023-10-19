@@ -38,6 +38,7 @@ public class DeathStatueEntityItem extends Item {
         PlayerEntity player = context.getPlayer();
         Vec3d playerPosition = context.getHitPos();
         BlockPos playerBlockPos = BlockPos.ofFloored(playerPosition);
+        assert player != null;
         String playerName = player.getName().getString();
         GameProfile gameProfile = new GameProfile(UUID.randomUUID(), "Death Statue of [" + playerName + "]");
 
@@ -46,7 +47,7 @@ public class DeathStatueEntityItem extends Item {
         deathStatue.setPosition(playerPosition);
         deathStatue.setUuid(Uuids.getUuidFromProfile(gameProfile));
         deathStatue.setCustomName(Text.of(gameProfile.getName()));
-        deathStatue.setHeadYaw(player.getHeadYaw());
+        deathStatue.setHeadYaw(-player.getHeadYaw());
         if (itemStack.hasNbt()) {
             assert itemStack.getNbt() != null;
             nbtData = itemStack.getNbt();
@@ -55,7 +56,7 @@ public class DeathStatueEntityItem extends Item {
         }
 
         world.spawnEntity(deathStatue);
-        deathStatue.refreshPositionAndAngles(playerBlockPos, player.getYaw(), player.getPitch());
+        deathStatue.refreshPositionAndAngles(playerBlockPos, -player.getYaw(), player.getPitch());
 
         String statueLocation = deathStatue.getBlockX() + ", " + deathStatue.getBlockY() + ", " + deathStatue.getBlockZ();
         DeathStatues.LOGGER.info("SPAWNED DEATH STATUE: [" + deathStatue.getUuidAsString() + "] at: (" + statueLocation + ")");
