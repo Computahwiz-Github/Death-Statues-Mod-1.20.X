@@ -2,7 +2,7 @@ package net.isaiah.deathstatues.client.network;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.isaiah.deathstatues.DeathStatues;
+import net.isaiah.deathstatues.entity.ModEntities;
 import net.isaiah.deathstatues.entity.deathstatue.DeathStatueEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.PlayerListEntry;
@@ -34,7 +34,7 @@ public abstract class AbstractClientDeathStatueEntity extends DeathStatueEntity 
     public final ClientWorld clientWorld;
 
     public AbstractClientDeathStatueEntity(ClientWorld world) {
-        super(DeathStatues.DEATH_STATUE, world);
+        super(ModEntities.DEATH_STATUE, world);
         this.clientWorld = world;
     }
 

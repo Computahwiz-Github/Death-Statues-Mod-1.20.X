@@ -18,6 +18,7 @@ import net.isaiah.deathstatues.client.render.entity.model.DeathStatueEntityModel
 import net.isaiah.deathstatues.client.render.entity.DeathStatueEntityRenderer;
 import net.isaiah.deathstatues.config.DeathStatueConfig;
 import net.isaiah.deathstatues.config.DeathStatueConfigManager;
+import net.isaiah.deathstatues.entity.ModEntities;
 import net.isaiah.deathstatues.networking.ModMessages;
 import net.isaiah.deathstatues.screen.DeathStatuesScreen;
 import net.isaiah.deathstatues.screen.ModScreenHandlers;
@@ -57,7 +58,7 @@ public class DeathStatuesClient implements ClientModInitializer {
 
         EntityModelLayerRegistry.registerModelLayer(MODEL_STATUE_LAYER, () -> DeathStatueEntityModel.getTexturedModelData(Dilation.NONE, false));
 
-        EntityRendererRegistry.register(DeathStatues.DEATH_STATUE, DeathStatueEntityRenderer::new);
+        EntityRendererRegistry.register(ModEntities.DEATH_STATUE, DeathStatueEntityRenderer::new);
 
         //This code executes when the player loads into a world.
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
@@ -80,7 +81,7 @@ public class DeathStatuesClient implements ClientModInitializer {
                 displayKeyBindMessage(client);
                 //ClientPlayNetworking.send(ModMessages.UPDATE_STATUE_TEXTURE, new PacketByteBuf(Unpooled.buffer()).writeIdentifier(getSkinTexture()));
                 ClientPlayNetworking.send(ModMessages.SPAWN_DEATH_STATUE_ID, PacketByteBufs.create());
-                displayStatueSpawned(client);
+                //displayStatueSpawned(client);
             }
         });
     }
@@ -111,7 +112,10 @@ public class DeathStatuesClient implements ClientModInitializer {
     public static void displayKeyBindMessage(MinecraftClient client) {
         assert client.player != null;
         String playerName = client.player.getName().getString();
-        client.inGameHud.getChatHud().addMessage(Text.translatable("chat.deathstatues.toast.keybind", ("§6" + playerName + "§r")));
+        client.inGameHud.getChatHud().addMessage(Text.translatable("chat.deathstatues.keybind", ("§6" + playerName + "§r"))
+                .append(Text.translatable("chat.deathstatues.keybind.action"))
+                .append(Text.translatable("chat.deathstatues.keybind.message"))
+                .setStyle(Style.EMPTY.withHoverEvent(HoverEvent.Action.SHOW_TEXT.buildHoverEvent(Text.translatable("chat.deathstatues.keybind.tooltip")))));
     }
 
     public static void displayWhisperMessage(MinecraftClient client, PacketByteBuf buf) {

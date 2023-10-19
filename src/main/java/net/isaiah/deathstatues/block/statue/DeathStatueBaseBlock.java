@@ -3,6 +3,7 @@ package net.isaiah.deathstatues.block.statue;
 import net.isaiah.deathstatues.DeathStatues;
 import net.isaiah.deathstatues.block.ModBlocks;
 import net.isaiah.deathstatues.block.entity.DeathStatueBlockEntity;
+import net.isaiah.deathstatues.entity.ModEntities;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.enums.DoubleBlockHalf;
@@ -64,7 +65,7 @@ public class DeathStatueBaseBlock extends BlockWithEntity implements BlockEntity
                 if (placer.isHolding(ModBlocks.DEATH_STATUE_BASE_BLOCK.asItem())) {
                     int currentSlot = ((PlayerEntity) placer).getInventory().selectedSlot;
                     switchToWeaponSlot((PlayerEntity) placer);
-                    DeathStatues.spawnDeathStatueEntity((PlayerEntity) placer, pos.up().toCenterPos());
+                    ModEntities.spawnDeathStatueEntity((PlayerEntity) placer, pos.up().toCenterPos());
                     ((PlayerEntity) placer).getInventory().selectedSlot = currentSlot;
                 }
             }
@@ -74,10 +75,12 @@ public class DeathStatueBaseBlock extends BlockWithEntity implements BlockEntity
 
     public static void determineBasePlacesEntityBasedOnConfig(PacketByteBuf buf) {
         BASE_PLACES_ENTITY = buf.readBoolean();
+        DeathStatues.LOGGER.info("Server Received BasePlacesEntity Config Option. [Base Places Entity]:" + BASE_PLACES_ENTITY);
     }
 
     public static void determineBasePlacesBlockBasedOnConfig(PacketByteBuf buf) {
         BASE_PLACES_BLOCK = buf.readBoolean();
+        DeathStatues.LOGGER.info("Server Received BasePlacesBlock Config Option. [Base Places Block]:" + BASE_PLACES_BLOCK);
     }
 
     public void switchToWeaponSlot(PlayerEntity player) {

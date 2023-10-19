@@ -2,7 +2,7 @@
 Death Statues Mod -> Now with Config Options Compatible with ModMenu!
 
 > [!WARNING]
-> W.I.P! As of this version (1.6.3), there is still not a custom block entity renderer for the statue block!
+> W.I.P! As of this version (1.6.4), there is still not a custom block entity renderer for the statue block!
 
 > [!NOTE]
 > New Images Coming Soon
@@ -13,11 +13,14 @@ At the moment, when the player dies, a player-like statue spawns.
 
 The statue wears whatever the player had on (armor & mainhand/offhand items). It even grabs the player skin!
 
-You can right-click on it to access a statue base block's storage if it is above one.
+You can [R-CLICK] on it to access a statue base block's storage if it is above one.
 
-You can shift + right-click to swap armor and hand items like on an armor stand!
+You can [SHIFT] + [R-CLICK] to swap armor and hand items like on an armor stand!
 
-You can shift + L-ctrl + right-click to pick it up in item form. You can use the item to place it back down, inventory and all!
+You can [SHIFT] + [L-CTRL] + [R-CLICK] to pick it up in item form. You can use the item to place it back down, inventory and all!
+
+You can press [R] to spawn a half ring of fake statue entities,
+with your name instead of the regular death statue name, that can allow you to make a quick escape or play a goofy prank
 
 \
 There are three main goals for this project:

@@ -2,6 +2,7 @@ package net.isaiah.deathstatues.item;
 
 import com.mojang.authlib.GameProfile;
 import net.isaiah.deathstatues.DeathStatues;
+import net.isaiah.deathstatues.entity.ModEntities;
 import net.isaiah.deathstatues.entity.deathstatue.DeathStatueEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipContext;
@@ -33,8 +34,6 @@ public class DeathStatueEntityItem extends Item {
             return ActionResult.SUCCESS;
         }
 
-        //DeathStatues.spawnDeathStatueEntity(Objects.requireNonNull(context.getPlayer()), context.getHitPos());
-
         PlayerEntity player = context.getPlayer();
         Vec3d playerPosition = context.getHitPos();
         BlockPos playerBlockPos = BlockPos.ofFloored(playerPosition);
@@ -42,7 +41,7 @@ public class DeathStatueEntityItem extends Item {
         String playerName = player.getName().getString();
         GameProfile gameProfile = new GameProfile(UUID.randomUUID(), "Death Statue of [" + playerName + "]");
 
-        DeathStatueEntity deathStatue = new DeathStatueEntity(DeathStatues.DEATH_STATUE, world);
+        DeathStatueEntity deathStatue = new DeathStatueEntity(ModEntities.DEATH_STATUE, world);
 
         deathStatue.setPosition(playerPosition);
         deathStatue.setUuid(Uuids.getUuidFromProfile(gameProfile));

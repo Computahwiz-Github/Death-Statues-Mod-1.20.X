@@ -8,7 +8,10 @@
   "key.deathstatues.toast": "Toast Popup Message",
   "category.deathstatues.toast": "Death Statues Mod",
 
-  "chat.deathstatues.toast.keybind": "%s §A-> §c§l(R)§l §AToast & Statue Spawned",
+  "chat.deathstatues.keybind": "%s §A-> §c§l(R)§l ",
+  "chat.deathstatues.keybind.action": "§APerformed: ",
+  "chat.deathstatues.keybind.message": "§5[§6Duplication Spell§5]",
+  "chat.deathstatues.keybind.tooltip": "§6Duplication Spell\nWhen you press §c[R] §6you can make a quick escape!",
   "chat.deathstatues.hover": "Click to tp",
   "chat.deathstatues.welcome": "§AWelcome, %s, §AThanks for Downloading!",
 

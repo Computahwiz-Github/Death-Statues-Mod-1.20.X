@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.isaiah.deathstatues.DeathStatues;
 import net.isaiah.deathstatues.block.statue.DeathStatueBaseBlock;
 import net.isaiah.deathstatues.item.ModItems;
 import net.isaiah.deathstatues.screen.DeathStatuesScreen;
@@ -54,6 +55,7 @@ public class DeathStatueEntity extends LivingEntity {
     private PlayerListEntry playerListEntry;
     private Identifier skinTexture;
     private boolean playerListEntrySet;
+    private boolean isFakeStatue = false;
 
     public DeathStatueEntity(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
@@ -105,13 +107,22 @@ public class DeathStatueEntity extends LivingEntity {
         if (matcher.find() || !entityName.contains("[")) {
             try {
                 if (!entityName.contains("[")) {
-                    playerName = entityName;
+                    if (entityName.equals("Death Statue Entity")) {
+                        assert MinecraftClient.getInstance().player != null;
+                        playerName = MinecraftClient.getInstance().player.getName().getString();
+                    }
+                    else {
+                        playerName = entityName;
+                    }
                 }
                 else if (matcher.group(1) != null) {
                     playerName = matcher.group(1);
                 }
 
-                if (!playerName.toLowerCase().contains("player")) {
+                //System.out.println("PlayerName Contains 'Player': " + playerName.toLowerCase().contains("player"));
+                //System.out.println("PlayerName: " + playerName);
+                boolean offlinePlayer = playerName.toLowerCase().contains("player");
+                if (!offlinePlayer) {
                     uuidString = Objects.requireNonNull(getPlayerUUID(playerName))
                             .replaceAll(
                                     "(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})",
@@ -127,7 +138,8 @@ public class DeathStatueEntity extends LivingEntity {
                 e.printStackTrace();
             }
         }
-        return null;
+        //return null;
+        return Uuids.getOfflinePlayerUuid(playerName);
     }
 
     public static String getPlayerUUID(String playerName) {
@@ -164,10 +176,12 @@ public class DeathStatueEntity extends LivingEntity {
             this.playerListEntry = this.getPlayerListEntry();
             if (this.playerListEntry != null) {
                 this.skinTexture = new Identifier(this.playerListEntry.getSkinTexture().toTranslationKey().replace("minecraft.", ""));
+                DeathStatues.LOGGER.info("skinTexture: " + this.skinTexture);
             }
             this.playerListEntrySet = true;
         }
         if (this.playerListEntry == null) {
+            this.playerListEntrySet = false;
             return DefaultSkinHelper.getTexture(Objects.requireNonNull(getPlayerUUIDFromStatueName(this.getName().getString())));
         } else {
             //System.out.println("Player List Entry Path: " + this.playerListEntry.getSkinTexture().toTranslationKey().replace("minecraft.", ""));
@@ -194,6 +208,7 @@ public class DeathStatueEntity extends LivingEntity {
         NbtList nbtList = nbt.getList("Inventory", NbtElement.COMPOUND_TYPE);
         this.inventory.readNbt(nbtList);
         this.inventory.selectedSlot = nbt.getInt("SelectedItemSlot");
+        this.isFakeStatue = nbt.getBoolean("Fake");
         }
 
     @Override
@@ -202,6 +217,7 @@ public class DeathStatueEntity extends LivingEntity {
         NbtHelper.putDataVersion(nbt);
         nbt.put("Inventory", this.inventory.writeNbt(new NbtList()));
         nbt.putInt("SelectedItemSlot", this.inventory.selectedSlot);
+        nbt.putBoolean("Fake", this.isFakeStatue);
     }
 
     @Override
@@ -249,7 +265,7 @@ public class DeathStatueEntity extends LivingEntity {
         nbtData.put("Inventory", this.inventory.writeNbt(new NbtList()));
         //System.out.println("NBT DATA: " + nbtData);
         deathStatueStack.setNbt(nbtData);
-        String customName = Objects.requireNonNull(this.getCustomName()).getString();
+        String customName = Objects.requireNonNull(this.getName()).getString();
 
         Pattern pattern = Pattern.compile("\\[(.*?)]");
         Matcher matcher = pattern.matcher(customName);
@@ -276,6 +292,10 @@ public class DeathStatueEntity extends LivingEntity {
         BlockPos bottomPos = this.getBlockPos().down();
         BlockState bottomBlockState = player.getWorld().getBlockState(bottomPos);
         Block bottomBlock = bottomBlockState.getBlock();
+
+        if (this.isFakeStatue) {
+            return ActionResult.CONSUME;
+        }
 
         if (!player.isSneaking() && hand.equals(Hand.MAIN_HAND)) {
             if (bottomBlock instanceof DeathStatueBaseBlock) {
