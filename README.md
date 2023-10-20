@@ -19,8 +19,12 @@ You can [SHIFT] + [R-CLICK] to swap armor and hand items like on an armor stand!
 
 You can [SHIFT] + [L-CTRL] + [R-CLICK] to pick it up in item form. You can use the item to place it back down, inventory and all!
 
+https://github.com/Jermstain/Death-Statues-Mod-1.20.X/assets/143909731/e98e5a72-693c-4899-acdc-ac5d2515c69e
+
 You can press [R] to spawn a half ring of fake statue entities,
 with your name instead of the regular death statue name, that can allow you to make a quick escape or play a goofy prank
+
+https://github.com/Jermstain/Death-Statues-Mod-1.20.X/assets/143909731/cc3dfb6e-5787-4e51-976a-b489828f98e1
 
 \
 There are three main goals for this project:
