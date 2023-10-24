@@ -94,10 +94,11 @@ public class DeathStatues implements ModInitializer {
                 //If you're creative, you can destroy any statue
                 if (player.isCreative()) {
                     entity.remove(Entity.RemovalReason.DISCARDED);
+                    ServerPlayNetworking.send((ServerPlayerEntity) player, ModMessages.NOT_YOUR_STATUE_ID, PacketByteBufs.create());
                     return ActionResult.SUCCESS;
                 }
                 else {
-                    player.sendMessage(Text.of("This statue isn't yours!"));
+                    ServerPlayNetworking.send((ServerPlayerEntity) player, ModMessages.NOT_YOUR_STATUE_ID, PacketByteBufs.create());
                     return ActionResult.FAIL;
                 }
             }

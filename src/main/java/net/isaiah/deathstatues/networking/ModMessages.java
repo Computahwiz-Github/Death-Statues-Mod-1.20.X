@@ -10,6 +10,7 @@ import net.minecraft.util.Identifier;
 public class ModMessages {
     public static final Identifier SPAWN_FAKE_DEATH_STATUE_ID = new Identifier(DeathStatues.MOD_ID, "spawn_fake_death_statue");
     public static final Identifier DESTROY_STATUE_ID = new Identifier(DeathStatues.MOD_ID, "destroy_statue");
+    public static final Identifier NOT_YOUR_STATUE_ID = new Identifier(DeathStatues.MOD_ID, "not_your_statue");
     public static final Identifier PLAYER_DIED_ID = new Identifier(DeathStatues.MOD_ID, "player_died");
     public static final Identifier WHISPER_COMMAND_ID = new Identifier(DeathStatues.MOD_ID, "whisper_command");
     public static final Identifier HAS_STATUE_CLIENT_ID = new Identifier(DeathStatues.MOD_ID, "has_statue_client");
@@ -35,5 +36,6 @@ public class ModMessages {
         ClientPlayNetworking.registerGlobalReceiver(WHISPER_COMMAND_ID, S2CPacket::clientWhisperCommand);
         ClientPlayNetworking.registerGlobalReceiver(SERVER_NEEDS_STATUE_TEXTURE_ID, S2CPacket::clientSendStatueTexture);
         ClientPlayNetworking.registerGlobalReceiver(CLIENT_OPEN_STATUE_BASE_SCREEN_ID, S2CPacket::clientOpenStatueBaseScreen);
+        ClientPlayNetworking.registerGlobalReceiver(NOT_YOUR_STATUE_ID, S2CPacket::clientNotYourStatue);
     }
 }

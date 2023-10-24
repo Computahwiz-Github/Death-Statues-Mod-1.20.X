@@ -14,6 +14,7 @@
   "chat.deathstatues.keybind.tooltip": "§6Duplication Spell\nWhen you press §c[R] §6you can make a quick escape!",
   "chat.deathstatues.hover": "Click to tp",
   "chat.deathstatues.welcome": "§AWelcome, %s, §AThanks for Downloading!",
+  "chat.deathstatues.not_your_statue": "§cThis Death Statue isn't yours!",
 
   "entity.deathstatues.death_statue_entity": "Death Statue Entity",
 

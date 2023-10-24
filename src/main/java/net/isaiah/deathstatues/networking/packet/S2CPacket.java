@@ -29,4 +29,7 @@ public class S2CPacket {
     public static void clientOpenStatueBaseScreen(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
         DeathStatuesScreen.setDeathStatueEntityID(buf.readInt());
     }
+    public static void clientNotYourStatue(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
+        DeathStatuesClient.displayNotYourStatue();
+    }
 }

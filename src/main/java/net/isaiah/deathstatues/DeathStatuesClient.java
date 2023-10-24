@@ -129,6 +129,11 @@ public class DeathStatuesClient implements ClientModInitializer {
         DeathStatuesToast.add(MinecraftClient.getInstance().getToastManager(), DeathStatuesToast.Type.STATUE_NOTIFICATION, Text.translatable("deathstatues.toast.title"), Text.translatable("deathstatues.toast.destroyed"));
     }
 
+    public static void displayNotYourStatue() {
+        MinecraftClient.getInstance().inGameHud.setOverlayMessage(Text.translatable("chat.deathstatues.not_your_statue").formatted(Formatting.RED), false);
+        DeathStatuesToast.add(MinecraftClient.getInstance().getToastManager(), DeathStatuesToast.Type.STATUE_NOTIFICATION, Text.translatable("deathstatues.toast.title"), Text.translatable("deathstatues.toast.destroyed"));
+    }
+
     public static void displayWelcomeMessage(MinecraftClient client) {
         assert client.player != null;
         String playerName = client.player.getName().getString();
