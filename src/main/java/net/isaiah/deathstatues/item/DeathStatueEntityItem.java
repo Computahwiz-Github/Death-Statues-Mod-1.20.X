@@ -51,6 +51,10 @@ public class DeathStatueEntityItem extends Item {
             assert itemStack.getNbt() != null;
             nbtData = itemStack.getNbt();
             //System.out.println("Item NBT Data: " + nbtData);
+            if (nbtData.contains("StatueTexture", NbtElement.STRING_TYPE)) {
+                deathStatue.setStatueTexture(nbtData.getString("StatueTexture"));
+                nbtData.remove("StatueTexture");
+            }
             deathStatue.readCustomDataFromNbt(nbtData);
         }
 

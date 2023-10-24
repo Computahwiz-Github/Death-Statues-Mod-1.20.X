@@ -29,7 +29,7 @@ public class ModEntities {
                     .dimensions(EntityDimensions.fixed(0.6F, 1.8F)).build());
 
     //This is the method that spawns the statue entity
-    public static void spawnDeathStatueEntity(PlayerEntity serverPlayer, Vec3d playerPosition) {
+    public static void spawnDeathStatueEntity(PlayerEntity serverPlayer, Vec3d playerPosition, float playerHeadYaw, float playerBodyYaw, float playerYaw, String statueTexture) {
         BlockPos playerBlockPos = BlockPos.ofFloored(playerPosition);
         World world = serverPlayer.getWorld();
         String playerName = serverPlayer.getName().getString();
@@ -47,10 +47,12 @@ public class ModEntities {
         deathStatue.setPosition(playerPosition);
         deathStatue.setUuid(Uuids.getUuidFromProfile(gameProfile));
         deathStatue.setCustomName(Text.of(gameProfile.getName()));
-        deathStatue.setHeadYaw(serverPlayer.getHeadYaw());
+        deathStatue.setHeadYaw(playerHeadYaw);
+        deathStatue.setBodyYaw(playerBodyYaw);
+        deathStatue.setStatueTexture(statueTexture);
 
         world.spawnEntity(deathStatue);
-        deathStatue.refreshPositionAndAngles(playerBlockPos, serverPlayer.getYaw(), serverPlayer.getPitch());
+        deathStatue.refreshPositionAndAngles(playerBlockPos, playerYaw, serverPlayer.getPitch());
 
         deathStatue.equipStack(EquipmentSlot.HEAD, HELMET);
         deathStatue.equipStack(EquipmentSlot.CHEST, BREASTPLATE);
@@ -73,7 +75,7 @@ public class ModEntities {
         DeathStatues.LOGGER.info("SPAWNED DEATH STATUE: [" + deathStatue.getUuidAsString() + "] at: (" + statueLocation + ")");
     }
 
-    public static void spawnFakeDeathStatueEntities(PlayerEntity serverPlayer, Vec3d playerPosition) {
+    public static void spawnFakeDeathStatueEntities(PlayerEntity serverPlayer, Vec3d playerPosition, String statueTexture) {
         BlockPos playerBlockPos = BlockPos.ofFloored(playerPosition);
         World world = serverPlayer.getWorld();
         String playerName = serverPlayer.getName().getString();
@@ -92,6 +94,8 @@ public class ModEntities {
         deathStatue.setUuid(Uuids.getUuidFromProfile(gameProfile));
         deathStatue.setCustomName(Text.of(gameProfile.getName()));
         deathStatue.setHeadYaw(serverPlayer.getHeadYaw());
+        deathStatue.setBodyYaw(serverPlayer.getBodyYaw());
+        deathStatue.setStatueTexture(statueTexture);
 
         NbtCompound nbtCompound = new NbtCompound();
         nbtCompound.putBoolean("Fake", true);
@@ -127,6 +131,7 @@ public class ModEntities {
         deathStatue2.setCustomName(Text.of(gameProfile2.getName()));
         deathStatue2.setHeadYaw(serverPlayer.getHeadYaw());
         deathStatue2.readCustomDataFromNbt(nbtCompound);
+        deathStatue2.setStatueTexture(statueTexture);
 
         world.spawnEntity(deathStatue2);
         if ((-45 <= serverPlayer.getYaw() && serverPlayer.getYaw() <= 45) || (135 <= serverPlayer.getYaw() ^ serverPlayer.getYaw() <= -135)) {
@@ -157,6 +162,7 @@ public class ModEntities {
         deathStatue3.setCustomName(Text.of(gameProfile3.getName()));
         deathStatue3.setHeadYaw(serverPlayer.getHeadYaw());
         deathStatue3.readCustomDataFromNbt(nbtCompound);
+        deathStatue3.setStatueTexture(statueTexture);
 
         world.spawnEntity(deathStatue3);
         if (-45 <= serverPlayer.getYaw() && serverPlayer.getYaw() <= 45) {
@@ -195,6 +201,7 @@ public class ModEntities {
         deathStatue4.setCustomName(Text.of(gameProfile4.getName()));
         deathStatue4.setHeadYaw(serverPlayer.getHeadYaw());
         deathStatue4.readCustomDataFromNbt(nbtCompound);
+        deathStatue4.setStatueTexture(statueTexture);
 
         world.spawnEntity(deathStatue4);
         if (-45 <= serverPlayer.getYaw() && serverPlayer.getYaw() <= 45) {
@@ -233,6 +240,7 @@ public class ModEntities {
         deathStatue5.setCustomName(Text.of(gameProfile5.getName()));
         deathStatue5.setHeadYaw(serverPlayer.getHeadYaw());
         deathStatue5.readCustomDataFromNbt(nbtCompound);
+        deathStatue5.setStatueTexture(statueTexture);
 
         world.spawnEntity(deathStatue5);
         //South
@@ -275,6 +283,7 @@ public class ModEntities {
         deathStatue6.setCustomName(Text.of(gameProfile6.getName()));
         deathStatue6.setHeadYaw(serverPlayer.getHeadYaw());
         deathStatue6.readCustomDataFromNbt(nbtCompound);
+        deathStatue6.setStatueTexture(statueTexture);
 
         world.spawnEntity(deathStatue6);
         //South
@@ -317,6 +326,7 @@ public class ModEntities {
         deathStatue7.setCustomName(Text.of(gameProfile7.getName()));
         deathStatue7.setHeadYaw(serverPlayer.getHeadYaw());
         deathStatue7.readCustomDataFromNbt(nbtCompound);
+        deathStatue7.setStatueTexture(statueTexture);
 
         world.spawnEntity(deathStatue7);
         deathStatue7.refreshPositionAndAngles(playerBlockPos, serverPlayer.getYaw(), serverPlayer.getPitch());

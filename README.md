@@ -2,7 +2,7 @@
 Death Statues Mod -> Now with Config Options Compatible with ModMenu!
 
 > [!WARNING]
-> W.I.P! As of this version (1.6.4), there is still not a custom block entity renderer for the statue block!
+> W.I.P! As of this version (1.6.5), there is still not a custom block entity renderer for the statue block!
 
 > [!NOTE]
 > New Images Coming Soon

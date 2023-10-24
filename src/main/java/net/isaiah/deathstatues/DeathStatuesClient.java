@@ -19,11 +19,13 @@ import net.isaiah.deathstatues.client.render.entity.DeathStatueEntityRenderer;
 import net.isaiah.deathstatues.config.DeathStatueConfig;
 import net.isaiah.deathstatues.config.DeathStatueConfigManager;
 import net.isaiah.deathstatues.entity.ModEntities;
+import net.isaiah.deathstatues.entity.deathstatue.DeathStatueEntity;
 import net.isaiah.deathstatues.networking.ModMessages;
 import net.isaiah.deathstatues.screen.DeathStatuesScreen;
 import net.isaiah.deathstatues.screen.ModScreenHandlers;
 import net.isaiah.deathstatues.util.ModModelPredicateProvider;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.model.Dilation;
 import net.minecraft.client.option.KeyBinding;
@@ -35,7 +37,11 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.util.hit.HitResult;
 import org.lwjgl.glfw.GLFW;
+
+import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
 public class DeathStatuesClient implements ClientModInitializer {
@@ -80,10 +86,31 @@ public class DeathStatuesClient implements ClientModInitializer {
             while (spawnKeyBinding.wasPressed()) {
                 displayKeyBindMessage(client);
                 //ClientPlayNetworking.send(ModMessages.UPDATE_STATUE_TEXTURE, new PacketByteBuf(Unpooled.buffer()).writeIdentifier(getSkinTexture()));
-                ClientPlayNetworking.send(ModMessages.SPAWN_DEATH_STATUE_ID, PacketByteBufs.create());
+                assert client.player != null;
+                String statueTexture = Objects.requireNonNull(Objects.requireNonNull(client.player.networkHandler).getPlayerListEntry(client.player.getUuid())).getSkinTexture().toTranslationKey().replace("minecraft.", "");
+                ClientPlayNetworking.send(ModMessages.SPAWN_FAKE_DEATH_STATUE_ID, PacketByteBufs.create().writeString(statueTexture));
+                System.out.println("StatueTexture: " + statueTexture);
                 //displayStatueSpawned(client);
             }
         });
+
+        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            if (Screen.hasControlDown()) {
+                assert client.crosshairTarget != null;
+                if (client.crosshairTarget.getType().equals(HitResult.Type.ENTITY)) {
+                    if (((EntityHitResult) client.crosshairTarget).getEntity() instanceof DeathStatueEntity) {
+                        boolean hasControlDown = true;
+                        ClientPlayNetworking.send(ModMessages.SERVER_PLAYER_HAS_CONTROL_DOWN_ID, new PacketByteBuf(Unpooled.buffer().writeBoolean(hasControlDown)));
+                    }
+                }
+            }
+        });
+    }
+
+    public static void sendStatueTexture(MinecraftClient client) {
+        assert client.player != null;
+        String statueTexture = Objects.requireNonNull(Objects.requireNonNull(client.player.networkHandler).getPlayerListEntry(client.player.getUuid())).getSkinTexture().toTranslationKey().replace("minecraft.", "");
+        ClientPlayNetworking.send(ModMessages.SERVER_RECEIVED_STATUE_TEXTURE_ID, PacketByteBufs.create().writeString(statueTexture));
     }
 
     public static void displayStatueSpawned(MinecraftClient client) {

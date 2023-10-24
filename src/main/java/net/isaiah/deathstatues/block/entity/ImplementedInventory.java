@@ -176,6 +176,7 @@ public interface ImplementedInventory extends SidedInventory {
         if (stack.getCount() > getMaxCountPerStack()) {
             stack.setCount(getMaxCountPerStack());
         }
+        markDirty();
     }
 
     /**

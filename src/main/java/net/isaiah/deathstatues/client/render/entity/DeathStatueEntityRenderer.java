@@ -6,6 +6,7 @@ import net.isaiah.deathstatues.DeathStatuesClient;
 import net.isaiah.deathstatues.client.render.entity.model.DeathStatueEntityModel;
 import net.isaiah.deathstatues.client.render.entity.feature.DeathStatueHeldItemFeatureRenderer;
 import net.isaiah.deathstatues.entity.deathstatue.DeathStatueEntity;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
@@ -16,6 +17,7 @@ import net.minecraft.client.render.entity.feature.*;
 import net.minecraft.client.render.entity.model.ArmorEntityModel;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.render.entity.model.EntityModelLayers;
+import net.minecraft.client.util.DefaultSkinHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.ItemStack;
@@ -127,7 +129,11 @@ public class DeathStatueEntityRenderer extends LivingEntityRenderer<DeathStatueE
 
     @Override
     public Identifier getTexture(DeathStatueEntity entity) {
-        return entity.getSkinTexture();
+        if (entity.getStatueTexture().isEmpty()) {
+            assert MinecraftClient.getInstance().player != null;
+            return DefaultSkinHelper.getTexture(Objects.requireNonNull(MinecraftClient.getInstance().player.getUuid()));
+        }
+        return Identifier.tryParse(entity.getStatueTexture());
     }
 
     @Override
@@ -159,17 +165,19 @@ public class DeathStatueEntityRenderer extends LivingEntityRenderer<DeathStatueE
         this.renderArm(matrices, vertexConsumers, light, player, this.model.leftArm, this.model.leftSleeve);
     }
 
-    private void renderArm(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, DeathStatueEntity player, ModelPart arm, ModelPart sleeve) {
+    private void renderArm(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, DeathStatueEntity deathStatueEntity, ModelPart arm, ModelPart sleeve) {
         DeathStatueEntityModel<DeathStatueEntity> playerEntityModel = this.getModel();
-        this.setModelPose(player);
+        this.setModelPose(deathStatueEntity);
         playerEntityModel.handSwingProgress = 0.0f;
         playerEntityModel.sneaking = false;
         playerEntityModel.leaningPitch = 0.0f;
-        playerEntityModel.setAngles(player, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+        playerEntityModel.setAngles(deathStatueEntity, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
         arm.pitch = 0.0f;
-        arm.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntitySolid(player.getSkinTexture())), light, OverlayTexture.DEFAULT_UV);
+        //arm.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntitySolid(deathStatueEntity.getSkinTexture())), light, OverlayTexture.DEFAULT_UV);
+        arm.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntitySolid(this.getTexture(deathStatueEntity))), light, OverlayTexture.DEFAULT_UV);
         sleeve.pitch = 0.0f;
-        sleeve.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(player.getSkinTexture())), light, OverlayTexture.DEFAULT_UV);
+        //sleeve.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(deathStatueEntity.getSkinTexture())), light, OverlayTexture.DEFAULT_UV);
+        sleeve.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(this.getTexture(deathStatueEntity))), light, OverlayTexture.DEFAULT_UV);
     }
 
     @Override

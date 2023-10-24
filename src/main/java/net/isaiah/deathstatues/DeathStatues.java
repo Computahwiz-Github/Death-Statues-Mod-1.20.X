@@ -21,6 +21,7 @@ import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.slf4j.Logger;
@@ -54,7 +55,12 @@ public class DeathStatues implements ModInitializer {
                 World world = player.getWorld();
                 BlockPos playerBlockPos = player.getBlockPos();
                 world.setBlockState(playerBlockPos, ModBlocks.DEATH_STATUE_BASE_BLOCK.getDefaultState());
-                ModEntities.spawnDeathStatueEntity(player, player.getPos().add(0, 1, 0));
+                ServerPlayNetworking.send(((ServerPlayerEntity) player), ModMessages.SERVER_NEEDS_STATUE_TEXTURE_ID, PacketByteBufs.create());
+                ServerPlayNetworking.registerGlobalReceiver(ModMessages.SERVER_RECEIVED_STATUE_TEXTURE_ID, (server, player1, handler, buf, responseSender) -> {
+                    System.out.println("StatueTexture buffer: " + Identifier.tryParse(buf.readString()));
+                    ModEntities.spawnDeathStatueEntity(player, player.getPos().add(0, 1, 0), player.getHeadYaw(), player.getBodyYaw(), player.getYaw(), buf.readString());
+                });
+                //ModEntities.spawnDeathStatueEntity(player, player.getPos().add(0, 1, 0), player.getHeadYaw(), player.getBodyYaw(), player.getYaw(), ModEntities.getStatueTextureString());
                 ServerPlayNetworking.send((ServerPlayerEntity) player, ModMessages.PLAYER_DIED_ID, PacketByteBufs.create());
             }
             return true;
@@ -78,17 +84,17 @@ public class DeathStatues implements ModInitializer {
                 }
                 else {
                     //System.out.println("Death Statue Entity Is Real");
+                    deathStatueEntity.kill();
+                    ServerPlayNetworking.send((ServerPlayerEntity) player, ModMessages.DESTROY_STATUE_ID, PacketByteBufs.create());
+                    return ActionResult.PASS;
                 }
-                deathStatueEntity.kill();
-                ServerPlayNetworking.send((ServerPlayerEntity) player, ModMessages.DESTROY_STATUE_ID, PacketByteBufs.create());
-                return ActionResult.PASS;
             }
             //This is called when the Death Statue Entity doesn't have the same name as the attacking player
             else if (entity instanceof DeathStatueEntity && !getPlayerNameFromStatueName(entity.getName().getString()).equals(player.getName())) {
                 //If you're creative, you can destroy any statue
                 if (player.isCreative()) {
-                    entity.kill();
-                    return ActionResult.PASS;
+                    entity.remove(Entity.RemovalReason.DISCARDED);
+                    return ActionResult.SUCCESS;
                 }
                 else {
                     player.sendMessage(Text.of("This statue isn't yours!"));

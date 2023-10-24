@@ -1,9 +1,12 @@
 package net.isaiah.deathstatues.block.statue;
 
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.isaiah.deathstatues.DeathStatues;
 import net.isaiah.deathstatues.block.ModBlocks;
 import net.isaiah.deathstatues.block.entity.DeathStatueBlockEntity;
 import net.isaiah.deathstatues.entity.ModEntities;
+import net.isaiah.deathstatues.networking.ModMessages;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.enums.DoubleBlockHalf;
@@ -14,6 +17,7 @@ import net.minecraft.item.*;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
@@ -65,7 +69,14 @@ public class DeathStatueBaseBlock extends BlockWithEntity implements BlockEntity
                 if (placer.isHolding(ModBlocks.DEATH_STATUE_BASE_BLOCK.asItem())) {
                     int currentSlot = ((PlayerEntity) placer).getInventory().selectedSlot;
                     switchToWeaponSlot((PlayerEntity) placer);
-                    ModEntities.spawnDeathStatueEntity((PlayerEntity) placer, pos.up().toCenterPos());
+                    //String statueTexture = Objects.requireNonNull(Objects.requireNonNull(((ClientPlayerEntity) placer).networkHandler).getPlayerListEntry(placer.getUuid())).getSkinTexture().toTranslationKey().replace("minecraft.", "");
+                    //ModEntities.spawnDeathStatueEntity(((PlayerEntity) placer), pos.up().toCenterPos(), -placer.getHeadYaw(), -placer.getBodyYaw(), -placer.getYaw(), statueTexture);
+                    if (placer instanceof ServerPlayerEntity serverPlayer) {
+                        ServerPlayNetworking.send(serverPlayer, ModMessages.SERVER_NEEDS_STATUE_TEXTURE_ID, PacketByteBufs.create());
+                        ServerPlayNetworking.registerGlobalReceiver(ModMessages.SERVER_RECEIVED_STATUE_TEXTURE_ID, (server, player1, handler, buf, responseSender) -> {
+                            ModEntities.spawnDeathStatueEntity(player1, pos.up().toCenterPos(), -player1.getHeadYaw(), -player1.getBodyYaw(), -player1.getYaw(), buf.readString());
+                        });
+                    }
                     ((PlayerEntity) placer).getInventory().selectedSlot = currentSlot;
                 }
             }
