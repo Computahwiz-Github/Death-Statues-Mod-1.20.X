@@ -1,6 +1,9 @@
 # Death-Statues-Mod-1.20.X
 Death Statues Mod -> Now with Config Options Compatible with ModMenu!
 
+# Upcoming
+New Container GUI Texture, skin retrieving/caching scheme, custom locking container blocks, Fancy ModMenu Description and Config, Server and Client Configs, Toasts for /whisper and /msg so you never miss anything important...
+
 > [!WARNING]
 > W.I.P! As of this version (1.6.5), there is still not a custom block entity renderer for the statue block!
 
